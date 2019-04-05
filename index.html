@@ -35,9 +35,9 @@
 		.bg-sec { background-color: #f0f1f4; }
 		main {
 			/*color: #D3D3D3;*/
-			/*height: 100vh;*/
+			height:100vh;
 			padding: 60px;
-			height: auto;
+			/*height: auto;*/
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -87,11 +87,11 @@
 
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-left justify-content-md-center" style="text-align: center;">
+<nav class="navbar navbar-expand-md navbar-dark bg-nav-col fixed-left justify-content-md-center" style="text-align: center;">
 	<div>
 		<div style="width: 90%; margin: auto;">
-    	<a class="navbar-brand" href="#" style=""><img style="width: 30px; height: 30px;" src="images/base2withcolor.svg"> Sanket Sanath</a>
-    </div>
+    		<a class="navbar-brand" href="#" style=""><img style="width: 30px; height: 30px;" src="images/base2withcolor.svg"> Sanket Sanath</a>
+    	</div>
 	</div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,16 +104,17 @@
                 <a class="nav-link" href="#"><i class="fa fa-home"></i> Home</a>
             </li>
 
-            <li class="nav-item dropdown">
-		    	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		        	<i class="fas fa-user"></i> About me
-		    	</a>
-		        <div class="dropdown-menu bg-dark" style="text-align: center;" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" style="color: #D3D3D3" href="#education"><i class="fas fa-school"></i> Education</a>
-		          <a class="dropdown-item" style="color: #D3D3D3" href="#skills"><i class="fas fa-wrench"></i> Skills</a>
-		          <a class="dropdown-item" style="color: #D3D3D3" href="#interests"><i class="fas fa-paint-brush"></i> Interests</a>
-		        </div>
-		      </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#education"><i class="fas fa-school"></i> Education</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#skills"><i class="fas fa-wrench"></i> Skills</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#interests"><i class="fas fa-paint-brush"></i> Interests</a>
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="#projects"><i class="fas fa-drafting-compass"></i> Projects</a>
@@ -131,6 +132,7 @@
 </nav>
 
 
+
 <main class="bg-col1">
 	<div id="main_div" class="container" style="text-align: center; margin: auto; color: white;">
 		<img style="max-width: 100px; max-height: 100px; margin-bottom: 33px;" src="images/base2withcolor.svg">
@@ -141,14 +143,14 @@
 		<div class="container">
 			<p class="muted-on-dark">A developer, programmer, loves reading and learning new skills</p>
 		</div>
-				<img style="max-width: 200px; max-height: 200px; margin-top: 33px;" src="images/me.jpg">
 
 	</div>
-	<span id="education"></span>
+	
 </main>
 
 <!-- Education -->
 <section class="bg-col2 divider container text-center text-white">
+	<span id="education"></span>
 	<div class="container">
 		<i class="fas fa-school" style="font-size: 3em;"></i>
 		<h2>Education</h2>
@@ -207,7 +209,7 @@
 			<div class="box container-fluid col-lg-3 col-11 bg-info">
 				<div>
 					<h2>Sketching</h2>
-					<a class="interests_link" href="#">Visit Gallary >></a>
+					<a class="interests_link" href="#">Visit Gallery >></a>
 				</div>
 			</div>
 
@@ -279,8 +281,17 @@
 </footer>
 
 </body>
-	<script type="text/javascript" src="css_n_js/js/jquery.js"></script>
+	<!-- <script type="text/javascript" src="css_n_js/js/jquery.js"></script> -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="css_n_js/js/bootstrap.min.js"></script>
-	
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+		    $(".navbar-nav li a").click(function(event) {
+		    $(".navbar-collapse").collapse('hide');
+		  });
+		});
+	</script>
+
 
 </html>
