@@ -67,7 +67,7 @@
 	.nav-item {
 		border-bottom: 1px solid grey;
 	}
-	.nav-item.active { background-color: #61892f; border-bottom: 1px solid #85bd01; }
+	.nav-item.active { /*background-color: #61892f;*/ border-bottom: 1px solid #85bd01; }
 	ul { width: 200px; margin: auto;}
 	hr {
 		border: 0;
@@ -130,11 +130,13 @@
 				<li class="nav-item">
 					<a class="nav-link" href="#"><i class="fas fa-file-alt"></i> Resume</a>
 				</li>
-				<div id="smprofiles">
-					<a href="https://www.linkedin.com/in/sanketsanath"  target="_blank"><i class="fab fa-linkedin-in dedh"></i></a>
-					<a href="https://github.com/SanketSanath"  target="_blank"><i class="fab fa-github dedh"></i></a>
-					<a href="mailto:sanathsanket@gmail.com"  target="_blank"><i class="fas fa-envelope dedh"></i></a>
-				</div>
+				<li class="nav-item">
+					<div id="smprofiles">
+						<a href="https://www.linkedin.com/in/sanketsanath"  target="_blank"><i class="fab fa-linkedin-in dedh"></i></a>
+						<a href="https://github.com/SanketSanath"  target="_blank"><i class="fab fa-github dedh"></i></a>
+						<a href="mailto:sanathsanket@gmail.com"  target="_blank"><i class="fas fa-envelope dedh"></i></a>
+					</div>
+				</li>
 			</ul>
 		</div>
 	</nav>
@@ -143,7 +145,7 @@
 
 	<main>
 		<div id="main_div" class="container" style="text-align: center; margin: auto; color: white;">
-			<img style="max-width: 100px; max-height: 100px; margin-bottom: 33px;" src="images/base2withcolor.svg">
+			<img style="max-width: 55px; max-height: 55px; margin-bottom: 33px;" src="images/base2withcolor.svg">
 			<!-- <h1 style="margin-bottom: 0px; font-family: sans-serif;">I'm <span class="sp-col">SANKET SANATH</span></h1> -->
 			<h1 style="margin-bottom: 0px; font-family: 'Pacifico', cursive;">I'm <span class="sp-col">Sanket Sanath</span></h1>
 
@@ -293,12 +295,45 @@
 <!-- <script type="text/javascript" src="css_n_js/js/jquery.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script type="text/javascript" src="css_n_js/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="css_n_js/js/anime.min.js"></script>
 
 <script type="text/javascript">
 	$(document).ready(function(){
 		$(".navbar-nav li a").click(function(event) {
 			$(".navbar-collapse").collapse('hide');
 		});
+
+		anime({
+			targets: '#main_div img',
+			// translateX: 250,
+			scale: 2,
+			rotate: '1.5turn',
+			direction: 'alternate',
+			loop: true,
+			duration: 2000
+		})
+
+
+		const staggersAnimation = anime.timeline({
+		    targets: '.nav-item',
+		    autoplay: false,
+		    duration: 600,
+		    loopComplete: (a) => console.log('end'),
+		    //update: () => console.log(staggersAnimation.progress)
+		  })
+		  .add({
+		  	translateX: -270,
+		  	duration: -1
+		    // translateX: anime.stagger(-100),
+		    // delay: anime.stagger(1)
+		  })
+		  .add({
+		    translateX: anime.stagger(0),
+		    delay: anime.stagger(30)
+		  })
+
+		staggersAnimation.play();
+		document.querySelector('.navbar-toggler').onclick = staggersAnimation.play;
 	});
 </script>
 
