@@ -6,99 +6,23 @@
 	<meta name="keywords" content="Sanket Sanath">
 	<meta name="author" content="Sanket Sanath">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css_n_js/css/loader.css" />
 	<link rel="stylesheet" type="text/css" href="css_n_js/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css_n_js/css/nav-left.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css" integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css_n_js/css/style.css">
 
-	<link href="https://fonts.googleapis.com/css?family=Pacifico|Raleway" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Raleway|Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
 
-	<!-- font-family: 'Pacifico', cursive; -->
+	<!-- font-family: 'Work Sans', sans-serif; -->
 
 	<!-- font-family: 'Raleway', sans-serif; -->
-<!-- 
-    color:
 
-    nav:   #28282d
-    bg-1:  #18181b
-    bg-2:  #202024
-
-    -------- revised color
-    nav: #1b1e20
-    back: #141618
--->
-
-
-<style rel="stylesheet/less" type="text/css">
-
-	body {
-		padding: 0px;
-		font-family: 'Raleway', sans-serif;
-	}
-
-	/*dark theme*/
-
-	.bg-nav-col { background-color: #1b1e20; } /*for navigation*/
-	.bg-sec { background-color: #f0f1f4; color: #262626; } /*for sections*/
-	body{background-color: white; color: #262626; } /*for body*/
-
-	main {
-		background-image: radial-gradient(#141618 55%, #1b1e20 95%);
-		height:100vh;
-		padding: 60px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-bottom: 32px;
-	}
-	#main_div {
-		width: auto;
-		height: auto;
-		text-align: center;
-	}
-	.dedh{ font-size: 1.5em }
-	.sp-col { color: #86c232; }
-	#smprofiles > a{
-		display: inline-block;
-		color: #D3D3D3;
-		padding: 5px;
-		margin: 5px;
-	}
-	.nav-item {
-		border-bottom: 1px solid grey;
-	}
-	.nav-item.active { /*background-color: #61892f;*/ border-bottom: 1px solid #85bd01; }
-	ul { width: 200px; margin: auto;}
-	hr {
-		border: 0;
-		clear:both;
-		display:block;
-		background-color: #D3D3D3;
-		height: 3px;
-	}
-
-	.box {
-		padding-top: 40px; padding-bottom: 40px; border-radius: 10px; margin-top: 5px; margin-bottom: 5px;
-	}
-	.muted-on-dark { color: #989ea4; }
-	.interests_link { color: white; }
-	.project_box { padding: 15px 15px 0px 15px; box-sizing: border-box; }
-	.project_box div { height: 100%; }
-	.divider {
-		width: 96%;
-		margin-top: 20px;
-		margin-bottom: 50px;
-		padding-top: 30px;
-		padding-bottom: 30px;
-		padding: 30px;
-		border-radius: 10px;
-	}
-
-
-</style>
 </head>
 
 <body>
+
 
 	<nav class="navbar navbar-expand-md navbar-dark bg-nav-col fixed-left justify-content-md-center" style="text-align: center;">
 		<div>
@@ -112,7 +36,7 @@
 		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
 			<ul class="navbar-nav">
 				<li class="nav-item active">
-					<a class="nav-link" href="#"><i class="fas fa-user"></i> About Me</a>
+					<a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
 				</li>
 
 				<li class="nav-item">
@@ -120,11 +44,7 @@
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link" href="#skills"><i class="fas fa-palette"></i> Sketches</a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="book_list.html"><i class="fas fa-book-open"></i> Book list</a>
+					<a class="nav-link" href="books.html"><i class="fas fa-book-open"></i> Books</a>
 				</li>
 
 				<li class="nav-item">
@@ -132,9 +52,9 @@
 				</li>
 				<li class="nav-item">
 					<div id="smprofiles">
-						<a href="https://www.linkedin.com/in/sanketsanath"  target="_blank"><i class="fab fa-linkedin-in dedh"></i></a>
-						<a href="https://github.com/SanketSanath"  target="_blank"><i class="fab fa-github dedh"></i></a>
-						<a href="mailto:sanathsanket@gmail.com"  target="_blank"><i class="fas fa-envelope dedh"></i></a>
+						<a href="https://www.linkedin.com/in/sanketsanath" target="_blank"><i class="fab fa-linkedin-in dedh"></i></a>
+						<a href="https://github.com/SanketSanath" target="_blank"><i class="fab fa-github dedh"></i></a>
+						<a href="mailto:sanathsanket@gmail.com" target="_blank"><i class="fas fa-envelope dedh"></i></a>
 					</div>
 				</li>
 			</ul>
@@ -143,153 +63,189 @@
 
 
 
-	<main>
-		<div id="main_div" class="container" style="text-align: center; margin: auto; color: white;">
-			<img style="max-width: 55px; max-height: 55px; margin-bottom: 33px;" src="images/base2withcolor.svg">
-			<!-- <h1 style="margin-bottom: 0px; font-family: sans-serif;">I'm <span class="sp-col">SANKET SANATH</span></h1> -->
-			<h1 style="margin-bottom: 0px; font-family: 'Pacifico', cursive;">I'm <span class="sp-col">Sanket Sanath</span></h1>
-
-			<hr style="width: 180px;">
-			<div class="container">
-				<p class="muted-on-dark">A developer, programmer, loves reading and learning new skills</p>
-			</div>
+	<main id="main">
+		<div id="main_div" class="container">
 
 		</div>
-
 	</main>
 
-	<!-- Education -->
-	<section class="bg-sec divider container text-center">
+	<!-- about me -->
+	<section class="bg-dark divider text-center text-white">
 		<div class="container">
-			<i class="fas fa-school" style="font-size: 3em;"></i>
-			<h2>Education</h2>
+			<img style="max-width: 120px; max-height: 120px; margin-bottom: 10px;" src="images/base2withcolor.svg">
+			<h2><span style="font-weight: 400;">I am</span> SANKET SANATH</h2>
+			<p style="max-width: 800px; margin: 30px auto;">I am a Software Developer and a cat lover. I am an IT graduate of 2k20 batch from NIT Patna.</p>
 
-			<hr style="height: 1px; width: 80%;">
-			<h5>NIT Patna</h5>
-			<p class="text-secondary">B. Tech in Information Technology | Expected 2020</p> 
+			<h4>I can help you</h4>
+			<p>solve a problem, build a website and design an eye-catching logo.</p>
+			<h4>Connect with me</h4>
+			<p>for Software Developer, Data Engineer, Web Developer job profile.</p>
+		</div>
+	</section>
 
-			<hr style="height: 1px; width: 80%;">
-			<h5>A. N. College, Patna</h5>
-			<p class="text-secondary">XII<sup>th</sup> (Science) | 2016</p>
+	<!-- skills -->
+	<section class="divider text-center">
+		<h2>SKILLS</h2>
+		<div class="container">
 
-			<hr style="height: 1px; width: 80%;">
-			<h5>L. N. Vidya Mandir, Balua</h5>
-			<p class="text-secondary" style="color: #989ea4">X<sup>th</sup> | 2014</p>
+			<h4>Languages</h4>
+			<hr style="max-width: 300px;">
+			<div id="languages">
+				<img src="https://cdn.svgporn.com/logos/c.svg" alt="C">
+				<img src="https://cdn.svgporn.com/logos/c-plusplus.svg" alt="C++">
+				<img src="https://cdn.svgporn.com/logos/javascript.svg">
+				<img src="https://cdn.svgporn.com/logos/python.svg">
+				<img src="https://cdn.svgporn.com/logos/java.svg">
+				<img src="https://cdn.svgporn.com/logos/scala.svg">
+				<img src="https://cdn.svgporn.com/logos/html-5.svg">
+				<img src="https://cdn.svgporn.com/logos/css-3.svg">
+			</div>
 
-			<hr style="height: 1px; width: 80%;">
-			<h5>Saraswati Shishu Mandir, Balua</h5>
-			<p class="text-secondary">Early education | 2010</p>
+			<h4>Frameworks</h4>
+			<hr style="max-width: 300px;">
+			<div id="languages">
+				<img src="https://cdn.svgporn.com/logos/nodejs.svg">
+				<img src="images/logo/bootstrap.png">
+				<img src="images/logo/spark.svg">
+				<img src="https://cdn.svgporn.com/logos/kafka.svg">
+				<img src="https://cdn.svgporn.com/logos/flask.svg">
+				
+			</div>
+
+			<h4>Databases and Tools</h4>
+			<hr style="max-width: 300px;">
+			<div id="languages">
+				<img src="https://cdn.svgporn.com/logos/mysql.svg">
+				<img src="https://cdn.svgporn.com/logos/mongodb.svg">
+				<img src="https://cdn.svgporn.com/logos/git-icon.svg">
+				<img src="https://cdn.svgporn.com/logos/vim.svg">
+				<img src="images/logo/bash.svg">
+				<img src="images/logo/ai.svg">
+			</div>
+
 		</div>
 	</section>
 
 
-	<!-- Technical Skills -->
+	<!-- projects -->
+	<section class="bg-light divider text-center">
+		<div class="container">
+			<h2>PROJECTS</h2>
+			<div class="row text-dark">
+				<div class="col-lg-6 col-12 project_box">
+					<div class="box container-fluid project" style="background-image: url('images/projects/reading-club.jpg');">
+						<h4>One Reading Club</h4>
+						<p>A website to track and build your reading habbit</p>
+						<ul class="actions">
+							<li>Node.JS</li>
+							<li>JavaScript</li>
+							<li>HTML</li>
+							<li>MongoDB</li>
+						</ul>
+						<a class="text-dark" target="_blank" href="https://github.com/SanketSanath/reading-club"><u>Source Code</u></a>
 
-	<section class="divider container text-center bg-sec">
-		<i class="fas fa-wrench" style="font-size: 3em;"></i> 
-		<h2>Technical Skills</h2>
+					</div>
+				</div>
 
-		<div class="row" style="text-align: left; color: white;">
-			<div class="box container-fluid col-lg-3 col-11 bg-info">
-				<h4>Experienced</h4>
-				&bull; JavaScript &bull; Node.js &bull; HTML/CSS &bull; C/C++ &bull; SQL &bull; Git &bull; Vim
-			</div>
+				<div class="col-lg-6 col-12 project_box">
+					<div class="box container-fluid project" style="color: black;">
+						<h4>Covid-19 Tweet Data Analyzation</h4>
+						<p>Data analysis of real time tweets related to COVID-19</p>
+						<ul class="actions">
+							<li>Scala</li>
+							<li>Spark</li>
+							<li>Kafka</li>
+							<li>MongoDB</li>
+							<li>Flask</li>
+						</ul>
+					</div>
+				</div>
 
-			<div class="box container-fluid col-lg-3 col-11 bg-warning" style="color: black;">
-				<h4>Familiar</h4>
-				&bull; Python &bull; MongoDB &bull; Unix Admin &bull; Java
-			</div>
+				<div class="col-lg-6 col-12 project_box">
+					<div class="box container-fluid project">
+						<h4>Libre-ry</h4>
+						<p>A Modern, feature enrich and intuitive Library Management System</p>
+						<ul class="actions">
+							<li>Node.js</li>
+							<li>ExpressJS</li>
+							<li>Javascript</li>
+							<li>MySQL</li>
+							<li>HTML</li>
+						</ul>
+						<a class="text-dark" target="_blank" href="https://github.com/SanketSanath/library"><u>Source Code</u></a>
 
-			<div class="box container-fluid col-lg-5 col-11 bg-success">
-				<h4>Academic Knowledge</h4>
-				&bull; Operating System &bull; Networking &bull; Computer Organizations and Architecture &bull; Algorithms &bull; Data Structures
+					</div>
+				</div>
+
+				<div class="col-lg-6 col-12 project_box">
+					<div class="box container-fluid project" style="color: black;">
+						<h4>Vision</h4>
+						<p>Self-learning intelligence system that will detect the defects in bearings</p>
+						<a class="text-dark" target="_blank" href="https://github.com/SanketSanath/vision" style="color: black;"><u>Source Code</u></a>
+
+					</div>
+				</div>
+
+
+				<div class="col-lg-6 col-12 project_box">
+					<div class="box container-fluid project">
+
+						<h4>Chat-App</h4>
+						<p>A simple web based Chat Application</p>
+						<a class="text-dark" target="_blank" href="https://github.com/SanketSanath/Chat-App"><u>Source Code</u></a> |
+						<a class="text-dark" target="_blank" href="https://boiling-lake-49192.herokuapp.com/"><u>Visit App</u></a>
+					</div>
+				</div>
+
+				<div class="col-lg-6 col-12 project_box">
+					<div class="box container-fluid project">
+						<h4>Basic Games</h4>
+						<p>JavaScript implementation of popular games</p>
+						<a class="text-dark" target="_blank" href="https://github.com/SanketSanath/basicgames"><u>Source Code</u></a> |
+						<a class="text-dark" target="_blank" href="https://sanketsanath.github.io/basicgames/"><u>Play Games</u></a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
 
-	<!-- interests -->
 
-	<section class="divider container text-center bg-sec">
-		<i class="fas fa-paint-brush" style="font-size: 3em;"></i>
-		<h2>Interests</h2>
+	<!-- footer -->
+	<footer class="bg-dark light-text divider" style="padding-bottom: 10px;">
 
-		<div class="row" style="color: white;">
-			<div class="box container-fluid col-lg-3 col-11 bg-info">
-				<div>
-					<h4>Sketching</h4>
-					<a class="interests_link" href="#">Visit Gallery >></a>
-				</div>
+		<div class="container row">
+			<div class="col-sm-8">
+				<h1>Sanket Sanath</h1>
+				<p class="muted-text">I’m a software developer. I can help you solve a problem, build a website and design an eye-catching logo. I am interested in Software Engineer, Web Developer, and Data Engineer job profile.</p>
+			</div>
+			<div class="col-sm-2">
+				<p style="font-size: 1.2em;">Menu</p>
+				<ul style="list-style-type: none; padding-left: 0px;">
+					<li><a href="#" class="muted-text">Home</a></li>
+					<li><a href="#blog" class="muted-text">Blog</a></li>
+					<li><a href="/books.html" class="muted-text">Books</a></li>
+					<li><a href="" class="muted-text">Resume</a></li>
+				</ul>
 			</div>
 
-			<div class="box container-fluid col-lg-3 col-11 bg-warning" style="color: black;">
-				<div>
-					<h4>Writing</h4>
-					<a class="interests_link" target="_blank" href="https://chaurahasite.wordpress.com/" style="color: black;">Read Writings >></a>
-				</div>
-			</div>
-
-			<div class="box container-fluid col-lg-3 col-11 bg-success">
-				<div>
-					<h4>Reading</h4>
-					<a class="interests_link" href="book_list.html">View Book List >></a>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- Projects -->
-
-	<section class="divider container text-center bg-sec">
-		<i class="fas fa-drafting-compass" style="font-size: 3em;"></i> 
-		<h2>Projects</h2>
-		<div class="row" style="color: white;">
-			<div class="col-lg-6 col-12 project_box">
-				<div class="box container-fluid bg-info">
-
-					<h4>Libre-ry</h4>
-					<p>A Modern, feature enrich and intuitive Library Management System</p>
-					<a class="interests_link" target="_blank" href="https://github.com/SanketSanath/library"><u>Source Code</u></a>
-
-				</div>
-			</div>
-
-			<div class="col-lg-6 col-12 project_box">
-				<div class="box container-fluid bg-warning" style="color: black;">
-
-
-					<h4>Vision</h4>
-					<p>Self-learning intelligence system that will detect the defects in bearings</p>
-					<a class="interests_link" target="_blank" href="https://github.com/SanketSanath/vision" style="color: black;"><u>Source Code</u></a>
-
-				</div>
-			</div>
-
-
-			<div class="col-lg-6 col-12 project_box">
-				<div class="box bg-success">
-
-					<h4>Chat-App</h4>
-					<p>A simple web based Chat Application</p>
-					<a class="interests_link" target="_blank" href="https://github.com/SanketSanath/Chat-App"><u>Source Code</u></a> |
-					<a class="interests_link" target="_blank" href="https://boiling-lake-49192.herokuapp.com/"><u>Visit App</u></a>
-				</div>
-			</div>
-
-			<div class="col-lg-6 col-12 project_box">
-				<div class="box  bg-danger">
-					<h4>Basic Games</h4>
-					<p>JavaScript implementation of some popular games</p>
-					<a class="interests_link" target="_blank" href="https://github.com/SanketSanath/basicgames"><u>Source Code</u></a> |
-					<a class="interests_link" target="_blank" href="https://sanketsanath.github.io/basicgames/"><u>Play Games</u></a>
-				</div>
+			<div class="col-sm-2">
+				<p style="font-size: 1.2em;">Connect</p>
+				<ul style="list-style-type: none; padding-left: 0px;">
+					<li><a href="https://github.com/SanketSanath" target="_blank" class="muted-text">GitHub</a></li>
+					<li><a href="https://www.linkedin.com/in/sanketsanath" target="_blank" class="muted-text">LinkedIn</a></li>
+					<li><a href="mailto:sanathsanket@gmail.com" target="_blank" class="muted-text">Mail</a></li>
+				</ul>
 			</div>
 		</div>
-		<!-- </div> -->
-	</section>
 
-	<footer style="text-align: center; padding-bottom: 20px;">
-		<p class="lead">&copy; Sanket Sanath</p>
+		<div class="text-center muted-text" style="margin-top: 50px;">
+			<p style="font-size: 1.2em;">&copy; Sanket Sanath 2020</p>
+		</div>
 	</footer>
+
+	<div class="loader-wrapper">
+		<span class="loader"><span class="loader-inner"></span></span>
+	</div>
 
 </body>
 <!-- <script type="text/javascript" src="css_n_js/js/jquery.js"></script> -->
@@ -298,42 +254,22 @@
 <script type="text/javascript" src="css_n_js/js/anime.min.js"></script>
 
 <script type="text/javascript">
+	$(window).on("load",function(){
+		$(".loader-wrapper").hide();
+	});
+
 	$(document).ready(function(){
 		$(".navbar-nav li a").click(function(event) {
 			$(".navbar-collapse").collapse('hide');
 		});
 
 		anime({
-			targets: '#main_div img',
-			// translateX: 250,
-			scale: 2,
+			targets: '.navbar-brand img',
 			rotate: '1.5turn',
 			direction: 'alternate',
 			loop: true,
 			duration: 2000
 		})
-
-
-		const staggersAnimation = anime.timeline({
-		    targets: '.nav-item',
-		    autoplay: false,
-		    duration: 600,
-		    loopComplete: (a) => console.log('end'),
-		    //update: () => console.log(staggersAnimation.progress)
-		  })
-		  .add({
-		  	translateX: -270,
-		  	duration: -1
-		    // translateX: anime.stagger(-100),
-		    // delay: anime.stagger(1)
-		  })
-		  .add({
-		    translateX: anime.stagger(0),
-		    delay: anime.stagger(30)
-		  })
-
-		staggersAnimation.play();
-		document.querySelector('.navbar-toggler').onclick = staggersAnimation.play;
 	});
 </script>
 

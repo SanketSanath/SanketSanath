@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Bookshelf | SanketSanath</title>
+	<meta charset="UTF-8">
+	<meta name="keywords" content="Sanket Sanath">
+	<meta name="author" content="Sanket Sanath">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css_n_js/css/loader.css" />
+	<link rel="stylesheet" type="text/css" href="css_n_js/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Raleway|Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+	<style type="text/css">
+		body {
+			font: Raleway;
+		}
+
+		.book_parent{
+			background-color: silver;
+		}
+		.book {
+			margin: 0;
+			padding: 0;
+			background-color: gold;
+		}
+		.book_cover {
+			max-width: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		.books_title {
+			font-size: 2.2rem;
+			line-height: 2.2rem;
+			font-weight: 400;
+			margin: 0 0 3rem;
+		}
+		.book_title {
+			margin: 0px;
+		}
+		.book_author {
+			margin: 0;
+			color: #c9c9c9;
+		}
+
+		.divider {
+			padding: 30px;
+			padding-top: 100px;
+			padding-bottom: 100px;
+		}
+
+		.light-text {
+			color: #eaebeb;
+		}
+
+		.muted-text {
+			color: #adb0b2;
+		}
+
+		a.muted-text:hover {
+			color: #eaebeb;
+		}
+	</style>
+</head>
+<body>
+
+	<nav class="navbar navbar-expand-md navbar-dark bg-nav-col fixed-top bg-dark" style="text-align: center;">
+		<div>
+			<div style="width: 90%; margin: auto;">
+				<a class="navbar-brand" href="index.html" style=""><img style="width: 30px; height: 30px;" src="images/base2withcolor.svg"> Sanket Sanath</a>
+			</div>
+		</div>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+		aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+			<ul class="nav navbar-nav navbar-right ml-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="/home">Home</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="#education">Blog</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<main class="divider">
+		
+	</main>
+
+	<!-- footer -->
+	<footer class="bg-dark light-text divider" style="padding-bottom: 10px;">
+
+		<div class="container row">
+			<div class="col-sm-8">
+				<h1>Sanket Sanath</h1>
+				<p class="muted-text">I’m a software developer. I can help you solve a problem, build a website and design an eye-catching logo. I am interested in Software Engineer, Web Developer, and Data Engineer job profile.</p>
+			</div>
+			<div class="col-sm-2">
+				<p style="font-size: 1.2em;">Menu</p>
+				<ul style="list-style-type: none; padding-left: 0px;">
+					<li><a href="#home" class="muted-text">Home</a></li>
+					<li><a href="#blog" class="muted-text">Blog</a></li>
+					<li><a href="" class="muted-text">Books</a></li>
+					<li><a href="" class="muted-text">Resume</a></li>
+				</ul>
+			</div>
+
+			<div class="col-sm-2">
+				<p style="font-size: 1.2em;">Connect</p>
+				<ul style="list-style-type: none; padding-left: 0px;">
+					<li><a href="#home" class="muted-text">GitHub</a></li>
+					<li><a href="#blog" class="muted-text">LinkedIn</a></li>
+					<li><a href="#home" class="muted-text">Mail</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="text-center muted-text" style="margin-top: 50px;">
+			<p style="font-size: 1.2em;">&copy; Sanket Sanath 2020</p>
+		</div>
+	</footer>
+
+	<div class="loader-wrapper">
+		<span class="loader"><span class="loader-inner"></span></span>
+	</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script type="text/javascript" src="css_n_js/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="css_n_js/js/anime.min.js"></script>
+<script src="css_n_js/js/ejs.min.js"></script>
+<script type="text/javascript">
+
+	$(window).on("load",function(){
+		$(".loader-wrapper").hide();
+	});
+
+	$(document).ready(function(){
+		$(".navbar-nav li a").click(function(event) {
+			$(".navbar-collapse").collapse('hide');
+		});
+
+		anime({
+			targets: '.navbar-brand img',
+			rotate: '1.5turn',
+			direction: 'alternate',
+			loop: true,
+			duration: 2000
+		})
+		var bw = $('.book').width();
+	console.log(bw);
+	$('.book').css({'height': 1.6*bw+'px'});
+	});
+
+
+	let ejs_base = `<div class="container-fluid">
+					<% for(let i = 0; i < book_data.length; i++) { %>
+						<div class="row">
+							<div class="col-12">
+								<h2><%= book_data[i].year %></h2>
+							</div>
+						</div>
+
+						<div class="row mb-40">
+							<% for(let j = 0; j < book_data[i].books.length; j++){ %>
+								<div class="book_parent col-6 col-sm-4 col-md-2 mb-5">
+									<div class="book">
+										<a class="book_link" href="<%= book_data[i].books[j].url %>" target="_blank">
+											<img class="book_cover" src="<%= book_data[i].books[j].cover %>" alt="cover">
+										</a>
+										
+									</div>
+									<p class="book_title"><%= book_data[i].books[j].title %></p>
+									<p class="book_author"><%= book_data[i].books[j].author %></p>
+								</div>
+							<% } %>
+						</div>
+					<% } %>
+				</div>`
+
+	let book_data = [
+		{
+			"year": 2020,
+			"books": [
+				{
+					"title": "Anand Math",
+					"author": "Bankim Chandra Chattopadhyay",
+					"cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1482464133l/33549259._SY475_.jpg",
+					"url": "https://www.goodreads.com/book/show/33549259",
+				},
+				{
+					"title": "Flowers for Algernon",
+					"author": "Keyes, Daniel",
+					"cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510416245l/36576608.jpg",
+					"url": "https://www.goodreads.com/book/show/18373.Flowers_for_Algernon",
+				},
+				{
+					"title": "Rich Dad, Poor Dad",
+					"author": "Robert T. Kiyosaki,  Sharon Lechter",
+					"cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388211242l/69571.jpg",
+					"url": "https://www.goodreads.com/book/show/69571.Rich_Dad_Poor_Dad",
+				},
+				{
+					"title": "The Da Vinci Code",
+					"author": "Dan Brown",
+					"cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1332591483l/269831.jpg",
+					"url": "https://www.goodreads.com/book/show/269831.The_Da_Vinci_Code",
+				},
+				{
+					"title": "Rangila Rasul",
+					"author": "M.A., Pandit Chamupati",
+					"cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470447956l/6788165.jpg",
+					"url": "https://www.goodreads.com/book/show/6788165-rangila-rasul",
+				}
+			]
+		},
+		{
+			"year": 2019,
+			"books": [
+				{
+					"title": "True Blue",
+					"author": "David Baldacci",
+					"cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328823844l/8507612.jpg",
+					"url": "https://www.goodreads.com/book/show/8507612-true-blue",
+				},
+				{
+					"title": "Our Moon Has Blood Clots: The Exodus of The Kashmiri Pandits",
+					"author": "Rahul Pandita",
+					"cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1380989503l/17240108.jpg",
+					"url": "https://www.goodreads.com/book/show/17240108-our-moon-has-blood-clots",
+				},
+				{
+					"title": "The Bourne Identity",
+					"author": "Robert Ludlum",
+					"cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335860740l/7869.jpg",
+					"url": "https://www.goodreads.com/book/show/7869.The_Bourne_Identity",
+				}
+			]
+		}
+	]
+				
+	let html = ejs.render(ejs_base, {book_data});
+	$('main').append(html);
+</script>
+</html>

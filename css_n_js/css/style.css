@@ -1,0 +1,114 @@
+body {
+	padding: 0px;
+	font-family: 'Raleway', sans-serif;
+}
+
+h2{
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 600;
+}
+/*dark theme*/
+
+.bg-nav-col { background-color: #343A40; } /*for navigation*/
+.bg-sec { background-color: #f0f1f4; color: #262626; } /*for sections*/
+
+#main {
+	/*background-image: radial-gradient(#141618 55%, #1b1e20 95%);*/
+	background-image: url("../../images/back1.svg");
+	background-repeat: no-repeat;
+	background-position: 50% 50%; 
+	height:100vh;
+	padding: 60px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 32px;
+}
+#main_div {
+	width: auto;
+	height: auto;
+	text-align: center;
+}
+.dedh{ font-size: 1.5em }
+#smprofiles > a{
+	display: inline-block;
+	color: #D3D3D3;
+	padding: 5px;
+	margin: 5px;
+}
+.nav-item {
+	border-bottom: 1px solid grey;
+}
+.nav-item.active { border-bottom: 1px solid #95C1E8; }
+nav ul { width: 200px; margin: auto;}
+hr {
+	border: 0;
+	clear:both;
+	display:block;
+	background-color: #D3D3D3;
+	height: 3px;
+}
+
+.box {
+	padding-top: 40px; padding-bottom: 40px; border-radius: 10px; margin-top: 5px; margin-bottom: 5px;
+}
+
+#languages {
+	margin-bottom: 60px;
+}
+
+#languages img {
+	height: 40px;
+	margin: 10px 20px 10px 20px;
+}
+.interests_link { color: white; }
+.project_box {
+	padding: 15px 15px 0px 15px;
+	box-sizing: border-box;
+}
+
+.project_box div { height: 100%; }
+.project {
+	background-color: #343A40;
+	background-size: cover;
+	box-shadow: inset 0 0 0 100vmax rgba(248, 249, 252, .8)
+}
+
+.project:hover {
+	box-shadow: inset 0 0 0 100vmax rgba(248, 249, 252, 0.9)
+}
+
+.project h4{
+	margin-bottom: 20px;
+}
+
+.divider {
+	padding: 30px;
+	padding-top: 100px;
+	padding-bottom: 100px;
+}
+
+.light-text {
+	color: #eaebeb;
+}
+
+.muted-text {
+	color: #adb0b2;
+}
+
+a.muted-text:hover {
+	color: #eaebeb;
+}
+
+ul.actions {
+    cursor: default;
+    list-style: none;
+    padding-left: 0;
+    margin: 0 0 2em 0;
+}
+
+ul.actions > li {
+    display: inline-block;
+    padding: 0 1em 0 0;
+    vertical-align: middle;
+}
