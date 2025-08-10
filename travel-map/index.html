@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css_n_js/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css_n_js/css/loader.css" />
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark bg-nav-col fixed-top bg-dark" style="text-align: center;">
+        <div>
+            <div style="width: 90%; margin: auto;">
+                <a class="navbar-brand" href="../index.html"><img style="width: 30px; height: 30px;"
+                        src="../images/base2withcolor.svg"> Sanket Sanath</a>
+            </div>
+        </div>
+    </nav>
+
+    <svg></svg>
+
+    <div class="loader-wrapper">
+        <span class="loader"><span class="loader-inner"></span></span>
+    </div>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+
+<script>
+    $(window).on("load", function () {
+        $(".loader-wrapper").hide();
+    });
+</script>
+<script src="../css_n_js/js/visitedDistrictsMap.js"></script>
+</html>
