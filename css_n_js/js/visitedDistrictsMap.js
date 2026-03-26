@@ -35,6 +35,10 @@ const visitedDistricts = [
     // Tamil Nadu
     "Chennai",
     "Thiruvallur",
+    // Uttarakhand
+    "Dehra Dun",
+    "Haridwar",
+    "Naini Tal",
     // Uttar Pradesh
     "Agra",
     "Gautam Buddha Nagar",
@@ -59,7 +63,9 @@ const projection = d3.geoMercator()
     .translate([window.innerWidth * 0.5, window.innerHeight * 0.55]); // Center based on new dimensions
 
 const path = d3.geoPath().projection(projection);
-d3.json("indian-map.json").then(data => {
+const pathOnline = "https://raw.githubusercontent.com/mkiitkgp/India-map-D3/refs/heads/master/data/full_data-1.json";
+const pathLocal = "../../travel-map/indian-map.json";
+d3.json(pathOnline).then(data => {
     svg.selectAll("path")
         .data(data.features)
         .enter().append("path")
