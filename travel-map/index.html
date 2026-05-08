@@ -3,9 +3,32 @@
 
 <head>
     <meta charset="utf-8">
+    <title>Travel Map - Visited Places</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../css_n_js/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css_n_js/css/loader.css" />
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #f9f9f9;
+        }
+
+        svg {
+            display: block;
+        }
+
+        #map-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            pointer-events: none;
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -13,13 +36,15 @@
     <nav class="navbar navbar-dark bg-nav-col fixed-top bg-dark" style="text-align: center;">
         <div>
             <div style="width: 90%; margin: auto;">
-                <a class="navbar-brand" href="../index.html"><img style="width: 30px; height: 30px;"
-                        src="../images/base2withcolor.svg"> Sanket Sanath</a>
+                <a class="navbar-brand" href="../index.html">
+                    <img style="width: 30px; height: 30px;" src="../images/base2withcolor.svg"> Sanket Sanath
+                </a>
             </div>
         </div>
     </nav>
 
     <svg></svg>
+    <div id="map-tooltip"></div>
 
     <div class="loader-wrapper">
         <span class="loader"><span class="loader-inner"></span></span>
@@ -36,5 +61,6 @@
         $(".loader-wrapper").hide();
     });
 </script>
-<script src="../css_n_js/js/visitedDistrictsMap.js"></script>
+<script src="../css_n_js/js/visitedPlacesMap.js"></script>
+
 </html>
