@@ -3,47 +3,230 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Travel Map - Visited Places</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Adventure Journey - Sanket Sanath</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../css_n_js/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css_n_js/css/loader.css" />
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             overflow: hidden;
+            background: #f4f4f4;
+            font-family: sans-serif;
+        }
+
+        /* ── App shell ── */
+        #app {
+            position: fixed;
+            top: 56px;
+            /* navbar height */
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Tabs ── */
+        #tabs-bar {
+            display: flex;
+            background: #1a1a2e;
+            height: 44px;
+            flex-shrink: 0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: color 0.2s, border-bottom 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: #fff;
+            border-bottom: 3px solid #4caf50;
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: #ddd;
+        }
+
+        /* ── Main content area ── */
+        #content {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+        }
+
+        /* ── Map ── */
+        #map-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #map-container svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ── Sidebar (desktop right panel) ── */
+        #sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background: #fff;
+            border-left: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #sidebar-title {
+            padding: 14px 16px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #555;
+            border-bottom: 1px solid #eee;
+            flex-shrink: 0;
+        }
+
+        #sidebar-count {
+            font-size: 11px;
+            font-weight: 400;
+            color: #999;
+            float: right;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        #list-container {
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .list-item:hover {
             background: #f9f9f9;
         }
 
-        svg {
-            display: block;
+        .list-item.highlighted {
+            background: #fff8e1;
         }
 
+        .list-icon {
+            font-size: 18px;
+            margin-right: 10px;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .list-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #222;
+            line-height: 1.3;
+        }
+
+        .list-state {
+            font-size: 11px;
+            color: #888;
+            margin-top: 1px;
+        }
+
+        /* ── Tooltip ── */
         #map-tooltip {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.75);
+            position: fixed;
+            background: rgba(20, 20, 20, 0.88);
             color: #fff;
-            padding: 6px 10px;
-            border-radius: 4px;
+            padding: 7px 12px;
+            border-radius: 5px;
             font-size: 13px;
             pointer-events: none;
             display: none;
+            z-index: 999;
+            max-width: 200px;
+            line-height: 1.5;
+        }
+
+        /* ── Mobile: sidebar moves to bottom ── */
+        @media (max-width: 767px) {
+            body {
+                overflow: hidden;
+            }
+
+            #content {
+                flex-direction: column;
+            }
+
+            #map-container {
+                flex: none;
+                height: 70%;
+            }
+
+            #sidebar {
+                width: 100%;
+                height: 30%;
+                border-left: none;
+                border-top: 1px solid #ddd;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <nav class="navbar navbar-dark bg-nav-col fixed-top bg-dark" style="text-align: center;">
-        <div>
-            <div style="width: 90%; margin: auto;">
-                <a class="navbar-brand" href="../index.html">
-                    <img style="width: 30px; height: 30px;" src="../images/base2withcolor.svg"> Sanket Sanath
-                </a>
-            </div>
+    <nav class="navbar navbar-dark bg-nav-col fixed-top bg-dark" style="text-align:center;">
+        <div style="width:90%;margin:auto;">
+            <a class="navbar-brand" href="../index.html">
+                <img style="width:30px;height:30px;" src="../images/base2withcolor.svg"> Sanket Sanath
+            </a>
         </div>
     </nav>
 
-    <svg></svg>
+    <div id="app">
+        <div id="tabs-bar">
+            <button class="tab-btn active" data-tab="places">📍 &nbsp;Places</button>
+            <button class="tab-btn" data-tab="adventures">🏔️ &nbsp;Adventures</button>
+        </div>
+
+        <div id="content">
+            <div id="map-container">
+                <svg id="main-svg"></svg>
+            </div>
+            <div id="sidebar">
+                <div id="sidebar-title">
+                    Places Visited
+                    <span id="sidebar-count"></span>
+                </div>
+                <div id="list-container"></div>
+            </div>
+        </div>
+    </div>
+
     <div id="map-tooltip"></div>
 
     <div class="loader-wrapper">
@@ -55,7 +238,6 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
     crossorigin="anonymous"></script>
-
 <script>
     $(window).on("load", function () {
         $(".loader-wrapper").hide();
