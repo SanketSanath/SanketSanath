@@ -20,7 +20,7 @@
         /* ── Layout ── */
         body {
             font-family: 'Raleway', sans-serif;
-            background: #f4f4f4;
+            background: #f9f9f9;
         }
 
         /* offset for fixed left navbar on desktop, top navbar on mobile */
@@ -45,7 +45,7 @@
         }
 
         .expl-section:nth-child(odd) {
-            background: #f4f4f4;
+            background: #f9f9f9;
         }
 
         .section-heading {
@@ -79,7 +79,7 @@
         #map-svg-container {
             flex: 1;
             min-height: 480px;
-            background: #e8f4fd;
+            background: #f1f6fa;
             border-radius: 12px;
             overflow: hidden;
             position: relative;
@@ -156,7 +156,9 @@
             }
 
             #map-svg-container {
+                width: 100%;
                 min-height: 340px;
+                flex: none;
             }
 
             .expl-section {
@@ -471,6 +473,24 @@
                     <h4>Adventure Sports <span class="col-tag done-tag">Done</span></h4>
 
                     <div class="adventure-item done">
+                        <div class="adv-emoji">🪢</div>
+                        <div class="adv-body">
+                            <div class="adv-name">Bungee Jumping</div>
+                            <div class="adv-place">Rishikesh, Uttarakhand</div>
+                        </div>
+                        <div class="adv-check">✓</div>
+                    </div>
+
+                    <div class="adventure-item done">
+                        <div class="adv-emoji">🚣</div>
+                        <div class="adv-body">
+                            <div class="adv-name">White River Rafting</div>
+                            <div class="adv-place">Rishikesh, Uttarakhand</div>
+                        </div>
+                        <div class="adv-check">✓</div>
+                    </div>
+
+                    <div class="adventure-item done">
                         <div class="adv-emoji">🪂</div>
                         <div class="adv-body">
                             <div class="adv-name">Paragliding</div>
@@ -493,24 +513,6 @@
                         <div class="adv-body">
                             <div class="adv-name">Snorkelling</div>
                             <div class="adv-place">Phi Phi Islands, Thailand</div>
-                        </div>
-                        <div class="adv-check">✓</div>
-                    </div>
-
-                    <div class="adventure-item done">
-                        <div class="adv-emoji">🚣</div>
-                        <div class="adv-body">
-                            <div class="adv-name">White River Rafting</div>
-                            <div class="adv-place">Rishikesh, Uttarakhand</div>
-                        </div>
-                        <div class="adv-check">✓</div>
-                    </div>
-
-                    <div class="adventure-item done">
-                        <div class="adv-emoji">🪢</div>
-                        <div class="adv-body">
-                            <div class="adv-name">Bungee Jumping</div>
-                            <div class="adv-place">Rishikesh, Uttarakhand</div>
                         </div>
                         <div class="adv-check">✓</div>
                     </div>
@@ -593,7 +595,7 @@
     <script>
         // ── Visited Places Data ───────────────────────────────────────────
         const visitedPlaces = [
-            { name: "West Godavari",        state: "Andhra Pradesh",      lat: 16.90, lng: 81.10 },
+            { name: "Bhimavaram",           state: "Andhra Pradesh",      lat: 16.53, lng: 81.50 },
             { name: "Araria",               state: "Bihar",               lat: 26.15, lng: 87.52 },
             { name: "Bhagalpur",            state: "Bihar",               lat: 25.25, lng: 87.01 },
             { name: "Darbhanga",            state: "Bihar",               lat: 26.15, lng: 85.90 },
@@ -604,33 +606,30 @@
             { name: "Siwan",                state: "Bihar",               lat: 26.22, lng: 84.36 },
             { name: "Supaul",               state: "Bihar",               lat: 26.12, lng: 86.60 },
             { name: "Delhi",                state: "Delhi",               lat: 28.65, lng: 77.23 },
-            { name: "North Goa",            state: "Goa",                 lat: 15.50, lng: 74.10 },
-            { name: "Faridabad",            state: "Haryana",             lat: 28.41, lng: 77.31 },
-            { name: "Gurgaon",              state: "Haryana",             lat: 28.46, lng: 77.03 },
+            { name: "Goa",                  state: "Goa",                 lat: 15.25, lng: 73.90 },
             { name: "Shimla",               state: "Himachal Pradesh",    lat: 31.10, lng: 77.17 },
             { name: "Jammu",                state: "Jammu and Kashmir",   lat: 32.73, lng: 74.87 },
             { name: "Udhampur",             state: "Jammu and Kashmir",   lat: 32.92, lng: 75.14 },
-            { name: "Bangalore Urban",      state: "Karnataka",           lat: 12.97, lng: 77.59 },
-            { name: "Greater Bombay",       state: "Maharashtra",         lat: 19.08, lng: 72.88 },
-            { name: "Thane",                state: "Maharashtra",         lat: 19.22, lng: 73.00 },
-            { name: "Khordha",              state: "Odisha",              lat: 20.18, lng: 85.62 },
+            { name: "Bangalore",            state: "Karnataka",           lat: 12.97, lng: 77.59 },
+            { name: "Mumbai",               state: "Maharashtra",         lat: 19.08, lng: 72.88 },
+            { name: "Konark",               state: "Odisha",              lat: 19.89, lng: 86.08 },
             { name: "Puri",                 state: "Odisha",              lat: 19.81, lng: 85.83 },
             { name: "Alwar",                state: "Rajasthan",           lat: 27.56, lng: 76.62 },
             { name: "Jodhpur",              state: "Rajasthan",           lat: 26.30, lng: 73.02 },
+            { name: "Bhangarh",             state: "Rajasthan",           lat: 27.09, lng: 76.29 },
             { name: "Chennai",              state: "Tamil Nadu",          lat: 13.08, lng: 80.27 },
-            { name: "Thiruvallur",          state: "Tamil Nadu",          lat: 13.14, lng: 79.91 },
-            { name: "Dehra Dun",            state: "Uttarakhand",         lat: 30.32, lng: 78.03 },
-            { name: "Haridwar",             state: "Uttarakhand",         lat: 29.95, lng: 78.16 },
-            { name: "Naini Tal",            state: "Uttarakhand",         lat: 29.38, lng: 79.46 },
+            { name: "Chakrata",             state: "Uttarakhand",         lat: 30.70, lng: 77.86 },
+            { name: "Rishikesh",            state: "Uttarakhand",         lat: 30.08, lng: 78.22 },
+            { name: "Nainital",             state: "Uttarakhand",         lat: 29.38, lng: 79.46 },
             { name: "Agra",                 state: "Uttar Pradesh",       lat: 27.18, lng: 78.01 },
-            { name: "Gautam Buddha Nagar",  state: "Uttar Pradesh",       lat: 28.57, lng: 77.49 },
-            { name: "Ghaziabad",            state: "Uttar Pradesh",       lat: 28.67, lng: 77.45 },
             { name: "Mathura",              state: "Uttar Pradesh",       lat: 27.49, lng: 77.67 },
             { name: "Meerut",               state: "Uttar Pradesh",       lat: 28.98, lng: 77.71 },
             { name: "Varanasi",             state: "Uttar Pradesh",       lat: 25.32, lng: 83.00 },
             { name: "Darjiling",            state: "West Bengal",         lat: 27.04, lng: 88.26 },
             { name: "Kolkata",              state: "West Bengal",         lat: 22.57, lng: 88.36 },
-            { name: "Haora",                state: "West Bengal",         lat: 22.59, lng: 88.31 },
+            { name: "Itahari",              state: "Nepal",               lat: 26.86, lng: 87.06 },
+            { name: "Kanyam",               state: "Nepal",               lat: 26.86, lng: 87.76 },
+            { name: "Janakpur",             state: "Nepal",               lat: 26.75, lng: 85.85 },
         ];
 
         const STATE_GEOJSON_URL = "https://gist.githubusercontent.com/jbrobst/56c13bbbf9d97d187fea01ca62ea5112/raw/e388c4cae20aa53cb5090210a42ebb9b765c0a36/india_states.geojson";
@@ -684,9 +683,9 @@
                 .enter().append("path")
                 .attr("class", "state")
                 .attr("d", path)
-                .attr("fill", "#cce5f6")
+                .attr("fill", "#d8ecfa")
                 .attr("stroke", "#7ab8d9")
-                .attr("stroke-width", 0.8);
+                .attr("stroke-width", 0.4);
 
             // Visited squares
             const sq = Math.max(6, Math.min(W, H) * 0.012);
@@ -698,13 +697,13 @@
                 .attr("x", d => projection([d.lng, d.lat])[0] - sq / 2)
                 .attr("y", d => projection([d.lng, d.lat])[1] - sq / 2)
                 .attr("width", sq).attr("height", sq)
-                .attr("fill", "#e53935")
-                .attr("stroke", "#b71c1c")
+                .attr("fill", "#3183e1")
+                .attr("stroke", "#2171cc")
                 .attr("stroke-width", 1)
                 .attr("rx", 2)
                 .style("cursor", "pointer")
                 .on("mouseover", (event, d) => {
-                    d3.select(event.currentTarget).attr("fill", "#ff9800");
+                    d3.select(event.currentTarget).attr("fill", "#66a8f5");
                     tooltip.style("display", "block")
                         .html(`<strong>${d.name}</strong><br>${d.state}`);
                 })
@@ -713,7 +712,7 @@
                            .style("top",  (event.clientY - 34) + "px");
                 })
                 .on("mouseout", event => {
-                    d3.select(event.currentTarget).attr("fill", "#e53935");
+                    d3.select(event.currentTarget).attr("fill", "#3183e1");
                     tooltip.style("display", "none");
                 })
                 .on("click", (event, d) => {
@@ -742,4 +741,3 @@
 
 </body>
 </html>
-
