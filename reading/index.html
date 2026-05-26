@@ -364,6 +364,8 @@
             <button class="group-btn active" data-group="flat">All</button>
             <button class="group-btn" data-group="year">By Year</button>
             <button class="group-btn" data-group="author">By Author</button>
+            <button class="group-btn" data-group="genre">By Genre</button>
+            <button class="group-btn" data-group="language">By Language</button>
         </div>
         <span class="count-label" id="count-label" aria-live="polite"></span>
     </div>
@@ -516,7 +518,20 @@
                 return Number(b) - Number(a);   // descending
             });
             inner = keys.map(k => sectionHtml(k === UNKNOWN ? 'Year Unknown' : k, groups[k])).join('');
-
+        } else if (groupMode === 'genre') {
+            const groups = groupBy(books, b => b.genre || 'Unknown');
+            const keys   = Object.keys(groups).sort((a, b) => {
+                const diff = groups[b].length - groups[a].length;
+                return diff !== 0 ? diff : a.localeCompare(b);
+            });
+            inner = keys.map(k => sectionHtml(k, groups[k])).join('');
+        } else if (groupMode === 'language') {
+            const groups = groupBy(books, b => b.language || 'Unknown');
+            const keys   = Object.keys(groups).sort((a, b) => {
+                const diff = groups[b].length - groups[a].length;
+                return diff !== 0 ? diff : a.localeCompare(b);
+            });
+            inner = keys.map(k => sectionHtml(k, groups[k])).join('');
         } else {
             // By Author — most books first, then alpha
             const groups = groupBy(books, b => b.author);
