@@ -4,63 +4,62 @@
  * Each entry:
  *   title    {string}  Book title
  *   author   {string}  Author name
- *   rating   {number}  0–5  (0 = not rated; supports decimals e.g. 4.5)
+ *   rating   {number}  0-5  (0 = not rated; supports decimals e.g. 4.5)
  *   dateRead {string}  "YYYY/MM/DD" or "" if unknown
- *   genre    {string}  e.g. "Mystery", "Literary Fiction", "Romance" …
+ *   genre    {string}  e.g. "Mystery", "Literary Fiction", "Romance"
  *   language {string}  e.g. "English", "Hindi", "Japanese"
  *
- * To add a new book: copy any entry as a template and paste it at the
- * very top of the BOOKS array (before the first entry).
+ * Add a new book at the very top of the BOOKS array (before the first entry).
  */
 
 const BOOKS = [
 
-  // ── 2026 ─────────────────────────────────────────────────────────────
+  // -- 2026 --
   { title: "Nirmala (Hindi)",                                              author: "Munshi Premchand",             rating: 5, dateRead: "2026/05/10", genre: "Classic",          language: "Hindi"    },
   { title: "Murder on the Orient Express (Hercule Poirot, #10)",           author: "Agatha Christie",              rating: 5, dateRead: "2026/05/02", genre: "Mystery",          language: "English"  },
   { title: "The Murder of Roger Ackroyd (Hercule Poirot, #4)",             author: "Agatha Christie",              rating: 5, dateRead: "2026/04/19", genre: "Mystery",          language: "English"  },
   { title: "Siddhartha",                                                    author: "Hermann Hesse",                rating: 5, dateRead: "2026/04/12", genre: "Literary Fiction", language: "English"  },
-  { title: "सूरज का सातवाँ घोड़ा",                                         author: "Dharamvir Bharati",            rating: 5, dateRead: "2026/04/04", genre: "Literary Fiction", language: "Hindi"    },
+  { title: "Suraj Ka Satvan Ghoda",                                         author: "Dharamvir Bharati",            rating: 5, dateRead: "2026/04/04", genre: "Literary Fiction", language: "Hindi"    },
   { title: "And Then There Were None",                                      author: "Agatha Christie",              rating: 5, dateRead: "2026/03/28", genre: "Mystery",          language: "English"  },
   { title: "White Nights",                                                  author: "Fyodor Dostoevsky",            rating: 3, dateRead: "2026/03/14", genre: "Literary Fiction", language: "English"  },
-  { title: "Musafir Café",                                                  author: "Hind Yugm",                    rating: 4, dateRead: "2026/03/02", genre: "Hindi Fiction",    language: "Hindi"    },
+  { title: "Musafir Cafe",                                                  author: "Hind Yugm",                    rating: 4, dateRead: "2026/03/02", genre: "Short Stories",    language: "Hindi"    },
   { title: "The Stranger",                                                  author: "Albert Camus",                 rating: 3, dateRead: "2026/02/21", genre: "Literary Fiction", language: "English"  },
-  { title: "अक्टूबर जंक्शन",                                               author: "Divya Prakash Dubey",          rating: 2, dateRead: "2026/02/28", genre: "Hindi Fiction",    language: "Hindi"    },
+  { title: "October Junction",                                              author: "Divya Prakash Dubey",          rating: 2, dateRead: "2026/02/28", genre: "Hindi Fiction",    language: "Hindi"    },
   { title: "The Girl with the Dragon Tattoo (Millennium, #1)",              author: "Stieg Larsson",                rating: 5, dateRead: "2026/02/10", genre: "Thriller",         language: "English"  },
 
-  // ── 2025 ─────────────────────────────────────────────────────────────
+  // -- 2025 --
   { title: "A Thousand Splendid Suns",                                      author: "Khaled Hosseini",              rating: 5, dateRead: "2025/08/14", genre: "Literary Fiction", language: "English"  },
-  { title: "गुनाहों का देवता",                                              author: "Dharamvir Bharati",            rating: 5, dateRead: "2025/08/11", genre: "Romance",          language: "Hindi"    },
+  { title: "Gunahon Ka Devta",                                              author: "Dharamvir Bharati",            rating: 5, dateRead: "2025/08/11", genre: "Romance",          language: "Hindi"    },
 
-  // ── 2022 ─────────────────────────────────────────────────────────────
+  // -- 2022 --
   { title: "Jujutsu Kaisen 0",                                              author: "Gege Akutami",                 rating: 5, dateRead: "2022/01/01", genre: "Manga",            language: "Japanese" },
 
-  // ── 2021 ─────────────────────────────────────────────────────────────
+  // -- 2021 --
   { title: "The Richest Man in Babylon: Six Laws of Wealth",                author: "Charles Conrad",               rating: 4, dateRead: "2021/11/27", genre: "Self Help",        language: "English"  },
-  { title: "Chaurasi / चौरासी / 84",                                        author: "Satya Vyas",                   rating: 4, dateRead: "2021/07/11", genre: "Hindi Fiction",    language: "Hindi"    },
+  { title: "Chaurasi / 84",                                                 author: "Satya Vyas",                   rating: 4, dateRead: "2021/07/11", genre: "Hindi Fiction",    language: "Hindi"    },
 
-  // ── 2020 ─────────────────────────────────────────────────────────────
-  { title: "आनन्द मठ",                                                      author: "Bankim Chandra Chattopadhyay", rating: 4, dateRead: "2020/04/29", genre: "Classic",          language: "Hindi"    },
+  // -- 2020 --
+  { title: "Anand Math",                                                    author: "Bankim Chandra Chattopadhyay", rating: 4, dateRead: "2020/04/29", genre: "Classic",          language: "Hindi"    },
   { title: "Flowers for Algernon",                                          author: "Daniel Keyes",                 rating: 5, dateRead: "2020/04/22", genre: "Sci-Fi",           language: "English"  },
   { title: "Konark",                                                        author: "Nimmy Chacko",                 rating: 3, dateRead: "2020/08/08", genre: "Mythology",        language: "English"  },
   { title: "Vaishno Devi",                                                  author: "Aruna Balakrishna Singh",      rating: 3, dateRead: "2020/08/08", genre: "Mythology",        language: "English"  },
   { title: "The Da Vinci Code (Robert Langdon, #2)",                        author: "Dan Brown",                    rating: 4, dateRead: "2020/02/15", genre: "Thriller",         language: "English"  },
   { title: "Rangila Rasul",                                                 author: "M.A. Chamupati",               rating: 5, dateRead: "2020/01/07", genre: "Non-fiction",      language: "Hindi"    },
 
-  // ── 2019 ─────────────────────────────────────────────────────────────
+  // -- 2019 --
   { title: "The Bourne Identity (Jason Bourne, #1)",                        author: "Robert Ludlum",                rating: 4, dateRead: "2019/12/21", genre: "Thriller",         language: "English"  },
   { title: "True Blue",                                                     author: "David Baldacci",               rating: 3, dateRead: "2019/12/16", genre: "Thriller",         language: "English"  },
 
-  // ── 2017 ─────────────────────────────────────────────────────────────
+  // -- 2017 --
   { title: "Life is What You Make It",                                      author: "Preeti Shenoy",                rating: 2, dateRead: "2017/03/09", genre: "Romance",          language: "English"  },
 
-  // ── 2015 ─────────────────────────────────────────────────────────────
+  // -- 2015 --
   { title: "Lolita",                                                        author: "Vladimir Nabokov",             rating: 4, dateRead: "2015/10/01", genre: "Literary Fiction", language: "English"  },
 
-  // ── Date Unknown ─────────────────────────────────────────────────────
+  // -- Date Unknown --
   { title: "Steve Jobs",                                                    author: "Walter Isaacson",              rating: 5, dateRead: "", genre: "Biography",        language: "English"  },
   { title: "War and Peace",                                                 author: "Leo Tolstoy",                  rating: 5, dateRead: "", genre: "Classic",          language: "English"  },
-  { title: "Our Moon Has Blood Clots: The Exodus of the Kashmiri Pandits",  author: "Rahul Pandita",                rating: 5, dateRead: "", genre: "Non-fiction",      language: "English"  },
+  { title: "Our Moon Has Blood Clots",                                      author: "Rahul Pandita",                rating: 5, dateRead: "", genre: "Non-fiction",      language: "English"  },
   { title: "Kafka on the Shore",                                            author: "Haruki Murakami",              rating: 4, dateRead: "", genre: "Literary Fiction", language: "English"  },
   { title: "Who Will Cry When You Die?",                                    author: "Robin Sharma",                 rating: 4, dateRead: "", genre: "Self Help",        language: "English"  },
   { title: "One Night at the Call Center",                                  author: "Chetan Bhagat",                rating: 3, dateRead: "", genre: "Romance",          language: "English"  },
@@ -74,12 +73,12 @@ const BOOKS = [
   { title: "The Last Leaf",                                                 author: "O. Henry",                     rating: 5, dateRead: "", genre: "Classic",          language: "English"  },
   { title: "I Too Had a Love Story",                                        author: "Ravinder Singh",               rating: 2, dateRead: "", genre: "Romance",          language: "English"  },
   { title: "Swaraj",                                                        author: "Arvind Kejriwal",              rating: 3, dateRead: "", genre: "Non-fiction",      language: "Hindi"    },
-  { title: "एक गधे की वापसी",                                               author: "Krishan Chandar",              rating: 5, dateRead: "", genre: "Hindi Fiction",    language: "Hindi"    },
-  { title: "एक गधे की आत्मकथा",                                             author: "Krishan Chander",              rating: 5, dateRead: "", genre: "Hindi Fiction",    language: "Hindi"    },
+  { title: "Ek Gadhe Ki Wapsi",                                             author: "Krishan Chandar",              rating: 5, dateRead: "", genre: "Hindi Fiction",    language: "Hindi"    },
+  { title: "Ek Gadhe Ki Atmakatha",                                         author: "Krishan Chander",              rating: 5, dateRead: "", genre: "Hindi Fiction",    language: "Hindi"    },
   { title: "Brida",                                                         author: "Paulo Coelho",                 rating: 2, dateRead: "", genre: "Literary Fiction", language: "English"  },
   { title: "Eleven Minutes",                                                author: "Paulo Coelho",                 rating: 2, dateRead: "", genre: "Literary Fiction", language: "English"  },
-  { title: "हुंकार",                                                         author: "Ramdhari Singh 'Dinkar'",      rating: 3, dateRead: "", genre: "Poetry",           language: "Hindi"    },
-  { title: "रश्मिरथी",                                                       author: "Ramdhari Singh 'Dinkar'",      rating: 5, dateRead: "", genre: "Poetry",           language: "Hindi"    },
+  { title: "Hunkar",                                                        author: "Ramdhari Singh Dinkar",        rating: 3, dateRead: "", genre: "Poetry",           language: "Hindi"    },
+  { title: "Rashmirathi",                                                   author: "Ramdhari Singh Dinkar",        rating: 5, dateRead: "", genre: "Poetry",           language: "Hindi"    },
   { title: "Fifty Shades of Grey (Fifty Shades, #1)",                       author: "E.L. James",                   rating: 3, dateRead: "", genre: "Romance",          language: "English"  },
   { title: "Fifty Shades Darker (Fifty Shades, #2)",                        author: "E.L. James",                   rating: 3, dateRead: "", genre: "Romance",          language: "English"  },
   { title: "Fifty Shades Freed (Fifty Shades, #3)",                         author: "E.L. James",                   rating: 3, dateRead: "", genre: "Romance",          language: "English"  },
