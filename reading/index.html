@@ -160,11 +160,42 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .book-card:hover .book-cover { transform: translateY(-3px) rotate(0.5deg); box-shadow: -2px 0 8px rgba(0,0,0,0.2), 4px 10px 20px rgba(0,0,0,0.18), inset -1px 0 3px rgba(0,0,0,0.1); }
+        /* spine */
         .book-cover::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 9px; background: rgba(0,0,0,0.22); border-radius: 4px 0 0 4px; }
-        .book-cover::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.13) 0%, transparent 52%); pointer-events: none; }
-        .book-initials { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 700; color: rgba(255,255,255,0.85); position: relative; z-index: 1; text-shadow: 0 1px 6px rgba(0,0,0,0.35); letter-spacing: 0.04em; }
+        /* bottom dark fade for text legibility */
+        .book-cover::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.45) 100%); pointer-events: none; }
+        .book-cover-title {
+            font-family: var(--font-serif);
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.95);
+            text-align: center;
+            padding: 10px 12px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.5);
+            line-height: 1.45;
+            word-break: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 7;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            align-self: flex-end;
+        }
         .book-title { font-family: var(--font-serif); font-size: 0.87rem; font-weight: 700; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 0 0 3px; color: var(--text); }
-        .book-author { font-size: 0.75rem; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; margin: 0 0 6px; }
+        .book-author { font-size: 0.75rem; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; margin: 0 0 5px; }
+        .book-genres { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 5px; }
+        .book-genre-tag {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--muted);
+            background: var(--border);
+            padding: 2px 6px;
+            border-radius: 3px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
 
         /* ─── STARS ─── */
         .stars { display: inline-flex; gap: 0.5px; line-height: 1; vertical-align: middle; }
@@ -326,14 +357,19 @@
 
     /* ── Components ── */
     function bookCard(b) {
+        const genres = Array.isArray(b.genre) ? b.genre : (b.genre ? [b.genre] : []);
+        const genreTags = genres.length
+            ? `<div class="book-genres">${genres.map(g => `<span class="book-genre-tag">${esc(g)}</span>`).join('')}</div>`
+            : '';
         return `<div class="book-card">
             <div class="book-cover" style="${coverGradient(b.title)}">
-                <span class="book-initials">${esc(getInitials(b.title))}</span>
+                <span class="book-cover-title">${esc(b.title)}</span>
             </div>
             <p class="book-title">${esc(b.title)}</p>
             <p class="book-author">${esc(b.author)}</p>
             ${renderStars(b.rating)}
             ${b.dateRead ? `<p class="book-date">${fmtDate(b.dateRead)}</p>` : ''}
+            ${genreTags}
         </div>`;
     }
     function sectionHtml(label, books) {
@@ -375,7 +411,7 @@
             'All Authors');
 
         fillSelect('filter-genre',
-            [...new Set(allBooks.map(b => b.genre || ''))].filter(Boolean).sort()
+            [...new Set(allBooks.flatMap(b => Array.isArray(b.genre) ? b.genre : (b.genre ? [b.genre] : [])))].filter(Boolean).sort()
                 .map(g => ({ v: g, l: g })),
             'All Genres');
 
@@ -402,8 +438,8 @@
                 ? books.filter(b => !b.dateRead)
                 : books.filter(b => String(readYear(b.dateRead)) === filters.year);
         }
-        if (filters.author)   books = books.filter(b => b.author   === filters.author);
-        if (filters.genre)    books = books.filter(b => b.genre    === filters.genre);
+        if (filters.author)   books = books.filter(b => b.author === filters.author);
+        if (filters.genre)    books = books.filter(b => Array.isArray(b.genre) ? b.genre.includes(filters.genre) : b.genre === filters.genre);
         if (filters.language) books = books.filter(b => b.language === filters.language);
         return books;
     }
@@ -448,8 +484,17 @@
             inner = byCountAlpha(groups).map(k => sectionHtml(k, groups[k])).join('');
 
         } else if (groupMode === 'genre') {
-            const groups = groupBy(books, b => b.genre || 'Unknown');
-            inner = byCountAlpha(groups).map(k => sectionHtml(k, groups[k])).join('');
+            // A book can belong to multiple genres — it appears in each section
+            const allGenres = [...new Set(books.flatMap(b => Array.isArray(b.genre) ? b.genre : (b.genre ? [b.genre] : ['Unknown'])))];
+            const sorted = allGenres.sort((a, b) => {
+                const countA = books.filter(bk => (Array.isArray(bk.genre) ? bk.genre : [bk.genre]).includes(a)).length;
+                const countB = books.filter(bk => (Array.isArray(bk.genre) ? bk.genre : [bk.genre]).includes(b)).length;
+                return countB - countA || a.localeCompare(b);
+            });
+            inner = sorted.map(g => {
+                const gb = books.filter(bk => Array.isArray(bk.genre) ? bk.genre.includes(g) : bk.genre === g);
+                return sectionHtml(g, gb);
+            }).join('');
 
         } else if (groupMode === 'language') {
             const groups = groupBy(books, b => b.language || 'Unknown');
