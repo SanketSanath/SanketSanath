@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading — Sanket Sanath</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:         #faf8f4;
+            --bg-card:    #ffffff;
+            --text:       #1c1917;
+            --muted:      #78716c;
+            --subtle:     #b8b0a8;
+            --border:     #e5ddd5;
+            --star:       #d97706;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans:  'Inter', system-ui, sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ─── STATS BAR ─────────────────────────────── */
+        .stats-bar {
+            background: #1c1917;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .stat-pill {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 40px;
+            border-right: 1px solid rgba(255,255,255,0.09);
+            gap: 5px;
+        }
+        .stat-pill:last-child { border-right: none; }
+        .stat-value {
+            font-family: var(--font-serif);
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.66rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.13em;
+            color: rgba(255,255,255,0.45);
+        }
+
+        /* ─── PAGE HEADER ───────────────────────────── */
+        .page-header {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 56px 32px 28px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .header-headline h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            line-height: 0.92;
+            letter-spacing: -0.03em;
+        }
+        .header-headline h1 em { font-style: italic; font-weight: 400; }
+        .header-side { text-align: right; flex-shrink: 0; }
+        .header-side p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+        .back-link {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1.5px solid var(--border);
+            padding-bottom: 1px;
+            transition: border-color 0.15s;
+        }
+        .back-link:hover { border-color: var(--text); }
+
+        /* ─── CONTROLS BAR ──────────────────────────── */
+        .controls-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(250,248,244,0.88);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .search-wrap { flex: 1; min-width: 180px; position: relative; }
+        .search-icon {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            stroke: var(--muted);
+            fill: none;
+            pointer-events: none;
+        }
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 34px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg-card);
+            font-family: var(--font-sans);
+            font-size: 0.875rem;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .search-input::placeholder { color: var(--subtle); }
+        .search-input:focus {
+            border-color: var(--text);
+            box-shadow: 0 0 0 3px rgba(28,25,23,0.07);
+        }
+        .group-toggle {
+            display: flex;
+            background: var(--border);
+            border-radius: 7px;
+            padding: 2px;
+            gap: 2px;
+        }
+        .group-btn {
+            padding: 6px 15px;
+            border: none;
+            border-radius: 5px;
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            background: transparent;
+            color: var(--muted);
+            transition: background 0.15s, color 0.15s;
+            white-space: nowrap;
+        }
+        .group-btn:hover { color: var(--text); }
+        .group-btn.active { background: var(--text); color: #fff; }
+        .count-label {
+            font-size: 0.78rem;
+            color: var(--subtle);
+            margin-left: 4px;
+            white-space: nowrap;
+        }
+
+        /* ─── MAIN CONTENT ──────────────────────────── */
+        .main-content {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 32px 32px 96px;
+        }
+
+        /* ─── GROUP SECTIONS ────────────────────────── */
+        .group-section + .group-section { margin-top: 56px; }
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1.5px solid var(--text);
+        }
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+        .section-count {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ─── BOOK GRID ─────────────────────────────── */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 24px 18px;
+        }
+
+        /* ─── BOOK CARD ─────────────────────────────── */
+        .book-card { display: flex; flex-direction: column; }
+        .book-cover {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            border-radius: 4px 6px 6px 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            box-shadow:
+                -2px 0 6px rgba(0,0,0,0.18),
+                2px 4px 14px rgba(0,0,0,0.15),
+                inset -1px 0 3px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            flex-shrink: 0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .book-card:hover .book-cover {
+            transform: translateY(-3px) rotate(0.5deg);
+            box-shadow:
+                -2px 0 8px rgba(0,0,0,0.2),
+                4px 10px 20px rgba(0,0,0,0.18),
+                inset -1px 0 3px rgba(0,0,0,0.1);
+        }
+        /* spine */
+        .book-cover::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 9px;
+            background: rgba(0,0,0,0.22);
+            border-radius: 4px 0 0 4px;
+        }
+        /* sheen */
+        .book-cover::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.13) 0%, transparent 52%);
+            pointer-events: none;
+        }
+        .book-initials {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.85);
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.35);
+            letter-spacing: 0.04em;
+        }
+        .book-title {
+            font-family: var(--font-serif);
+            font-size: 0.87rem;
+            font-weight: 700;
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin: 0 0 3px;
+            color: var(--text);
+        }
+        .book-author {
+            font-size: 0.75rem;
+            color: var(--muted);
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin: 0 0 6px;
+        }
+
+        /* ─── STARS ─────────────────────────────────── */
+        .stars { display: inline-flex; gap: 0.5px; line-height: 1; vertical-align: middle; }
+        .star-pos { position: relative; display: inline-block; font-size: 0.85rem; line-height: 1; }
+        .star-empty { color: #d6cec5; }
+        .star-filled { position: absolute; top: 0; left: 0; overflow: hidden; color: var(--star); white-space: nowrap; }
+        .no-rating { font-size: 0.7rem; color: var(--subtle); font-style: italic; }
+        .book-date { font-size: 0.7rem; color: var(--subtle); margin-top: 4px; }
+
+        /* ─── EMPTY STATE ────────────────────────────── */
+        .state-center { text-align: center; padding: 100px 24px; color: var(--muted); }
+        .state-center p { font-size: 0.95rem; margin-top: 4px; }
+
+        /* ─── RESPONSIVE ─────────────────────────────── */
+        @media (max-width: 700px) {
+            .stat-pill { padding: 16px 26px; }
+            .stat-value { font-size: 1.9rem; }
+            .page-header { padding: 36px 20px 20px; }
+            .controls-bar { padding: 10px 20px; }
+            .main-content { padding: 24px 20px 64px; }
+            .book-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 18px 14px; }
+            .count-label { display: none; }
+        }
+        @media (max-width: 400px) {
+            .stat-pill { padding: 14px 16px; }
+            .stat-value { font-size: 1.6rem; }
+            .book-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 14px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── STATS BAR ── -->
+    <div class="stats-bar">
+        <div class="stat-pill">
+            <span class="stat-value" id="stat-total">—</span>
+            <span class="stat-label">Books Read</span>
+        </div>
+        <div class="stat-pill">
+            <span class="stat-value" id="stat-year">—</span>
+            <span class="stat-label" id="stat-year-label">This Year</span>
+        </div>
+        <div class="stat-pill">
+            <span class="stat-value" id="stat-avg">—</span>
+            <span class="stat-label">Avg Rating</span>
+        </div>
+        <div class="stat-pill">
+            <span class="stat-value" id="stat-authors">—</span>
+            <span class="stat-label">Authors</span>
+        </div>
+    </div>
+
+    <!-- ── PAGE HEADER ── -->
+    <div class="page-header">
+        <div class="header-headline">
+            <h1>My<br><em>Reading</em></h1>
+        </div>
+        <div class="header-side">
+            <p>Books I've read, tracked on Goodreads.</p>
+            <a class="back-link" href="../index.html">← Sanket Sanath</a>
+        </div>
+    </div>
+
+    <!-- ── CONTROLS BAR ── -->
+    <div class="controls-bar">
+        <div class="search-wrap">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input
+                class="search-input"
+                id="search-input"
+                type="search"
+                placeholder="Search title or author…"
+                autocomplete="off"
+                spellcheck="false"
+            >
+        </div>
+        <div class="group-toggle" role="group" aria-label="Group by">
+            <button class="group-btn active" data-group="flat">All</button>
+            <button class="group-btn" data-group="year">By Year</button>
+            <button class="group-btn" data-group="author">By Author</button>
+        </div>
+        <span class="count-label" id="count-label" aria-live="polite"></span>
+    </div>
+
+    <!-- ── BOOK GRID ── -->
+    <div id="grid-container"></div>
+
+    <!-- Edit books-data.js to add or update books -->
+    <script src="books-data.js"></script>
+    <script>
+    'use strict';
+
+    const CY = new Date().getFullYear();
+    let searchQ   = '';
+    let groupMode = 'flat';
+
+    /* Sort once: date-read descending, unknowns last */
+    const allBooks = [...BOOKS].sort((a, b) => {
+        if (!a.dateRead && !b.dateRead) return 0;
+        if (!a.dateRead) return 1;
+        if (!b.dateRead) return -1;
+        return b.dateRead.localeCompare(a.dateRead);
+    });
+
+    /* ── Helpers ── */
+    function strHue(s) {
+        let h = 0;
+        for (let i = 0; i < s.length; i++) h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+        return Math.abs(h) % 360;
+    }
+
+    function coverGradient(title) {
+        const h = strHue(title), h2 = (h + 42) % 360;
+        return `background:linear-gradient(155deg,hsl(${h},46%,37%),hsl(${h2},46%,25%))`;
+    }
+
+    function getInitials(title) {
+        const clean = title.replace(/\(.*?\)/g, '').trim();
+        const words = clean.split(/\s+/).filter(w => w.length > 0);
+        if (!words.length) return '?';
+        const a = words.find(w => w.length > 1) || words[0];
+        const b = words.find((w, i) => i > 0 && w.length > 1) || words[1];
+        return (a[0] + (b ? b[0] : '')).toUpperCase();
+    }
+
+    function renderStars(rating) {
+        const r = parseFloat(rating) || 0;
+        if (r === 0) return '<span class="no-rating">not rated</span>';
+        let html = `<span class="stars" title="${r} / 5">`;
+        for (let i = 1; i <= 5; i++) {
+            const pct = Math.min(100, Math.max(0, (r - (i - 1)) * 100));
+            html += `<span class="star-pos"><span class="star-empty">★</span><span class="star-filled" style="width:${pct}%">★</span></span>`;
+        }
+        return html + '</span>';
+    }
+
+    function fmtDate(d) {
+        if (!d) return '';
+        const [y, m, day] = d.split('/');
+        if (!y || !m) return y || '';
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        return `${months[parseInt(m, 10) - 1]} ${parseInt(day, 10)}, ${y}`;
+    }
+
+    function readYear(dateStr) {
+        if (!dateStr) return null;
+        const y = parseInt(dateStr, 10);
+        return isNaN(y) ? null : y;
+    }
+
+    function esc(s) {
+        return String(s)
+            .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+            .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function groupBy(arr, keyFn) {
+        const out = {};
+        arr.forEach(x => { const k = keyFn(x); if (!out[k]) out[k] = []; out[k].push(x); });
+        return out;
+    }
+
+    /* ── Components ── */
+    function bookCard(b) {
+        return `<div class="book-card">
+            <div class="book-cover" style="${coverGradient(b.title)}">
+                <span class="book-initials">${esc(getInitials(b.title))}</span>
+            </div>
+            <p class="book-title">${esc(b.title)}</p>
+            <p class="book-author">${esc(b.author)}</p>
+            ${renderStars(b.rating)}
+            ${b.dateRead ? `<p class="book-date">${fmtDate(b.dateRead)}</p>` : ''}
+        </div>`;
+    }
+
+    function sectionHtml(label, books) {
+        const n = books.length;
+        return `<div class="group-section">
+            <div class="section-header">
+                <span class="section-title">${esc(label)}</span>
+                <span class="section-count">${n} book${n !== 1 ? 's' : ''}</span>
+            </div>
+            <div class="book-grid">${books.map(bookCard).join('')}</div>
+        </div>`;
+    }
+
+    /* ── Stats ── */
+    function updateStats() {
+        document.getElementById('stat-total').textContent     = allBooks.length;
+        document.getElementById('stat-year-label').textContent = String(CY);
+        document.getElementById('stat-year').textContent      = allBooks.filter(b => readYear(b.dateRead) === CY).length;
+        const rated = allBooks.filter(b => b.rating > 0);
+        document.getElementById('stat-avg').textContent       = rated.length
+            ? (rated.reduce((s, b) => s + b.rating, 0) / rated.length).toFixed(1) : '—';
+        document.getElementById('stat-authors').textContent   = new Set(allBooks.map(b => b.author)).size;
+    }
+
+    /* ── Render ── */
+    function filtered() {
+        if (!searchQ) return allBooks;
+        const q = searchQ.toLowerCase();
+        return allBooks.filter(b =>
+            b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q)
+        );
+    }
+
+    function render() {
+        const books     = filtered();
+        const container = document.getElementById('grid-container');
+
+        document.getElementById('count-label').textContent = books.length
+            ? `${books.length} book${books.length !== 1 ? 's' : ''}` : '';
+
+        if (!books.length) {
+            container.innerHTML = `<div class="state-center"><p>No books match your search.</p></div>`;
+            return;
+        }
+
+        let inner = '';
+
+        if (groupMode === 'flat') {
+            inner = `<div class="book-grid">${books.map(bookCard).join('')}</div>`;
+
+        } else if (groupMode === 'year') {
+            const UNKNOWN = '__unknown__';
+            const groups  = groupBy(books, b => readYear(b.dateRead) ?? UNKNOWN);
+            const keys    = Object.keys(groups).sort((a, b) => {
+                if (a === UNKNOWN) return 1;
+                if (b === UNKNOWN) return -1;
+                return Number(b) - Number(a);   // descending
+            });
+            inner = keys.map(k => sectionHtml(k === UNKNOWN ? 'Year Unknown' : k, groups[k])).join('');
+
+        } else {
+            // By Author — most books first, then alpha
+            const groups = groupBy(books, b => b.author);
+            const keys   = Object.keys(groups).sort((a, b) => {
+                const diff = groups[b].length - groups[a].length;
+                return diff !== 0 ? diff : a.localeCompare(b);
+            });
+            inner = keys.map(k => sectionHtml(k, groups[k])).join('');
+        }
+
+        container.innerHTML = `<div class="main-content">${inner}</div>`;
+    }
+
+    /* ── Events ── */
+    document.getElementById('search-input').addEventListener('input', e => {
+        searchQ = e.target.value.trim();
+        render();
+    });
+
+    document.querySelectorAll('.group-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            groupMode = btn.dataset.group;
+            document.querySelectorAll('.group-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            render();
+        });
+    });
+
+    /* ── Init ── */
+    updateStats();
+    render();
+    </script>
+</body>
+</html>
+
