@@ -236,11 +236,12 @@
             letter-spacing: 0.5px;
         }
 
-        /* ── 3. BUCKET LIST ── */
+        /* ── 3. ADVENTURE LOG ── */
         .bucket-cols {
             display: flex;
-            gap: 32px;
+            gap: 56px;
             flex-wrap: wrap;
+            max-width: 900px;
         }
 
         .bucket-col {
@@ -248,91 +249,53 @@
             min-width: 260px;
         }
 
-        .bucket-col h4 {
+        .log-group-heading {
             font-family: 'Work Sans', sans-serif;
-            font-weight: 600;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #555;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .bucket-col h4 .col-tag {
-            font-size: 10px;
             font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 20px;
-            letter-spacing: 0.5px;
+            font-size: 0.78rem;
             text-transform: uppercase;
-        }
-
-        .col-tag.done-tag {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        .col-tag.todo-tag {
-            background: #fff3e0;
-            color: #e65100;
+            letter-spacing: 1.2px;
+            color: #5a6680;
+            margin: 0 0 7px;
         }
 
         .adventure-item {
             display: flex;
             align-items: flex-start;
-            gap: 14px;
-            padding: 14px 16px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            transition: transform 0.15s, box-shadow 0.15s;
+            gap: 13px;
+            padding: 10px 0;
+            margin: 0;
         }
 
-        .adventure-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        .adventure-item:hover { background: transparent; }
+
+        .adv-marker {
+            width: 10px;
+            height: 10px;
+            margin-top: 5px;
+            flex: 0 0 10px;
+            border: 1.5px solid #596b8c;
         }
 
-        .adventure-item.done {
-            background: #fff;
-            border: 1px solid #e0e0e0;
+        .adventure-item.done .adv-marker {
+            border: 0;
+            background: linear-gradient(135deg, #5b43c4, #369ed6);
         }
 
-        .adventure-item.todo {
-            background: #fff;
-            border: 1px solid #ffe0b2;
-        }
-
-        .adv-emoji {
-            font-size: 1.8rem;
-            line-height: 1;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .adv-body {}
+        .adv-body { min-width: 0; }
 
         .adv-name {
-            font-size: 14px;
-            font-weight: 700;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
             color: #222;
             line-height: 1.3;
         }
 
         .adv-place {
             font-size: 12px;
-            color: #999;
-            margin-top: 2px;
-        }
-
-        .adv-check {
-            margin-left: auto;
-            flex-shrink: 0;
-            align-self: center;
-            font-size: 18px;
-            color: #4caf50;
+            color: #87909f;
+            margin-top: 4px;
         }
 
         /* ── 3. TRIP STORIES ── */
@@ -534,8 +497,8 @@
              SECTION 4 — BUCKET LIST
         ══════════════════════════════════════════════ -->
         <section class="expl-section">
-            <p class="section-sub">Thrills & Goals</p>
-            <h2 class="section-heading">Bucket List</h2>
+            <p class="section-sub">Done, then next</p>
+            <h2 class="section-heading">The Adventure Log</h2>
             <hr class="section-divider">
 
             <div id="bucket-list" class="bucket-cols"></div>
@@ -793,16 +756,15 @@
         function renderBucketList() {
             document.getElementById("bucket-list").innerHTML = BUCKET_LIST.map(group => `
                 <div class="bucket-col">
-                    <h4>${escapeHtml(group.title)} <span class="col-tag ${escapeHtml(group.status)}-tag">${escapeHtml(group.statusLabel)}</span></h4>
+                    <h3 class="log-group-heading">${group.status === "done" ? "Completed" : "Next Up"}</h3>
                     ${group.items.map(item => `
-                        <div class="adventure-item ${escapeHtml(group.status)}">
-                            <div class="adv-emoji">${escapeHtml(item.emoji)}</div>
+                        <article class="adventure-item ${escapeHtml(group.status)}">
+                            <span class="adv-marker" aria-hidden="true"></span>
                             <div class="adv-body">
                                 <div class="adv-name">${escapeHtml(item.name)}</div>
                                 ${item.place ? `<div class="adv-place">${escapeHtml(item.place)}</div>` : ""}
                             </div>
-                            ${group.status === "done" ? '<div class="adv-check">✓</div>' : ""}
-                        </div>`).join("")}
+                        </article>`).join("")}
                 </div>`).join("");
         }
 
