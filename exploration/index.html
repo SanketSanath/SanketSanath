@@ -560,7 +560,8 @@
     </script>
 
     <script>
-        const STATE_GEOJSON_URL = "https://gist.githubusercontent.com/jbrobst/56c13bbbf9d97d187fea01ca62ea5112/raw/e388c4cae20aa53cb5090210a42ebb9b765c0a36/india_states.geojson";
+        const INDIA_STATES_GEOJSON_URL = "https://gist.githubusercontent.com/jbrobst/56c13bbbf9d97d187fea01ca62ea5112/raw/e388c4cae20aa53cb5090210a42ebb9b765c0a36/india_states.geojson";
+        const NEPAL_GEOJSON_URL = "https://raw.githubusercontent.com/Acesmndr/nepal-geojson/master/generated-geojson/nepal-acesmndr.geojson";
 
         const svg     = d3.select("#india-svg");
         const tooltip = d3.select("#expl-tooltip");
@@ -589,7 +590,7 @@
         }
 
         // ── Map render ────────────────────────────────────────────────────
-        function renderIndiaMap(geoData) {
+        function renderIndiaMap(indiaData, nepalData) {
             const container = document.getElementById("map-svg-container");
             const W = container.clientWidth;
             const H = container.clientHeight || Math.max(420, W * 0.85);
@@ -639,10 +640,25 @@
                 .attr("height", scratchSize)
                 .attr("fill", "black");
 
+            // The Nepal source uses the opposite polygon winding from D3's
+            // spherical GeoJSON convention. Reverse its exterior ring so the
+            // country itself is filled instead of the surrounding canvas.
+            const nepalShape = {
+                ...nepalData,
+                geometry: {
+                    ...nepalData.geometry,
+                    coordinates: nepalData.geometry.coordinates.map(ring => [...ring].reverse())
+                }
+            };
+
+            // India retains its state-level boundaries; Nepal is rendered as
+            // one additional country shape so Nepal visits can be scratched too.
+            const mapShapes = [...indiaData.features, nepalShape];
             const statePaths = selection => selection
-                .data(geoData.features)
+                .data(mapShapes)
                 .enter().append("path")
-                .attr("d", path);
+                .attr("d", path)
+                .attr("fill-rule", "evenodd");
 
             statePaths(svg.append("g").attr("class", "map-gradient-layer").selectAll("path"))
                 .attr("fill", "url(#visited-gradient)");
@@ -767,19 +783,22 @@
         renderBucketList();
 
         // ── Load & resize ─────────────────────────────────────────────────
-        d3.json(STATE_GEOJSON_URL).then(data => {
+        Promise.all([
+            d3.json(INDIA_STATES_GEOJSON_URL),
+            d3.json(NEPAL_GEOJSON_URL)
+        ]).then(([indiaData, nepalData]) => {
             // set container height = 85% of its width for nice aspect ratio
             const container = document.getElementById("map-svg-container");
             container.style.height = Math.max(420, container.clientWidth * 0.85) + "px";
 
-            renderIndiaMap(data);
+            renderIndiaMap(indiaData, nepalData);
 
             let t;
             window.addEventListener("resize", () => {
                 clearTimeout(t);
                 t = setTimeout(() => {
                     container.style.height = Math.max(420, container.clientWidth * 0.85) + "px";
-                    renderIndiaMap(data);
+                    renderIndiaMap(indiaData, nepalData);
                 }, 150);
             });
         });
