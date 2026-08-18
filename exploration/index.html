@@ -605,33 +605,72 @@
             svg.attr("width", W).attr("height", H);
             svg.selectAll("*").remove();
 
-            // States
-            svg.selectAll("path.state")
-                .data(geoData.features)
-                .enter().append("path")
-                .attr("class", "state")
-                .attr("d", path)
-                .attr("fill", "#d8ecfa")
-                .attr("stroke", "#7ab8d9")
-                .attr("stroke-width", 0.4);
+            // The map is built in three layers: a gradient base, the muted
+            // coating, and state outlines drawn above both. Visited places
+            // punch compact square reveals through the coating.
+            const scratchSize = Math.max(7, Math.min(W, H) * 0.014);
+            const defs = svg.append("defs");
+            const gradient = defs.append("linearGradient")
+                .attr("id", "visited-gradient")
+                .attr("gradientUnits", "userSpaceOnUse")
+                .attr("x1", 0).attr("y1", H)
+                .attr("x2", W).attr("y2", 0);
 
-            // Visited squares
-            const sq = Math.max(6, Math.min(W, H) * 0.012);
+            gradient.append("stop").attr("offset", "0%").attr("stop-color", "#5a4b91");
+            gradient.append("stop").attr("offset", "38%").attr("stop-color", "#b356a5");
+            gradient.append("stop").attr("offset", "68%").attr("stop-color", "#f2a65a");
+            gradient.append("stop").attr("offset", "100%").attr("stop-color", "#45afd0");
 
-            svg.selectAll("rect.vp")
+            const mask = defs.append("mask")
+                .attr("id", "visited-reveal-mask")
+                .attr("maskUnits", "userSpaceOnUse")
+                .attr("x", 0).attr("y", 0).attr("width", W).attr("height", H);
+
+            mask.append("rect")
+                .attr("width", W).attr("height", H)
+                .attr("fill", "white");
+
+            mask.selectAll("rect")
                 .data(VISITED_PLACES)
                 .enter().append("rect")
-                .attr("class", "vp")
-                .attr("x", d => projection([d.lng, d.lat])[0] - sq / 2)
-                .attr("y", d => projection([d.lng, d.lat])[1] - sq / 2)
-                .attr("width", sq).attr("height", sq)
-                .attr("fill", "#3183e1")
-                .attr("stroke", "#2171cc")
-                .attr("stroke-width", 1)
-                .attr("rx", 2)
+                .attr("x", d => projection([d.lng, d.lat])[0] - scratchSize / 2)
+                .attr("y", d => projection([d.lng, d.lat])[1] - scratchSize / 2)
+                .attr("width", scratchSize)
+                .attr("height", scratchSize)
+                .attr("fill", "black");
+
+            const statePaths = selection => selection
+                .data(geoData.features)
+                .enter().append("path")
+                .attr("d", path);
+
+            statePaths(svg.append("g").attr("class", "map-gradient-layer").selectAll("path"))
+                .attr("fill", "url(#visited-gradient)");
+
+            statePaths(svg.append("g")
+                .attr("class", "map-coating-layer")
+                .attr("mask", "url(#visited-reveal-mask)")
+                .selectAll("path"))
+                .attr("fill", "#d8ecfa");
+
+            statePaths(svg.append("g").attr("class", "map-boundaries").selectAll("path"))
+                .attr("fill", "none")
+                .attr("stroke", "#7ab8d9")
+                .attr("stroke-width", 0.65)
+                .attr("vector-effect", "non-scaling-stroke");
+
+            // Invisible hit areas retain the useful tooltip and list linking
+            // without adding visible markers above the scratch reveals.
+            svg.append("g").attr("class", "visited-place-targets").selectAll("rect")
+                .data(VISITED_PLACES)
+                .enter().append("rect")
+                .attr("x", d => projection([d.lng, d.lat])[0] - scratchSize / 2)
+                .attr("y", d => projection([d.lng, d.lat])[1] - scratchSize / 2)
+                .attr("width", scratchSize)
+                .attr("height", scratchSize)
+                .attr("fill", "transparent")
                 .style("cursor", "pointer")
                 .on("mouseover", (event, d) => {
-                    d3.select(event.currentTarget).attr("fill", "#66a8f5");
                     tooltip.style("display", "block")
                         .html(`<strong>${d.name}</strong><br>${d.state}`);
                 })
@@ -640,7 +679,6 @@
                            .style("top",  (event.clientY - 34) + "px");
                 })
                 .on("mouseout", event => {
-                    d3.select(event.currentTarget).attr("fill", "#3183e1");
                     tooltip.style("display", "none");
                 })
                 .on("click", (event, d) => {
