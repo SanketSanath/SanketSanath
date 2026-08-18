@@ -628,12 +628,14 @@
                 .attr("x", 0).attr("y", 0).attr("width", W).attr("height", H);
 
             mask.append("rect")
+                .attr("class", "mask-coating")
                 .attr("width", W).attr("height", H)
                 .attr("fill", "white");
 
-            mask.selectAll("rect")
+            mask.selectAll("rect.scratch-reveal")
                 .data(VISITED_PLACES)
                 .enter().append("rect")
+                .attr("class", "scratch-reveal")
                 .attr("x", d => projection([d.lng, d.lat])[0] - scratchSize / 2)
                 .attr("y", d => projection([d.lng, d.lat])[1] - scratchSize / 2)
                 .attr("width", scratchSize)
@@ -653,7 +655,10 @@
 
             // India retains its state-level boundaries; Nepal is rendered as
             // one additional country shape so Nepal visits can be scratched too.
-            const mapShapes = [...indiaData.features, nepalShape];
+            const mapShapes = [
+                ...indiaData.features.map(feature => ({ ...feature, mapCountry: "india" })),
+                { ...nepalShape, mapCountry: "nepal" }
+            ];
             const statePaths = selection => selection
                 .data(mapShapes)
                 .enter().append("path")
@@ -667,7 +672,7 @@
                 .attr("class", "map-coating-layer")
                 .attr("mask", "url(#visited-reveal-mask)")
                 .selectAll("path"))
-                .attr("fill", "#d8ecfa");
+                .attr("fill", d => d.mapCountry === "nepal" ? "#EBF8FF" : "#d8ecfa");
 
             statePaths(svg.append("g").attr("class", "map-boundaries").selectAll("path"))
                 .attr("fill", "none")

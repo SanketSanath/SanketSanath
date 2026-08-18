@@ -31,6 +31,7 @@ const VISITED_PLACES = [
     { name: "Supaul", state: "Bihar", lat: 26.12, lng: 86.60 },
     { name: "Delhi", state: "Delhi", lat: 28.65, lng: 77.23 },
     { name: "Goa", state: "Goa", lat: 15.25, lng: 73.90 },
+    { name: "Gurugram", state: "Haryana", lat: 28.46, lng: 77.03 },
     { name: "Shimla", state: "Himachal Pradesh", lat: 31.10, lng: 77.17 },
     { name: "Jammu", state: "Jammu and Kashmir", lat: 32.73, lng: 74.87 },
     { name: "Udhampur", state: "Jammu and Kashmir", lat: 32.92, lng: 75.14 },
@@ -38,6 +39,7 @@ const VISITED_PLACES = [
     { name: "Mumbai", state: "Maharashtra", lat: 19.08, lng: 72.88 },
     { name: "Konark", state: "Odisha", lat: 19.89, lng: 86.08 },
     { name: "Puri", state: "Odisha", lat: 19.81, lng: 85.83 },
+    { name: "Tijara", state: "Rajasthan", lat: 27.95, lng: 76.81 },
     { name: "Alwar", state: "Rajasthan", lat: 27.56, lng: 76.62 },
     { name: "Jodhpur", state: "Rajasthan", lat: 26.30, lng: 73.02 },
     { name: "Bhangarh", state: "Rajasthan", lat: 27.09, lng: 76.29 },
@@ -53,7 +55,8 @@ const VISITED_PLACES = [
     { name: "Kolkata", state: "West Bengal", lat: 22.57, lng: 88.36 },
     { name: "Itahari", state: "Nepal", lat: 26.86, lng: 87.06 },
     { name: "Kanyam", state: "Nepal", lat: 26.86, lng: 87.76 },
-    { name: "Janakpur", state: "Nepal", lat: 26.75, lng: 85.85 }
+    { name: "Janakpur", state: "Nepal", lat: 26.75, lng: 85.85 },
+    { name: "Biratnagar", state: "Nepal", lat: 26.58, lng: 87.06 }
 ];
 
 const TRIPS = [
