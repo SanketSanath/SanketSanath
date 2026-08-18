@@ -107,28 +107,29 @@ const WORLD_FLAGS = [
 ];
 
 /**
- * Bucket-list groups. Each item uses an emoji, title, and optional location.
+ * Bucket-list groups. Each item uses an `art` key, title, and optional location.
  */
 const BUCKET_LIST = [
     {
         title: "Adventure Sports", status: "done", statusLabel: "Done",
         items: [
-            { emoji: "🪢", name: "Bungee Jumping", place: "Rishikesh, Uttarakhand" },
-            { emoji: "🚣", name: "White River Rafting", place: "Rishikesh, Uttarakhand" },
-            { emoji: "🪂", name: "Paragliding", place: "Shimla, Himachal Pradesh" },
-            { emoji: "🚤", name: "Jet Ski", place: "Phuket, Thailand" },
-            { emoji: "🤿", name: "Snorkelling", place: "Phi Phi Islands, Thailand" },
-            { emoji: "🥾", name: "Trekking", place: "Himalayas" }
+            { art: "jump", name: "Bungee Jumping", place: "Rishikesh, Uttarakhand" },
+            { art: "raft", name: "White River Rafting", place: "Rishikesh, Uttarakhand" },
+            { art: "glide", name: "Paragliding", place: "Shimla, Himachal Pradesh" },
+            { art: "zip-lining", name: "Zip Lining", place: "Jodhpur, Rajasthan" },
+            { art: "jet-ski", name: "Jet Ski", place: "Phuket, Thailand" },
+            { art: "snorkel", name: "Snorkelling", place: "Phi Phi Islands, Thailand" },
+            { art: "trek", name: "Trekking", place: "Himalayas" }
         ]
     },
     {
         title: "Wish List", status: "todo", statusLabel: "Pending",
         items: [
-            { emoji: "🛶", name: "Kayaking", place: "Somewhere scenic" },
-            { emoji: "🪂", name: "Sky Diving", place: "Someday, somewhere high" },
-            { emoji: "🪂", name: "Parasailing", place: "Over the ocean" },
-            { emoji: "🤿", name: "Scuba Diving", place: "Deep sea" },
-            { emoji: "🎿", name: "Skiing", place: "Snow-capped mountains" }
+            { art: "kayak", name: "Kayaking", place: "Somewhere scenic" },
+            { art: "sky", name: "Sky Diving", place: "Someday, somewhere high" },
+            { art: "glide", name: "Parasailing", place: "Over the ocean" },
+            { art: "scuba", name: "Scuba Diving", place: "Deep sea" },
+            { art: "ski", name: "Skiing", place: "Snow-capped mountains" }
         ]
     }
 ];
