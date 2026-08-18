@@ -37,6 +37,7 @@ const VISITED_PLACES = [
     { name: "Udhampur", state: "Jammu and Kashmir", lat: 32.92, lng: 75.14 },
     { name: "Bangalore", state: "Karnataka", lat: 12.97, lng: 77.59 },
     { name: "Mumbai", state: "Maharashtra", lat: 19.08, lng: 72.88 },
+    { name: "Shirdi", state: "Maharashtra", lat: 19.76, lng: 74.46 },
     { name: "Konark", state: "Odisha", lat: 19.89, lng: 86.08 },
     { name: "Puri", state: "Odisha", lat: 19.81, lng: 85.83 },
     { name: "Tijara", state: "Rajasthan", lat: 27.95, lng: 76.81 },

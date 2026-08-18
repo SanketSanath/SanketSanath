@@ -617,10 +617,12 @@
                 .attr("x1", 0).attr("y1", H)
                 .attr("x2", W).attr("y2", 0);
 
-            gradient.append("stop").attr("offset", "0%").attr("stop-color", "#5a4b91");
-            gradient.append("stop").attr("offset", "38%").attr("stop-color", "#b356a5");
-            gradient.append("stop").attr("offset", "68%").attr("stop-color", "#f2a65a");
-            gradient.append("stop").attr("offset", "100%").attr("stop-color", "#45afd0");
+            <!--     Use 0, 25, 50, 75, 100       -->
+            gradient.append("stop").attr("offset", "30%").attr("stop-color", "#4f42a5");
+            gradient.append("stop").attr("offset", "40%").attr("stop-color", "#7c3aed");
+            gradient.append("stop").attr("offset", "50%").attr("stop-color", "#2563eb");
+            gradient.append("stop").attr("offset", "60%").attr("stop-color", "#06b6d4");
+            gradient.append("stop").attr("offset", "70%").attr("stop-color", "#0fd0ed");
 
             const gradientBorder = defs.append("linearGradient")
                 .attr("id", "visited-gradient-border")
@@ -628,10 +630,11 @@
                 .attr("x1", 0).attr("y1", H)
                 .attr("x2", W).attr("y2", 0);
 
-            gradientBorder.append("stop").attr("offset", "0%").attr("stop-color", "#40366f");
-            gradientBorder.append("stop").attr("offset", "38%").attr("stop-color", "#8a3e80");
-            gradientBorder.append("stop").attr("offset", "68%").attr("stop-color", "#bd793b");
-            gradientBorder.append("stop").attr("offset", "100%").attr("stop-color", "#287f9b");
+            gradientBorder.append("stop").attr("offset", "30%").attr("stop-color", "#180d68");
+            gradientBorder.append("stop").attr("offset", "40%").attr("stop-color", "#5723b3");
+            gradientBorder.append("stop").attr("offset", "50%").attr("stop-color", "#1747ae");
+            gradientBorder.append("stop").attr("offset", "60%").attr("stop-color", "#087f98");
+            gradientBorder.append("stop").attr("offset", "70%").attr("stop-color", "#1298ad");
 
             const mask = defs.append("mask")
                 .attr("id", "visited-reveal-mask")
