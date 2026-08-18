@@ -335,6 +335,108 @@
             color: #4caf50;
         }
 
+        /* ── 3. TRIP STORIES ── */
+        .trip-stories {
+            display: grid;
+            gap: 14px;
+            max-width: 900px;
+        }
+
+        .trip-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .trip-toggle {
+            width: 100%;
+            border: 0;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #fff;
+            padding: 20px 22px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-align: left;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .trip-toggle:hover,
+        .trip-toggle:focus-visible {
+            background: #f7fbff;
+            outline: none;
+        }
+
+        .trip-toggle:focus-visible {
+            box-shadow: inset 0 0 0 3px #3183e1;
+        }
+
+        .trip-title-wrap { flex: 1; }
+
+        .trip-label {
+            display: block;
+            font-size: 11px;
+            color: #888;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .trip-title {
+            display: block;
+            color: #222;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .trip-chevron {
+            color: #3183e1;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .trip-toggle[aria-expanded="true"] .trip-chevron { transform: rotate(180deg); }
+
+        .trip-panel {
+            border-top: 1px solid #eee;
+            padding: 20px 22px 22px;
+        }
+
+        .trip-panel[hidden] { display: none; }
+
+        .trip-route {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-bottom: 20px;
+        }
+
+        .trip-panel .trip-route:last-child { margin-bottom: 0; }
+
+        .trip-stop {
+            background: #eaf4fd;
+            border-radius: 20px;
+            color: #236aa9;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 5px 10px;
+        }
+
+        .trip-route-arrow { color: #9bbbd6; }
+
+        .trip-story {
+            margin: 0 0 20px;
+            color: #555;
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
         /* map tooltip */
         #expl-tooltip {
             position: fixed;
@@ -395,47 +497,7 @@
             <h2 class="section-heading">World</h2>
             <hr class="section-divider">
 
-            <div class="flag-subsection">
-                <h5>🏅 Flags Collected</h5>
-                <div class="flags-row">
-                    <div class="flag-card">
-                        <span class="flag-emoji">🇮🇳</span>
-                        <span class="flag-name">India</span>
-                    </div>
-                    <div class="flag-card">
-                        <span class="flag-emoji">🇳🇵</span>
-                        <span class="flag-name">Nepal</span>
-                    </div>
-                    <div class="flag-card">
-                        <span class="flag-emoji">🇹🇭</span>
-                        <span class="flag-name">Thailand</span>
-                    </div>
-                    <div class="flag-card">
-                        <span class="flag-emoji">🇲🇾</span>
-                        <span class="flag-name">Malaysia</span>
-                    </div>
-                    <div class="flag-card">
-                        <span class="flag-emoji">🇸🇬</span>
-                        <span class="flag-name">Singapore</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flag-subsection">
-                <h5>🗺️ Next on the List</h5>
-                <div class="flags-row">
-                    <div class="flag-card next">
-                        <span class="flag-emoji">🇻🇳</span>
-                        <span class="flag-name">Vietnam</span>
-                        <span class="next-badge">NEXT</span>
-                    </div>
-                    <div class="flag-card next">
-                        <span class="flag-emoji">🇴🇲</span>
-                        <span class="flag-name">Oman</span>
-                        <span class="next-badge">NEXT</span>
-                    </div>
-                </div>
-            </div>
+            <div id="world-flags"></div>
         </section>
 
         <!-- ══════════════════════════════════════════════
@@ -459,120 +521,24 @@
 
 
         <!-- ══════════════════════════════════════════════
-             SECTION 3 — BUCKET LIST
+             SECTION 3 — TRIP STORIES
+        ══════════════════════════════════════════════ -->
+        <section class="expl-section">
+            <p class="section-sub">Moments worth keeping</p>
+            <h2 class="section-heading">Trip Stories</h2>
+            <hr class="section-divider">
+            <div id="trip-stories" class="trip-stories"></div>
+        </section>
+
+        <!-- ══════════════════════════════════════════════
+             SECTION 4 — BUCKET LIST
         ══════════════════════════════════════════════ -->
         <section class="expl-section">
             <p class="section-sub">Thrills & Goals</p>
             <h2 class="section-heading">Bucket List</h2>
             <hr class="section-divider">
 
-            <div class="bucket-cols">
-
-                <!-- Done -->
-                <div class="bucket-col">
-                    <h4>Adventure Sports <span class="col-tag done-tag">Done</span></h4>
-
-                    <div class="adventure-item done">
-                        <div class="adv-emoji">🪢</div>
-                        <div class="adv-body">
-                            <div class="adv-name">Bungee Jumping</div>
-                            <div class="adv-place">Rishikesh, Uttarakhand</div>
-                        </div>
-                        <div class="adv-check">✓</div>
-                    </div>
-
-                    <div class="adventure-item done">
-                        <div class="adv-emoji">🚣</div>
-                        <div class="adv-body">
-                            <div class="adv-name">White River Rafting</div>
-                            <div class="adv-place">Rishikesh, Uttarakhand</div>
-                        </div>
-                        <div class="adv-check">✓</div>
-                    </div>
-
-                    <div class="adventure-item done">
-                        <div class="adv-emoji">🪂</div>
-                        <div class="adv-body">
-                            <div class="adv-name">Paragliding</div>
-                            <div class="adv-place">Shimla, Himachal Pradesh</div>
-                        </div>
-                        <div class="adv-check">✓</div>
-                    </div>
-
-                    <div class="adventure-item done">
-                        <div class="adv-emoji">🚤</div>
-                        <div class="adv-body">
-                            <div class="adv-name">Jet Ski</div>
-                            <div class="adv-place">Phuket, Thailand</div>
-                        </div>
-                        <div class="adv-check">✓</div>
-                    </div>
-
-                    <div class="adventure-item done">
-                        <div class="adv-emoji">🤿</div>
-                        <div class="adv-body">
-                            <div class="adv-name">Snorkelling</div>
-                            <div class="adv-place">Phi Phi Islands, Thailand</div>
-                        </div>
-                        <div class="adv-check">✓</div>
-                    </div>
-
-                    <div class="adventure-item done">
-                        <div class="adv-emoji">🥾</div>
-                        <div class="adv-body">
-                            <div class="adv-name">Trekking</div>
-                            <div class="adv-place">Himalayas</div>
-                        </div>
-                        <div class="adv-check">✓</div>
-                    </div>
-                </div>
-
-                <!-- Todo -->
-                <div class="bucket-col">
-                    <h4>Wish List <span class="col-tag todo-tag">Pending</span></h4>
-
-                    <div class="adventure-item todo">
-                        <div class="adv-emoji">🛶</div>
-                        <div class="adv-body">
-                            <div class="adv-name">Kayaking</div>
-                            <div class="adv-place">Somewhere scenic</div>
-                        </div>
-                    </div>
-
-                    <div class="adventure-item todo">
-                        <div class="adv-emoji">🪂</div>
-                        <div class="adv-body">
-                            <div class="adv-name">Sky Diving</div>
-                            <div class="adv-place">Someday, somewhere high</div>
-                        </div>
-                    </div>
-
-                    <div class="adventure-item todo">
-                        <div class="adv-emoji">🪂</div>
-                        <div class="adv-body">
-                            <div class="adv-name">Parasailing</div>
-                            <div class="adv-place">Over the ocean</div>
-                        </div>
-                    </div>
-
-                    <div class="adventure-item todo">
-                        <div class="adv-emoji">🤿</div>
-                        <div class="adv-body">
-                            <div class="adv-name">Scuba Diving</div>
-                            <div class="adv-place">Deep sea</div>
-                        </div>
-                    </div>
-
-                    <div class="adventure-item todo">
-                        <div class="adv-emoji">🎿</div>
-                        <div class="adv-body">
-                            <div class="adv-name">Skiing</div>
-                            <div class="adv-place">Snow-capped mountains</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            <div id="bucket-list" class="bucket-cols"></div>
         </section>
 
     </div><!-- /page-wrapper -->
@@ -587,51 +553,13 @@
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
     <script src="../css_n_js/js/bootstrap.min.js"></script>
+    <script src="data.js"></script>
 
     <script>
         $(window).on("load", function () { $(".loader-wrapper").hide(); });
     </script>
 
     <script>
-        // ── Visited Places Data ───────────────────────────────────────────
-        const visitedPlaces = [
-            { name: "Bhimavaram",           state: "Andhra Pradesh",      lat: 16.53, lng: 81.50 },
-            { name: "Araria",               state: "Bihar",               lat: 26.15, lng: 87.52 },
-            { name: "Bhagalpur",            state: "Bihar",               lat: 25.25, lng: 87.01 },
-            { name: "Darbhanga",            state: "Bihar",               lat: 26.15, lng: 85.90 },
-            { name: "Madhepura",            state: "Bihar",               lat: 25.92, lng: 87.00 },
-            { name: "Nalanda",              state: "Bihar",               lat: 25.10, lng: 85.45 },
-            { name: "Patna",                state: "Bihar",               lat: 25.60, lng: 85.14 },
-            { name: "Saharsa",              state: "Bihar",               lat: 25.88, lng: 86.60 },
-            { name: "Siwan",                state: "Bihar",               lat: 26.22, lng: 84.36 },
-            { name: "Supaul",               state: "Bihar",               lat: 26.12, lng: 86.60 },
-            { name: "Delhi",                state: "Delhi",               lat: 28.65, lng: 77.23 },
-            { name: "Goa",                  state: "Goa",                 lat: 15.25, lng: 73.90 },
-            { name: "Shimla",               state: "Himachal Pradesh",    lat: 31.10, lng: 77.17 },
-            { name: "Jammu",                state: "Jammu and Kashmir",   lat: 32.73, lng: 74.87 },
-            { name: "Udhampur",             state: "Jammu and Kashmir",   lat: 32.92, lng: 75.14 },
-            { name: "Bangalore",            state: "Karnataka",           lat: 12.97, lng: 77.59 },
-            { name: "Mumbai",               state: "Maharashtra",         lat: 19.08, lng: 72.88 },
-            { name: "Konark",               state: "Odisha",              lat: 19.89, lng: 86.08 },
-            { name: "Puri",                 state: "Odisha",              lat: 19.81, lng: 85.83 },
-            { name: "Alwar",                state: "Rajasthan",           lat: 27.56, lng: 76.62 },
-            { name: "Jodhpur",              state: "Rajasthan",           lat: 26.30, lng: 73.02 },
-            { name: "Bhangarh",             state: "Rajasthan",           lat: 27.09, lng: 76.29 },
-            { name: "Chennai",              state: "Tamil Nadu",          lat: 13.08, lng: 80.27 },
-            { name: "Chakrata",             state: "Uttarakhand",         lat: 30.70, lng: 77.86 },
-            { name: "Rishikesh",            state: "Uttarakhand",         lat: 30.08, lng: 78.22 },
-            { name: "Nainital",             state: "Uttarakhand",         lat: 29.38, lng: 79.46 },
-            { name: "Agra",                 state: "Uttar Pradesh",       lat: 27.18, lng: 78.01 },
-            { name: "Mathura",              state: "Uttar Pradesh",       lat: 27.49, lng: 77.67 },
-            { name: "Meerut",               state: "Uttar Pradesh",       lat: 28.98, lng: 77.71 },
-            { name: "Varanasi",             state: "Uttar Pradesh",       lat: 25.32, lng: 83.00 },
-            { name: "Darjiling",            state: "West Bengal",         lat: 27.04, lng: 88.26 },
-            { name: "Kolkata",              state: "West Bengal",         lat: 22.57, lng: 88.36 },
-            { name: "Itahari",              state: "Nepal",               lat: 26.86, lng: 87.06 },
-            { name: "Kanyam",               state: "Nepal",               lat: 26.86, lng: 87.76 },
-            { name: "Janakpur",             state: "Nepal",               lat: 26.75, lng: 85.85 },
-        ];
-
         const STATE_GEOJSON_URL = "https://gist.githubusercontent.com/jbrobst/56c13bbbf9d97d187fea01ca62ea5112/raw/e388c4cae20aa53cb5090210a42ebb9b765c0a36/india_states.geojson";
 
         const svg     = d3.select("#india-svg");
@@ -639,9 +567,9 @@
 
         // ── Build sidebar list ────────────────────────────────────────────
         const listBody = document.getElementById("places-list-body");
-        document.getElementById("places-count").textContent = `(${visitedPlaces.length})`;
+        document.getElementById("places-count").textContent = `(${VISITED_PLACES.length})`;
 
-        visitedPlaces.forEach((p, i) => {
+        VISITED_PLACES.forEach((p, i) => {
             const row = document.createElement("div");
             row.className = "place-row";
             row.dataset.index = i;
@@ -691,7 +619,7 @@
             const sq = Math.max(6, Math.min(W, H) * 0.012);
 
             svg.selectAll("rect.vp")
-                .data(visitedPlaces)
+                .data(VISITED_PLACES)
                 .enter().append("rect")
                 .attr("class", "vp")
                 .attr("x", d => projection([d.lng, d.lat])[0] - sq / 2)
@@ -716,9 +644,89 @@
                     tooltip.style("display", "none");
                 })
                 .on("click", (event, d) => {
-                    highlightRow(visitedPlaces.indexOf(d));
+                    highlightRow(VISITED_PLACES.indexOf(d));
                 });
         }
+
+        // ── Trip stories ─────────────────────────────────────────────────
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>'"]/g, char => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
+            })[char]);
+        }
+
+        function renderTripStories() {
+            const container = document.getElementById("trip-stories");
+
+            container.innerHTML = TRIPS.map(trip => {
+                const panelId = `trip-${trip.id}`;
+                const route = trip.route.map((stop, index) =>
+                    `${index ? '<span class="trip-route-arrow" aria-hidden="true">→</span>' : ''}<span class="trip-stop">${escapeHtml(stop)}</span>`
+                ).join("");
+                const story = trip.story.trim()
+                    ? `<p class="trip-story">${escapeHtml(trip.story)}</p>`
+                    : "";
+
+                return `<article class="trip-card">
+                    <button class="trip-toggle" type="button" aria-expanded="false" aria-controls="${panelId}">
+                        <span class="trip-title-wrap"><span class="trip-label">${escapeHtml(trip.label)}</span><span class="trip-title">${escapeHtml(trip.title)}</span></span>
+                        <i class="fas fa-chevron-down trip-chevron" aria-hidden="true"></i>
+                    </button>
+                    <div class="trip-panel" id="${panelId}" hidden>
+                        <div class="trip-route">${route}</div>
+                        ${story}
+                    </div>
+                </article>`;
+            }).join("");
+
+            container.querySelectorAll(".trip-toggle").forEach(button => {
+                button.addEventListener("click", () => {
+                    const willExpand = button.getAttribute("aria-expanded") !== "true";
+                    container.querySelectorAll(".trip-toggle").forEach(otherButton => {
+                        otherButton.setAttribute("aria-expanded", "false");
+                        document.getElementById(otherButton.getAttribute("aria-controls")).hidden = true;
+                    });
+                    if (willExpand) {
+                        button.setAttribute("aria-expanded", "true");
+                        document.getElementById(button.getAttribute("aria-controls")).hidden = false;
+                    }
+                });
+            });
+        }
+
+        function renderWorldFlags() {
+            document.getElementById("world-flags").innerHTML = WORLD_FLAGS.map(group => `
+                <div class="flag-subsection">
+                    <h5>${escapeHtml(group.title)}</h5>
+                    <div class="flags-row">${group.countries.map(country => `
+                        <div class="flag-card${country.next ? " next" : ""}">
+                            <span class="flag-emoji">${escapeHtml(country.flag)}</span>
+                            <span class="flag-name">${escapeHtml(country.name)}</span>
+                            ${country.next ? '<span class="next-badge">NEXT</span>' : ""}
+                        </div>`).join("")}
+                    </div>
+                </div>`).join("");
+        }
+
+        function renderBucketList() {
+            document.getElementById("bucket-list").innerHTML = BUCKET_LIST.map(group => `
+                <div class="bucket-col">
+                    <h4>${escapeHtml(group.title)} <span class="col-tag ${escapeHtml(group.status)}-tag">${escapeHtml(group.statusLabel)}</span></h4>
+                    ${group.items.map(item => `
+                        <div class="adventure-item ${escapeHtml(group.status)}">
+                            <div class="adv-emoji">${escapeHtml(item.emoji)}</div>
+                            <div class="adv-body">
+                                <div class="adv-name">${escapeHtml(item.name)}</div>
+                                ${item.place ? `<div class="adv-place">${escapeHtml(item.place)}</div>` : ""}
+                            </div>
+                            ${group.status === "done" ? '<div class="adv-check">✓</div>' : ""}
+                        </div>`).join("")}
+                </div>`).join("");
+        }
+
+        renderWorldFlags();
+        renderTripStories();
+        renderBucketList();
 
         // ── Load & resize ─────────────────────────────────────────────────
         d3.json(STATE_GEOJSON_URL).then(data => {
