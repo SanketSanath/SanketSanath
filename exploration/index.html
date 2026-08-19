@@ -619,14 +619,43 @@
                 .attr("width", W).attr("height", H)
                 .attr("fill", "white");
 
+            const pointReveals = VISITED_PLACES.map((place, index) => {
+                const [x, y] = projection([place.lng, place.lat]);
+                return {
+                    ...place,
+                    kind: "place",
+                    placeIndex: index,
+                    x: x - scratchSize / 2,
+                    y: y - scratchSize / 2,
+                    width: scratchSize,
+                    height: scratchSize
+                };
+            });
+
+            const areaReveals = VISITED_AREAS.flatMap(area => {
+                if (!Array.isArray(area.points) || area.points.length < 4) return [];
+                return [{
+                    ...area,
+                    kind: "area",
+                    polygon: area.points.map(point => projection([point.lng, point.lat]))
+                }];
+            });
+
             mask.selectAll("rect.scratch-reveal")
-                .data(VISITED_PLACES)
+                .data(pointReveals)
                 .enter().append("rect")
                 .attr("class", "scratch-reveal")
-                .attr("x", d => projection([d.lng, d.lat])[0] - scratchSize / 2)
-                .attr("y", d => projection([d.lng, d.lat])[1] - scratchSize / 2)
-                .attr("width", scratchSize)
-                .attr("height", scratchSize)
+                .attr("x", d => d.x)
+                .attr("y", d => d.y)
+                .attr("width", d => d.width)
+                .attr("height", d => d.height)
+                .attr("fill", "black");
+
+            mask.selectAll("polygon.area-scratch-reveal")
+                .data(areaReveals)
+                .enter().append("polygon")
+                .attr("class", "area-scratch-reveal")
+                .attr("points", d => d.polygon.map(point => point.join(",")).join(" "))
                 .attr("fill", "black");
 
             // The Nepal source uses the opposite polygon winding from D3's
@@ -676,15 +705,16 @@
                 .attr("stroke-width", 0.65)
                 .attr("vector-effect", "non-scaling-stroke");
 
-            // Invisible hit areas retain the useful tooltip and list linking
-            // without adding visible markers above the scratch reveals.
+            // Invisible hit areas retain useful tooltips without adding visible
+            // markers above the scratch reveals. Area reveals use one target,
+            // so nearby places do not create a stack of competing hover labels.
             svg.append("g").attr("class", "visited-place-targets").selectAll("rect")
-                .data(VISITED_PLACES)
+                .data(pointReveals)
                 .enter().append("rect")
-                .attr("x", d => projection([d.lng, d.lat])[0] - scratchSize / 2)
-                .attr("y", d => projection([d.lng, d.lat])[1] - scratchSize / 2)
-                .attr("width", scratchSize)
-                .attr("height", scratchSize)
+                .attr("x", d => d.x)
+                .attr("y", d => d.y)
+                .attr("width", d => d.width)
+                .attr("height", d => d.height)
                 .attr("fill", "transparent")
                 .style("cursor", "pointer")
                 .on("mouseover", (event, d) => {
@@ -699,7 +729,25 @@
                     tooltip.style("display", "none");
                 })
                 .on("click", (event, d) => {
-                    highlightRow(VISITED_PLACES.indexOf(d));
+                    highlightRow(d.placeIndex);
+                });
+
+            svg.append("g").attr("class", "visited-area-targets").selectAll("polygon")
+                .data(areaReveals)
+                .enter().append("polygon")
+                .attr("points", d => d.polygon.map(point => point.join(",")).join(" "))
+                .attr("fill", "transparent")
+                .style("cursor", "pointer")
+                .on("mouseover", (event, d) => {
+                    tooltip.style("display", "block")
+                        .html(`<strong>${d.name}</strong><br>${d.state}`);
+                })
+                .on("mousemove", event => {
+                    tooltip.style("left", (event.clientX + 14) + "px")
+                           .style("top",  (event.clientY - 34) + "px");
+                })
+                .on("mouseout", event => {
+                    tooltip.style("display", "none");
                 });
         }
 

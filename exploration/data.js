@@ -10,6 +10,15 @@
  *   lat   {number} Latitude
  *   lng   {number} Longitude
  *
+ * VISITED_AREAS entry:
+ *   name   {string} Short label shown when the revealed area is hovered
+ *   state  {string} State or country shown when the revealed area is hovered
+ *   points {{ lat: number, lng: number }[]} Four or more boundary points,
+ *          listed in perimeter order (clockwise or anticlockwise). The
+ *          polygon they form is revealed.
+ *          Use an area instead of several nearby VISITED_PLACES markers when
+ *          you want one clean reveal rather than cramped hover targets.
+ *
  * TRIPS entry:
  *   id         {string} Unique, URL-safe identifier
  *   title      {string} Card heading
@@ -59,6 +68,28 @@ const VISITED_PLACES = [
     { name: "Kanyam", state: "Nepal", lat: 26.86, lng: 87.76 },
     { name: "Janakpur", state: "Nepal", lat: 26.75, lng: 85.85 },
     { name: "Biratnagar", state: "Nepal", lat: 26.58, lng: 87.06 }
+];
+
+const VISITED_AREAS = [
+//    {
+//        name: "Home", state: "Bihar",
+//        points: [
+//            { lat: 26.60, lng: 86.65 }, // tl - Raj Biraj
+//            { lat: 26.84, lng: 87.50 },  // tr - Belwari
+//            { lat: 26.10, lng: 87.50 }, // br - Araria
+//            { lat: 25.86, lng: 86.55 }, // bl - Saharsa
+//        ]
+//    },
+//    {
+//        name: "Delhi NCR", state: "Delhi & Haryana",
+//        points: [
+//            { lat: 29.00, lng: 77.00 }, // Sonipat
+//            { lat: 29.10, lng: 77.76 },  // Meerut
+//            { lat: 28.66, lng: 78.28 },  // Brujghat
+//            { lat: 28.10, lng: 77.45 }, // Jewar
+//            { lat: 28.20, lng: 76.60 }, // Panchgaon
+//        ]
+//    }
 ];
 
 const TRIPS = [
