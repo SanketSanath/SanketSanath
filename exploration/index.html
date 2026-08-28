@@ -568,7 +568,7 @@
             const W = container.clientWidth;
             const H = container.clientHeight || Math.max(420, W * 0.85);
 
-            const scale = Math.min(W, H) * 1.3;
+            const scale = Math.min(W, H) * 1.5; // map padding
             const projection = d3.geoMercator()
                 .center([82, 22])
                 .scale(scale)

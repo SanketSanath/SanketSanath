@@ -29,18 +29,18 @@
 
 const VISITED_PLACES = [
     { name: "Bhimavaram", state: "Andhra Pradesh", lat: 16.53, lng: 81.50 },
-    { name: "Araria", state: "Bihar", lat: 26.15, lng: 87.52 },
+//    { name: "Araria", state: "Bihar", lat: 26.15, lng: 87.52 },
     { name: "Bhagalpur", state: "Bihar", lat: 25.25, lng: 87.01 },
     { name: "Darbhanga", state: "Bihar", lat: 26.15, lng: 85.90 },
-    { name: "Madhepura", state: "Bihar", lat: 25.92, lng: 87.00 },
+//    { name: "Madhepura", state: "Bihar", lat: 25.92, lng: 87.00 },
     { name: "Nalanda", state: "Bihar", lat: 25.10, lng: 85.45 },
     { name: "Patna", state: "Bihar", lat: 25.60, lng: 85.14 },
-    { name: "Saharsa", state: "Bihar", lat: 25.88, lng: 86.60 },
+//    { name: "Saharsa", state: "Bihar", lat: 25.88, lng: 86.60 },
     { name: "Siwan", state: "Bihar", lat: 26.22, lng: 84.36 },
-    { name: "Supaul", state: "Bihar", lat: 26.12, lng: 86.60 },
-    { name: "Delhi", state: "Delhi", lat: 28.65, lng: 77.23 },
+//    { name: "Supaul", state: "Bihar", lat: 26.12, lng: 86.60 },
+//    { name: "Delhi", state: "Delhi", lat: 28.65, lng: 77.23 },
     { name: "Goa", state: "Goa", lat: 15.25, lng: 73.90 },
-    { name: "Gurugram", state: "Haryana", lat: 28.46, lng: 77.03 },
+//    { name: "Gurugram", state: "Haryana", lat: 28.46, lng: 77.03 },
     { name: "Shimla", state: "Himachal Pradesh", lat: 31.10, lng: 77.17 },
     { name: "Jammu", state: "Jammu and Kashmir", lat: 32.73, lng: 74.87 },
     { name: "Udhampur", state: "Jammu and Kashmir", lat: 32.92, lng: 75.14 },
@@ -53,6 +53,9 @@ const VISITED_PLACES = [
     { name: "Alwar", state: "Rajasthan", lat: 27.56, lng: 76.62 },
     { name: "Jodhpur", state: "Rajasthan", lat: 26.30, lng: 73.02 },
     { name: "Bhangarh", state: "Rajasthan", lat: 27.09, lng: 76.29 },
+    { name: "Chittorgarh", state: "Rajasthan", lat: 24.88, lng: 74.64 },
+    { name: "Kumbhalgarh", state: "Rajasthan", lat: 25.15, lng: 73.58 },
+    { name: "Udaipur", state: "Rajasthan", lat: 24.58, lng: 73.68 },
     { name: "Chennai", state: "Tamil Nadu", lat: 13.08, lng: 80.27 },
     { name: "Chakrata", state: "Uttarakhand", lat: 30.70, lng: 77.86 },
     { name: "Rishikesh", state: "Uttarakhand", lat: 30.08, lng: 78.22 },
@@ -71,25 +74,24 @@ const VISITED_PLACES = [
 ];
 
 const VISITED_AREAS = [
-//    {
-//        name: "Home", state: "Bihar",
-//        points: [
-//            { lat: 26.60, lng: 86.65 }, // tl - Raj Biraj
-//            { lat: 26.84, lng: 87.50 },  // tr - Belwari
-//            { lat: 26.10, lng: 87.50 }, // br - Araria
-//            { lat: 25.86, lng: 86.55 }, // bl - Saharsa
-//        ]
-//    },
-//    {
-//        name: "Delhi NCR", state: "Delhi & Haryana",
-//        points: [
-//            { lat: 29.00, lng: 77.00 }, // Sonipat
-//            { lat: 29.10, lng: 77.76 },  // Meerut
-//            { lat: 28.66, lng: 78.28 },  // Brujghat
-//            { lat: 28.10, lng: 77.45 }, // Jewar
-//            { lat: 28.20, lng: 76.60 }, // Panchgaon
-//        ]
-//    }
+    {
+        name: "Home", state: "Bihar",
+        points: [
+            { lat: 26.65, lng: 86.45 }, // tl - Raj Biraj
+            { lat: 26.65, lng: 87.50 },  // tr - Belwari
+            { lat: 25.70, lng: 87.50 }, // br - Araria
+            { lat: 25.70, lng: 86.45 }, // bl - Saharsa
+        ]
+    },
+    {
+        name: "Delhi NCR", state: "Delhi & Haryana",
+        points: [
+            { lat: 28.90, lng: 76.70 },
+            { lat: 28.90, lng: 77.60 },
+            { lat: 28.20, lng: 77.60 },
+            { lat: 28.20, lng: 76.70 },
+        ]
+    }
 ];
 
 const TRIPS = [
