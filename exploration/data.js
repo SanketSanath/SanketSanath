@@ -20,7 +20,6 @@
  *          you want one clean reveal rather than cramped hover targets.
  *
  * TRIPS entry:
- *   id         {string} Unique, URL-safe identifier
  *   title      {string} Card heading
  *   label      {string} Short trip category or location label
  *   date       {string} Month visited in YYYY-MM format; use "" until known
@@ -97,7 +96,6 @@ const VISITED_AREAS = [
 
 const TRIPS = [
     {
-        id: "udaipur",
         title: "Udaipur",
         label: "Rajasthan",
         date: "2026-08",
@@ -105,51 +103,48 @@ const TRIPS = [
         story: "This was an unexpected trip."
     },
     {
-        id: "rajasthan-bike-ride",
-        title: "Riding Bike in Rajasthan",
-        label: "Rajasthan",
-        date: "2025-07",
-        route: ["Delhi", "Tijara", "Alwar", "Bhangarh", "Delhi"],
-        story: "This was an unexpected trip."
+        title: "Janakpur",
+        label: "Nepal",
+        date: "2026-02",
     },
     {
-        id: "rishikesh-trip",
-        title: "Rishikesh Trip",
+        title: "East Nepal",
+        label: "Nepal",
+        date: "2026-01",
+        route: ["Kanyam", "Mirik", "Shree Antu"],
+    },
+    {
+        title: "Chakrata",
+        label: "Uttarakhand",
+        date: "2025-11",
+    },
+    {
+        title: "Rishikesh and Dev Prayag",
         label: "Uttarakhand",
         date: "2025-10",
         route: ["Delhi", "Rishikesh", "Dev Prayag", "Delhi"],
         story: "A trip full on adventure."
     },
     {
-        id: "singapore-kuala-lumpur",
+        title: "Nainital",
+        label: "Uttarakhand",
+        date: "2025-09",
+        route: ["Delhi", "Jim Corbett", "Nainital", "Delhi"],
+    },
+    {
         title: "Singapore & Kuala Lumpur",
         label: "Southeast Asia",
         date: "2025-08",
         route: ["Kuala Lumpur", "Singapore"],
         story: "First self managed international trip"
-    }
-];
-
-/**
- * Route-log entries. Every route needs a month in YYYY-MM format and at least
- * two stops. Set `tripId` to a TRIPS id to open its matching Trip Story.
- *
- *   id      {string} Unique, URL-safe identifier
- *   title   {string} Short route heading
- *   date    {string} Month travelled in YYYY-MM format
- *   mode    {string} Travel mode, for example "bike", "road trip", "train", or "flight"
- *   stops   {string[]} Stops in travel order
- *   tripId  {string} Optional matching TRIPS id
- */
-const ROUTES = [
+    },
     {
-        id: "rajasthan-bike-ride",
         title: "Riding Bike in Rajasthan",
+        label: "Rajasthan",
         date: "2025-07",
-        mode: "bike",
-        stops: ["Delhi", "Alwar", "Tijara", "Bhangarh", "Delhi"],
-        tripId: "rajasthan-bike-ride"
-    }
+        route: ["Delhi", "Tijara", "Alwar", "Bhangarh", "Delhi"],
+        story: "This was an unexpected trip."
+    },
 ];
 
 /**

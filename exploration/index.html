@@ -305,80 +305,6 @@
             margin-top: 2px;
         }
 
-        /* ── 3. TRIP STORIES ── */
-        .trip-stories {
-            display: grid;
-            gap: 14px;
-            max-width: 900px;
-        }
-
-        .trip-card {
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .trip-toggle {
-            width: 100%;
-            border: 0;
-            -webkit-appearance: none;
-            appearance: none;
-            background: #fff;
-            padding: 20px 22px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            text-align: left;
-            cursor: pointer;
-            font: inherit;
-        }
-
-        .trip-toggle:hover,
-        .trip-toggle:focus-visible {
-            background: #f7fbff;
-            outline: none;
-        }
-
-        .trip-toggle:focus-visible {
-            box-shadow: inset 0 0 0 3px #3183e1;
-        }
-
-        .trip-title-wrap { flex: 1; }
-
-        .trip-label {
-            display: block;
-            font-size: 11px;
-            color: #888;
-            font-weight: 700;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        .trip-title {
-            display: block;
-            color: #222;
-            font-family: 'Work Sans', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .trip-chevron {
-            color: #3183e1;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .trip-toggle[aria-expanded="true"] .trip-chevron { transform: rotate(180deg); }
-
-        .trip-panel {
-            border-top: 1px solid #eee;
-            padding: 20px 22px 22px;
-        }
-
-        .trip-panel[hidden] { display: none; }
-
         .trip-route {
             display: flex;
             align-items: center;
@@ -386,8 +312,6 @@
             gap: 7px;
             margin-bottom: 20px;
         }
-
-        .trip-panel .trip-route:last-child { margin-bottom: 0; }
 
         .trip-stop {
             background: #eaf4fd;
@@ -401,17 +325,14 @@
         .trip-route-arrow { color: #9bbbd6; }
 
         .trip-story {
-            margin: 0 0 20px;
+            margin: 0;
             color: #555;
             font-size: 14px;
             line-height: 1.65;
         }
 
-        /* ── TRAVEL TIMELINE & ROUTE LOG ── */
-        .travel-timeline,
-        .route-log {
-            max-width: 900px;
-        }
+        /* ── TRAVEL TIMELINE ── */
+        .travel-timeline { max-width: 900px; }
 
         .timeline-year + .timeline-year { margin-top: 28px; }
 
@@ -462,15 +383,15 @@
         .timeline-item:hover .timeline-title,
         .timeline-item:focus-visible .timeline-title { color: #236aa9; }
 
-        .timeline-item:focus-visible,
-        .route-entry:focus-visible {
+        .timeline-item:focus { outline: none; }
+
+        .timeline-item:focus-visible {
             border-radius: 5px;
             outline: 3px solid #3183e1;
             outline-offset: 2px;
         }
 
-        .timeline-month,
-        .route-date {
+        .timeline-month {
             color: #888;
             font-size: 11px;
             font-weight: 700;
@@ -493,62 +414,18 @@
             margin-top: 2px;
         }
 
-        .route-log { display: grid; }
-
-        .route-entry {
-            align-items: center;
-            background: #fff;
-            border: 0;
-            border-bottom: 1px solid #eee;
-            color: inherit;
-            display: grid;
-            font: inherit;
-            gap: 12px;
-            grid-template-columns: 76px minmax(0, 1fr) auto;
-            padding: 13px 0;
-            text-align: left;
-            width: 100%;
+        .timeline-panel {
+            border-top: 1px solid #eee;
+            margin: 2px 0 10px 58px;
+            padding: 14px 0 4px;
         }
 
-        button.route-entry { cursor: pointer; }
-        button.route-entry:hover { background: #f7fbff; }
-
-        .route-title {
-            color: #222;
-            display: block;
-            font-family: 'Work Sans', sans-serif;
-            font-size: 0.98rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .route-stops {
-            align-items: center;
-            color: #555;
-            display: flex;
-            flex-wrap: wrap;
-            font-size: 13px;
-            gap: 6px;
-        }
-
-        .route-arrow { color: #9bbbd6; }
-
-        .route-mode {
-            background: #eaf4fd;
-            border-radius: 20px;
-            color: #236aa9;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            padding: 4px 8px;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
+        .timeline-panel[hidden] { display: none; }
+        .timeline-panel .trip-route { margin-bottom: 14px; }
 
         @media (max-width: 767px) {
-            .route-entry { grid-template-columns: 58px minmax(0, 1fr); }
-            .route-mode { grid-column: 2; justify-self: start; }
             .timeline-items { padding-left: 18px; }
+            .timeline-panel { margin-left: 58px; }
         }
 
         /* map tooltip */
@@ -648,27 +525,7 @@
         </section>
 
         <!-- ══════════════════════════════════════════════
-             SECTION 4 — TRIP STORIES
-        ══════════════════════════════════════════════ -->
-        <section class="expl-section">
-            <p class="section-sub">Moments worth keeping</p>
-            <h2 class="section-heading">Trip Stories</h2>
-            <hr class="section-divider">
-            <div id="trip-stories" class="trip-stories"></div>
-        </section>
-
-        <!-- ══════════════════════════════════════════════
-             SECTION 5 — ROUTE LOG
-        ══════════════════════════════════════════════ -->
-        <section id="route-log-section" class="expl-section" hidden>
-            <p class="section-sub">Journeys in motion</p>
-            <h2 class="section-heading">Routes I've Taken</h2>
-            <hr class="section-divider">
-            <div id="route-log" class="route-log"></div>
-        </section>
-
-        <!-- ══════════════════════════════════════════════
-             SECTION 6 — The Adventure Log
+             SECTION 4 — The Adventure Log
         ══════════════════════════════════════════════ -->
         <section class="expl-section">
             <p class="section-sub">Thrills & Goals</p>
@@ -936,20 +793,15 @@
             return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][month - 1];
         }
 
-        function openTripStory(tripId) {
-            const card = document.getElementById(`trip-story-${tripId}`);
-            const button = card && card.querySelector(".trip-toggle");
-            if (!card || !button) return;
-            if (button.getAttribute("aria-expanded") !== "true") button.click();
-            card.scrollIntoView({ behavior: "smooth", block: "center" });
-            button.focus({ preventScroll: true });
-        }
-
         function renderTravelTimeline() {
             const section = document.getElementById("travel-timeline-section");
             const container = document.getElementById("travel-timeline");
-            const datedTrips = TRIPS.map(trip => ({ ...trip, dateInfo: parseMonth(trip.date) }))
-                .filter(trip => trip.dateInfo && trip.id && trip.title)
+            const datedTrips = TRIPS.map((trip, index) => ({
+                ...trip,
+                dateInfo: parseMonth(trip.date),
+                panelId: `timeline-story-${index}`
+            }))
+                .filter(trip => trip.dateInfo && trip.title)
                 .sort((a, b) => b.dateInfo.sortValue - a.dateInfo.sortValue);
 
             section.hidden = datedTrips.length === 0;
@@ -967,86 +819,37 @@
                 <div class="timeline-year">
                     <h3 class="timeline-year-heading">${year}</h3>
                     <div class="timeline-items">
-                        ${tripsByYear[year].map(trip => `
-                            <button class="timeline-item" type="button" data-trip-id="${escapeHtml(trip.id)}">
-                                <span class="timeline-month">${formatMonth(trip.dateInfo)}</span>
-                                <span><span class="timeline-title">${escapeHtml(trip.title)}</span><span class="timeline-label">${escapeHtml(trip.label || "")}</span></span>
-                            </button>`).join("")}
+                        ${tripsByYear[year].map(trip => {
+                            const panelId = trip.panelId;
+                            const route = Array.isArray(trip.route) ? trip.route.map((stop, index) =>
+                                `${index ? '<span class="trip-route-arrow" aria-hidden="true">→</span>' : ""}<span class="trip-stop">${escapeHtml(stop)}</span>`
+                            ).join("") : "";
+                            const story = String(trip.story || "").trim()
+                                ? `<p class="trip-story">${escapeHtml(trip.story)}</p>` : "";
+                            return `<div class="timeline-entry">
+                                <button class="timeline-item" type="button" aria-expanded="false" aria-controls="${escapeHtml(panelId)}">
+                                    <span class="timeline-month">${formatMonth(trip.dateInfo)}</span>
+                                    <span><span class="timeline-title">${escapeHtml(trip.title)}</span><span class="timeline-label">${escapeHtml(trip.label || "")}</span></span>
+                                </button>
+                                <div class="timeline-panel" id="${escapeHtml(panelId)}" hidden>
+                                    ${route ? `<div class="trip-route">${route}</div>` : ""}
+                                    ${story}
+                                </div>
+                            </div>`;
+                        }).join("")}
                     </div>
                 </div>`).join("");
 
             container.querySelectorAll(".timeline-item").forEach(item => {
-                item.addEventListener("click", () => openTripStory(item.dataset.tripId));
-            });
-        }
-
-        function renderRouteLog() {
-            const section = document.getElementById("route-log-section");
-            const container = document.getElementById("route-log");
-            const tripIds = new Set(TRIPS.map(trip => trip.id));
-            const datedRoutes = ROUTES.map(route => ({ ...route, dateInfo: parseMonth(route.date) }))
-                .filter(route => route.dateInfo && route.id && route.title && route.mode && Array.isArray(route.stops) && route.stops.length >= 2)
-                .sort((a, b) => b.dateInfo.sortValue - a.dateInfo.sortValue);
-
-            section.hidden = datedRoutes.length === 0;
-            if (!datedRoutes.length) {
-                container.innerHTML = "";
-                return;
-            }
-
-            container.innerHTML = datedRoutes.map(route => {
-                const hasTripStory = route.tripId && tripIds.has(route.tripId);
-                const stops = route.stops.map((stop, index) =>
-                    `${index ? '<span class="route-arrow" aria-hidden="true">→</span>' : ""}<span>${escapeHtml(stop)}</span>`
-                ).join("");
-                const details = `<span class="route-date">${formatMonth(route.dateInfo)} ${route.dateInfo.year}</span>
-                    <span><span class="route-title">${escapeHtml(route.title)}</span><span class="route-stops">${stops}</span></span>
-                    <span class="route-mode">${escapeHtml(route.mode)}</span>`;
-
-                return hasTripStory
-                    ? `<button class="route-entry" type="button" data-trip-id="${escapeHtml(route.tripId)}">${details}</button>`
-                    : `<article class="route-entry">${details}</article>`;
-            }).join("");
-
-            container.querySelectorAll("button.route-entry").forEach(item => {
-                item.addEventListener("click", () => openTripStory(item.dataset.tripId));
-            });
-        }
-
-        function renderTripStories() {
-            const container = document.getElementById("trip-stories");
-
-            container.innerHTML = TRIPS.map(trip => {
-                const panelId = `trip-${trip.id}`;
-                const route = trip.route.map((stop, index) =>
-                    `${index ? '<span class="trip-route-arrow" aria-hidden="true">→</span>' : ''}<span class="trip-stop">${escapeHtml(stop)}</span>`
-                ).join("");
-                const story = trip.story.trim()
-                    ? `<p class="trip-story">${escapeHtml(trip.story)}</p>`
-                    : "";
-
-                return `<article class="trip-card" id="trip-story-${escapeHtml(trip.id)}">
-                    <button class="trip-toggle" type="button" aria-expanded="false" aria-controls="${panelId}">
-                        <span class="trip-title-wrap"><span class="trip-label">${escapeHtml(trip.label)}</span><span class="trip-title">${escapeHtml(trip.title)}</span></span>
-                        <i class="fas fa-chevron-down trip-chevron" aria-hidden="true"></i>
-                    </button>
-                    <div class="trip-panel" id="${panelId}" hidden>
-                        <div class="trip-route">${route}</div>
-                        ${story}
-                    </div>
-                </article>`;
-            }).join("");
-
-            container.querySelectorAll(".trip-toggle").forEach(button => {
-                button.addEventListener("click", () => {
-                    const willExpand = button.getAttribute("aria-expanded") !== "true";
-                    container.querySelectorAll(".trip-toggle").forEach(otherButton => {
-                        otherButton.setAttribute("aria-expanded", "false");
-                        document.getElementById(otherButton.getAttribute("aria-controls")).hidden = true;
+                item.addEventListener("click", () => {
+                    const willExpand = item.getAttribute("aria-expanded") !== "true";
+                    container.querySelectorAll(".timeline-item").forEach(otherItem => {
+                        otherItem.setAttribute("aria-expanded", "false");
+                        document.getElementById(otherItem.getAttribute("aria-controls")).hidden = true;
                     });
                     if (willExpand) {
-                        button.setAttribute("aria-expanded", "true");
-                        document.getElementById(button.getAttribute("aria-controls")).hidden = false;
+                        item.setAttribute("aria-expanded", "true");
+                        document.getElementById(item.getAttribute("aria-controls")).hidden = false;
                     }
                 });
             });
@@ -1082,9 +885,7 @@
         }
 
         renderWorldFlags();
-        renderTripStories();
         renderTravelTimeline();
-        renderRouteLog();
         renderBucketList();
 
         // ── Load & resize ─────────────────────────────────────────────────
