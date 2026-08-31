@@ -23,6 +23,7 @@
  *   id         {string} Unique, URL-safe identifier
  *   title      {string} Card heading
  *   label      {string} Short trip category or location label
+ *   date       {string} Month visited in YYYY-MM format; use "" until known
  *   route      {string[]} Stops in travel order
  *   story      {string} Short personal memory; use "" until ready
  */
@@ -96,25 +97,58 @@ const VISITED_AREAS = [
 
 const TRIPS = [
     {
+        id: "udaipur",
+        title: "Udaipur",
+        label: "Rajasthan",
+        date: "2026-08",
+        route: ["Delhi", "Chittorgarh", "Kumbhalgarh", "Udaipur", "Delhi"],
+        story: "This was an unexpected trip."
+    },
+    {
         id: "rajasthan-bike-ride",
         title: "Riding Bike in Rajasthan",
         label: "Rajasthan",
-        route: ["Alwar", "Tijara", "Bhangarh"],
+        date: "2025-07",
+        route: ["Delhi", "Tijara", "Alwar", "Bhangarh", "Delhi"],
         story: "This was an unexpected trip."
     },
     {
         id: "rishikesh-trip",
         title: "Rishikesh Trip",
         label: "Uttarakhand",
-        route: ["Rishikesh"],
+        date: "2025-10",
+        route: ["Delhi", "Rishikesh", "Dev Prayag", "Delhi"],
         story: "A trip full on adventure."
     },
     {
         id: "singapore-kuala-lumpur",
         title: "Singapore & Kuala Lumpur",
         label: "Southeast Asia",
-        route: ["Singapore", "Kuala Lumpur"],
+        date: "2025-08",
+        route: ["Kuala Lumpur", "Singapore"],
         story: "First self managed international trip"
+    }
+];
+
+/**
+ * Route-log entries. Every route needs a month in YYYY-MM format and at least
+ * two stops. Set `tripId` to a TRIPS id to open its matching Trip Story.
+ *
+ *   id      {string} Unique, URL-safe identifier
+ *   title   {string} Short route heading
+ *   date    {string} Month travelled in YYYY-MM format
+ *   mode    {string} Travel mode, for example "bike", "road trip", "train", or "flight"
+ *   stops   {string[]} Stops in travel order
+ *   tripId  {string} Optional matching TRIPS id
+ */
+const ROUTES = [
+    {
+        id: "rajasthan-bike-ride",
+        title: "Riding Bike in Rajasthan",
+        date: "2025-07",
+        mode: "bike",
+        stops: ["Delhi", "Alwar", "Tijara", "Bhangarh", "Delhi"],
+        tripId: "rajasthan-bike-ride"
     }
 ];
 

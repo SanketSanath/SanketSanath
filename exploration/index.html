@@ -407,6 +407,150 @@
             line-height: 1.65;
         }
 
+        /* ── TRAVEL TIMELINE & ROUTE LOG ── */
+        .travel-timeline,
+        .route-log {
+            max-width: 900px;
+        }
+
+        .timeline-year + .timeline-year { margin-top: 28px; }
+
+        .timeline-year-heading {
+            color: #236aa9;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin: 0 0 10px;
+        }
+
+        .timeline-items {
+            border-left: 2px solid #c6e2f7;
+            display: grid;
+            gap: 3px;
+            margin-left: 8px;
+            padding-left: 22px;
+        }
+
+        .timeline-item {
+            align-items: baseline;
+            background: transparent;
+            border: 0;
+            color: inherit;
+            cursor: pointer;
+            display: grid;
+            font: inherit;
+            gap: 14px;
+            grid-template-columns: 44px minmax(0, 1fr);
+            padding: 8px 0;
+            position: relative;
+            text-align: left;
+        }
+
+        .timeline-item::before {
+            background: #3183e1;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px #c6e2f7;
+            content: "";
+            height: 10px;
+            left: -29px;
+            position: absolute;
+            top: 13px;
+            width: 10px;
+        }
+
+        .timeline-item:hover .timeline-title,
+        .timeline-item:focus-visible .timeline-title { color: #236aa9; }
+
+        .timeline-item:focus-visible,
+        .route-entry:focus-visible {
+            border-radius: 5px;
+            outline: 3px solid #3183e1;
+            outline-offset: 2px;
+        }
+
+        .timeline-month,
+        .route-date {
+            color: #888;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+        }
+
+        .timeline-title {
+            color: #222;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: color 0.15s;
+        }
+
+        .timeline-label {
+            color: #888;
+            display: block;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .route-log { display: grid; }
+
+        .route-entry {
+            align-items: center;
+            background: #fff;
+            border: 0;
+            border-bottom: 1px solid #eee;
+            color: inherit;
+            display: grid;
+            font: inherit;
+            gap: 12px;
+            grid-template-columns: 76px minmax(0, 1fr) auto;
+            padding: 13px 0;
+            text-align: left;
+            width: 100%;
+        }
+
+        button.route-entry { cursor: pointer; }
+        button.route-entry:hover { background: #f7fbff; }
+
+        .route-title {
+            color: #222;
+            display: block;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 0.98rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .route-stops {
+            align-items: center;
+            color: #555;
+            display: flex;
+            flex-wrap: wrap;
+            font-size: 13px;
+            gap: 6px;
+        }
+
+        .route-arrow { color: #9bbbd6; }
+
+        .route-mode {
+            background: #eaf4fd;
+            border-radius: 20px;
+            color: #236aa9;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 4px 8px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 767px) {
+            .route-entry { grid-template-columns: 58px minmax(0, 1fr); }
+            .route-mode { grid-column: 2; justify-self: start; }
+            .timeline-items { padding-left: 18px; }
+        }
+
         /* map tooltip */
         #expl-tooltip {
             position: fixed;
@@ -494,7 +638,17 @@
 
 
         <!-- ══════════════════════════════════════════════
-             SECTION 3 — TRIP STORIES
+             SECTION 3 — TRAVEL TIMELINE
+        ══════════════════════════════════════════════ -->
+        <section id="travel-timeline-section" class="expl-section" hidden>
+            <p class="section-sub">Trips, in time</p>
+            <h2 class="section-heading">Travel Timeline</h2>
+            <hr class="section-divider">
+            <div id="travel-timeline" class="travel-timeline"></div>
+        </section>
+
+        <!-- ══════════════════════════════════════════════
+             SECTION 4 — TRIP STORIES
         ══════════════════════════════════════════════ -->
         <section class="expl-section">
             <p class="section-sub">Moments worth keeping</p>
@@ -504,7 +658,17 @@
         </section>
 
         <!-- ══════════════════════════════════════════════
-             SECTION 4 — The Adventure Log
+             SECTION 5 — ROUTE LOG
+        ══════════════════════════════════════════════ -->
+        <section id="route-log-section" class="expl-section" hidden>
+            <p class="section-sub">Journeys in motion</p>
+            <h2 class="section-heading">Routes I've Taken</h2>
+            <hr class="section-divider">
+            <div id="route-log" class="route-log"></div>
+        </section>
+
+        <!-- ══════════════════════════════════════════════
+             SECTION 6 — The Adventure Log
         ══════════════════════════════════════════════ -->
         <section class="expl-section">
             <p class="section-sub">Thrills & Goals</p>
@@ -758,6 +922,97 @@
             })[char]);
         }
 
+        function parseMonth(value) {
+            const match = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(value || "");
+            if (!match) return null;
+            return {
+                year: Number(match[1]),
+                month: Number(match[2]),
+                sortValue: Number(match[1]) * 12 + Number(match[2])
+            };
+        }
+
+        function formatMonth({ month }) {
+            return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][month - 1];
+        }
+
+        function openTripStory(tripId) {
+            const card = document.getElementById(`trip-story-${tripId}`);
+            const button = card && card.querySelector(".trip-toggle");
+            if (!card || !button) return;
+            if (button.getAttribute("aria-expanded") !== "true") button.click();
+            card.scrollIntoView({ behavior: "smooth", block: "center" });
+            button.focus({ preventScroll: true });
+        }
+
+        function renderTravelTimeline() {
+            const section = document.getElementById("travel-timeline-section");
+            const container = document.getElementById("travel-timeline");
+            const datedTrips = TRIPS.map(trip => ({ ...trip, dateInfo: parseMonth(trip.date) }))
+                .filter(trip => trip.dateInfo && trip.id && trip.title)
+                .sort((a, b) => b.dateInfo.sortValue - a.dateInfo.sortValue);
+
+            section.hidden = datedTrips.length === 0;
+            if (!datedTrips.length) {
+                container.innerHTML = "";
+                return;
+            }
+
+            const tripsByYear = datedTrips.reduce((groups, trip) => {
+                (groups[trip.dateInfo.year] ||= []).push(trip);
+                return groups;
+            }, {});
+
+            container.innerHTML = Object.keys(tripsByYear).sort((a, b) => b - a).map(year => `
+                <div class="timeline-year">
+                    <h3 class="timeline-year-heading">${year}</h3>
+                    <div class="timeline-items">
+                        ${tripsByYear[year].map(trip => `
+                            <button class="timeline-item" type="button" data-trip-id="${escapeHtml(trip.id)}">
+                                <span class="timeline-month">${formatMonth(trip.dateInfo)}</span>
+                                <span><span class="timeline-title">${escapeHtml(trip.title)}</span><span class="timeline-label">${escapeHtml(trip.label || "")}</span></span>
+                            </button>`).join("")}
+                    </div>
+                </div>`).join("");
+
+            container.querySelectorAll(".timeline-item").forEach(item => {
+                item.addEventListener("click", () => openTripStory(item.dataset.tripId));
+            });
+        }
+
+        function renderRouteLog() {
+            const section = document.getElementById("route-log-section");
+            const container = document.getElementById("route-log");
+            const tripIds = new Set(TRIPS.map(trip => trip.id));
+            const datedRoutes = ROUTES.map(route => ({ ...route, dateInfo: parseMonth(route.date) }))
+                .filter(route => route.dateInfo && route.id && route.title && route.mode && Array.isArray(route.stops) && route.stops.length >= 2)
+                .sort((a, b) => b.dateInfo.sortValue - a.dateInfo.sortValue);
+
+            section.hidden = datedRoutes.length === 0;
+            if (!datedRoutes.length) {
+                container.innerHTML = "";
+                return;
+            }
+
+            container.innerHTML = datedRoutes.map(route => {
+                const hasTripStory = route.tripId && tripIds.has(route.tripId);
+                const stops = route.stops.map((stop, index) =>
+                    `${index ? '<span class="route-arrow" aria-hidden="true">→</span>' : ""}<span>${escapeHtml(stop)}</span>`
+                ).join("");
+                const details = `<span class="route-date">${formatMonth(route.dateInfo)} ${route.dateInfo.year}</span>
+                    <span><span class="route-title">${escapeHtml(route.title)}</span><span class="route-stops">${stops}</span></span>
+                    <span class="route-mode">${escapeHtml(route.mode)}</span>`;
+
+                return hasTripStory
+                    ? `<button class="route-entry" type="button" data-trip-id="${escapeHtml(route.tripId)}">${details}</button>`
+                    : `<article class="route-entry">${details}</article>`;
+            }).join("");
+
+            container.querySelectorAll("button.route-entry").forEach(item => {
+                item.addEventListener("click", () => openTripStory(item.dataset.tripId));
+            });
+        }
+
         function renderTripStories() {
             const container = document.getElementById("trip-stories");
 
@@ -770,7 +1025,7 @@
                     ? `<p class="trip-story">${escapeHtml(trip.story)}</p>`
                     : "";
 
-                return `<article class="trip-card">
+                return `<article class="trip-card" id="trip-story-${escapeHtml(trip.id)}">
                     <button class="trip-toggle" type="button" aria-expanded="false" aria-controls="${panelId}">
                         <span class="trip-title-wrap"><span class="trip-label">${escapeHtml(trip.label)}</span><span class="trip-title">${escapeHtml(trip.title)}</span></span>
                         <i class="fas fa-chevron-down trip-chevron" aria-hidden="true"></i>
@@ -828,6 +1083,8 @@
 
         renderWorldFlags();
         renderTripStories();
+        renderTravelTimeline();
+        renderRouteLog();
         renderBucketList();
 
         // ── Load & resize ─────────────────────────────────────────────────
