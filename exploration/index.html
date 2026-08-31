@@ -305,106 +305,125 @@
             margin-top: 2px;
         }
 
-        /* ── 3. TRIP STORIES ── */
-        .trip-stories {
-            display: grid;
-            gap: 14px;
-            max-width: 900px;
-        }
-
-        .trip-card {
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .trip-toggle {
-            width: 100%;
-            border: 0;
-            -webkit-appearance: none;
-            appearance: none;
-            background: #fff;
-            padding: 20px 22px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            text-align: left;
-            cursor: pointer;
-            font: inherit;
-        }
-
-        .trip-toggle:hover,
-        .trip-toggle:focus-visible {
-            background: #f7fbff;
-            outline: none;
-        }
-
-        .trip-toggle:focus-visible {
-            box-shadow: inset 0 0 0 3px #3183e1;
-        }
-
-        .trip-title-wrap { flex: 1; }
-
-        .trip-label {
-            display: block;
-            font-size: 11px;
-            color: #888;
-            font-weight: 700;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        .trip-title {
-            display: block;
-            color: #222;
-            font-family: 'Work Sans', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .trip-chevron {
-            color: #3183e1;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .trip-toggle[aria-expanded="true"] .trip-chevron { transform: rotate(180deg); }
-
-        .trip-panel {
-            border-top: 1px solid #eee;
-            padding: 20px 22px 22px;
-        }
-
-        .trip-panel[hidden] { display: none; }
-
         .trip-route {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
-            gap: 7px;
-            margin-bottom: 20px;
+            color: #555;
+            font-size: 14px;
+            gap: 5px;
+            line-height: 1.65;
+            margin-bottom: 14px;
         }
-
-        .trip-panel .trip-route:last-child { margin-bottom: 0; }
 
         .trip-stop {
-            background: #eaf4fd;
-            border-radius: 20px;
-            color: #236aa9;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 5px 10px;
+            font-weight: 400;
         }
 
-        .trip-route-arrow { color: #9bbbd6; }
+        .trip-route-arrow { color: #999; }
 
         .trip-story {
-            margin: 0 0 20px;
+            margin: 0;
             color: #555;
             font-size: 14px;
             line-height: 1.65;
+        }
+
+        /* ── TRAVEL TIMELINE ── */
+        .travel-timeline { max-width: 900px; }
+
+        .timeline-year + .timeline-year { margin-top: 28px; }
+
+        .timeline-year-heading {
+            color: #236aa9;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin: 0 0 10px;
+        }
+
+        .timeline-items {
+            border-left: 2px solid #c6e2f7;
+            display: grid;
+            gap: 3px;
+            margin-left: 8px;
+            padding-left: 22px;
+        }
+
+        .timeline-item {
+            align-items: baseline;
+            background: transparent;
+            border: 0;
+            color: inherit;
+            cursor: pointer;
+            display: grid;
+            font: inherit;
+            gap: 14px;
+            grid-template-columns: 44px minmax(0, 1fr);
+            padding: 8px 0;
+            position: relative;
+            text-align: left;
+        }
+
+        .timeline-item::before {
+            background: #3183e1;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px #c6e2f7;
+            content: "";
+            height: 10px;
+            left: -29px;
+            position: absolute;
+            top: 13px;
+            width: 10px;
+        }
+
+        .timeline-item:hover .timeline-title,
+        .timeline-item:focus-visible .timeline-title { color: #236aa9; }
+
+        .timeline-item:focus { outline: none; }
+
+        .timeline-item:focus-visible {
+            border-radius: 5px;
+            outline: 3px solid #3183e1;
+            outline-offset: 2px;
+        }
+
+        .timeline-month {
+            color: #888;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+        }
+
+        .timeline-title {
+            color: #222;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: color 0.15s;
+        }
+
+        .timeline-label {
+            color: #888;
+            display: block;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .timeline-panel {
+            border-top: 1px solid #eee;
+            margin: 2px 0 10px 58px;
+            padding: 14px 0 4px;
+        }
+
+        .timeline-panel[hidden] { display: none; }
+        .timeline-panel .trip-route { margin-bottom: 14px; }
+
+        @media (max-width: 767px) {
+            .timeline-items { padding-left: 18px; }
+            .timeline-panel { margin-left: 58px; }
         }
 
         /* map tooltip */
@@ -494,13 +513,13 @@
 
 
         <!-- ══════════════════════════════════════════════
-             SECTION 3 — TRIP STORIES
+             SECTION 3 — TRAVEL TIMELINE
         ══════════════════════════════════════════════ -->
-        <section class="expl-section">
-            <p class="section-sub">Moments worth keeping</p>
-            <h2 class="section-heading">Trip Stories</h2>
+        <section id="travel-timeline-section" class="expl-section" hidden>
+            <p class="section-sub">Trips, in time</p>
+            <h2 class="section-heading">Travel Timeline</h2>
             <hr class="section-divider">
-            <div id="trip-stories" class="trip-stories"></div>
+            <div id="travel-timeline" class="travel-timeline"></div>
         </section>
 
         <!-- ══════════════════════════════════════════════
@@ -758,40 +777,77 @@
             })[char]);
         }
 
-        function renderTripStories() {
-            const container = document.getElementById("trip-stories");
+        function parseMonth(value) {
+            const match = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(value || "");
+            if (!match) return null;
+            return {
+                year: Number(match[1]),
+                month: Number(match[2]),
+                sortValue: Number(match[1]) * 12 + Number(match[2])
+            };
+        }
 
-            container.innerHTML = TRIPS.map(trip => {
-                const panelId = `trip-${trip.id}`;
-                const route = trip.route.map((stop, index) =>
-                    `${index ? '<span class="trip-route-arrow" aria-hidden="true">→</span>' : ''}<span class="trip-stop">${escapeHtml(stop)}</span>`
-                ).join("");
-                const story = trip.story.trim()
-                    ? `<p class="trip-story">${escapeHtml(trip.story)}</p>`
-                    : "";
+        function formatMonth({ month }) {
+            return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][month - 1];
+        }
 
-                return `<article class="trip-card">
-                    <button class="trip-toggle" type="button" aria-expanded="false" aria-controls="${panelId}">
-                        <span class="trip-title-wrap"><span class="trip-label">${escapeHtml(trip.label)}</span><span class="trip-title">${escapeHtml(trip.title)}</span></span>
-                        <i class="fas fa-chevron-down trip-chevron" aria-hidden="true"></i>
-                    </button>
-                    <div class="trip-panel" id="${panelId}" hidden>
-                        <div class="trip-route">${route}</div>
-                        ${story}
+        function renderTravelTimeline() {
+            const section = document.getElementById("travel-timeline-section");
+            const container = document.getElementById("travel-timeline");
+            const datedTrips = TRIPS.map((trip, index) => ({
+                ...trip,
+                dateInfo: parseMonth(trip.date),
+                panelId: `timeline-story-${index}`
+            }))
+                .filter(trip => trip.dateInfo && trip.title)
+                .sort((a, b) => b.dateInfo.sortValue - a.dateInfo.sortValue);
+
+            section.hidden = datedTrips.length === 0;
+            if (!datedTrips.length) {
+                container.innerHTML = "";
+                return;
+            }
+
+            const tripsByYear = datedTrips.reduce((groups, trip) => {
+                (groups[trip.dateInfo.year] ||= []).push(trip);
+                return groups;
+            }, {});
+
+            container.innerHTML = Object.keys(tripsByYear).sort((a, b) => b - a).map(year => `
+                <div class="timeline-year">
+                    <h3 class="timeline-year-heading">${year}</h3>
+                    <div class="timeline-items">
+                        ${tripsByYear[year].map(trip => {
+                            const panelId = trip.panelId;
+                            const route = Array.isArray(trip.route) ? trip.route.map((stop, index) =>
+                                `${index ? '<span class="trip-route-arrow" aria-hidden="true">→</span>' : ""}<span class="trip-stop">${escapeHtml(stop)}</span>`
+                            ).join("") : "";
+                            const story = String(trip.story || "").trim()
+                                ? `<p class="trip-story">${escapeHtml(trip.story)}</p>` : "";
+                            return `<div class="timeline-entry">
+                                <button class="timeline-item" type="button" aria-expanded="false" aria-controls="${escapeHtml(panelId)}">
+                                    <span class="timeline-month">${formatMonth(trip.dateInfo)}</span>
+                                    <span><span class="timeline-title">${escapeHtml(trip.title)}</span><span class="timeline-label">${escapeHtml(trip.label || "")}</span></span>
+                                </button>
+                                <div class="timeline-panel" id="${escapeHtml(panelId)}" hidden>
+                                    ${route ? `<div class="trip-route">${route}</div>` : ""}
+                                    ${story}
+                                </div>
+                            </div>`;
+                        }).join("")}
                     </div>
-                </article>`;
-            }).join("");
+                </div>`).join("");
 
-            container.querySelectorAll(".trip-toggle").forEach(button => {
-                button.addEventListener("click", () => {
-                    const willExpand = button.getAttribute("aria-expanded") !== "true";
-                    container.querySelectorAll(".trip-toggle").forEach(otherButton => {
-                        otherButton.setAttribute("aria-expanded", "false");
-                        document.getElementById(otherButton.getAttribute("aria-controls")).hidden = true;
+            container.querySelectorAll(".timeline-item").forEach(item => {
+                item.addEventListener("click", () => {
+                    const willExpand = item.getAttribute("aria-expanded") !== "true";
+                    container.querySelectorAll(".timeline-item").forEach(otherItem => {
+                        otherItem.setAttribute("aria-expanded", "false");
+                        document.getElementById(otherItem.getAttribute("aria-controls")).hidden = true;
                     });
                     if (willExpand) {
-                        button.setAttribute("aria-expanded", "true");
-                        document.getElementById(button.getAttribute("aria-controls")).hidden = false;
+                        item.setAttribute("aria-expanded", "true");
+                        document.getElementById(item.getAttribute("aria-controls")).hidden = false;
                     }
                 });
             });
@@ -827,7 +883,7 @@
         }
 
         renderWorldFlags();
-        renderTripStories();
+        renderTravelTimeline();
         renderBucketList();
 
         // ── Load & resize ─────────────────────────────────────────────────

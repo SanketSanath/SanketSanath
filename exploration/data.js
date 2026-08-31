@@ -20,9 +20,9 @@
  *          you want one clean reveal rather than cramped hover targets.
  *
  * TRIPS entry:
- *   id         {string} Unique, URL-safe identifier
  *   title      {string} Card heading
  *   label      {string} Short trip category or location label
+ *   date       {string} Month visited in YYYY-MM format; use "" until known
  *   route      {string[]} Stops in travel order
  *   story      {string} Short personal memory; use "" until ready
  */
@@ -96,26 +96,55 @@ const VISITED_AREAS = [
 
 const TRIPS = [
     {
-        id: "rajasthan-bike-ride",
-        title: "Riding Bike in Rajasthan",
+        title: "Udaipur",
         label: "Rajasthan",
-        route: ["Alwar", "Tijara", "Bhangarh"],
+        date: "2026-08",
+        route: ["Delhi", "Chittorgarh", "Kumbhalgarh", "Udaipur", "Delhi"],
         story: "This was an unexpected trip."
     },
     {
-        id: "rishikesh-trip",
-        title: "Rishikesh Trip",
+        title: "Janakpur",
+        label: "Nepal",
+        date: "2026-02",
+    },
+    {
+        title: "East Nepal",
+        label: "Nepal",
+        date: "2026-01",
+        route: ["Kanyam", "Mirik", "Shree Antu"],
+    },
+    {
+        title: "Chakrata",
         label: "Uttarakhand",
-        route: ["Rishikesh"],
+        date: "2025-11",
+    },
+    {
+        title: "Rishikesh and Dev Prayag",
+        label: "Uttarakhand",
+        date: "2025-10",
+        route: ["Delhi", "Rishikesh", "Dev Prayag", "Delhi"],
         story: "A trip full on adventure."
     },
     {
-        id: "singapore-kuala-lumpur",
+        title: "Nainital",
+        label: "Uttarakhand",
+        date: "2025-09",
+        route: ["Delhi", "Jim Corbett", "Nainital", "Delhi"],
+    },
+    {
         title: "Singapore & Kuala Lumpur",
         label: "Southeast Asia",
-        route: ["Singapore", "Kuala Lumpur"],
+        date: "2025-08",
+        route: ["Kuala Lumpur", "Singapore"],
         story: "First self managed international trip"
-    }
+    },
+    {
+        title: "Riding Bike in Rajasthan",
+        label: "Rajasthan",
+        date: "2025-07",
+        route: ["Delhi", "Tijara", "Alwar", "Bhangarh", "Delhi"],
+        story: "This was an unexpected trip."
+    },
 ];
 
 /**
