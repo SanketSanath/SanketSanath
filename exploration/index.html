@@ -1145,6 +1145,7 @@
             // set container height = 85% of its width for nice aspect ratio
             const container = document.getElementById("map-svg-container");
             container.style.height = Math.max(420, container.clientWidth * 0.85) + "px";
+            let renderedMapWidth = container.clientWidth;
 
             renderIndiaMap(indiaData, nepalData);
 
@@ -1152,6 +1153,9 @@
             window.addEventListener("resize", () => {
                 clearTimeout(t);
                 t = setTimeout(() => {
+                    const nextMapWidth = container.clientWidth;
+                    if (nextMapWidth === renderedMapWidth) return;
+                    renderedMapWidth = nextMapWidth;
                     container.style.height = Math.max(420, container.clientWidth * 0.85) + "px";
                     renderIndiaMap(indiaData, nepalData);
                 }, 150);
