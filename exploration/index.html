@@ -101,18 +101,19 @@
             transform-origin: left center;
         }
 
-        .motion-ready .expl-section.is-visible .flag-card,
-        .motion-ready .expl-section.is-visible .timeline-entry {
+        .motion-ready .expl-section.is-visible .flag-card {
             animation: card-settle 0.64s cubic-bezier(0.2, 0.7, 0.2, 1) both;
             animation-delay: var(--item-delay, 0ms);
         }
 
-        .motion-ready .expl-section.is-visible .adventure-item {
+        .motion-ready .expl-section.is-visible .adventure-item,
+        .motion-ready .expl-section.is-visible .timeline-entry {
             opacity: 0;
             transform: translateY(20px) scale(0.98);
         }
 
-        .motion-ready .expl-section.is-visible .adventure-item.is-visible {
+        .motion-ready .expl-section.is-visible .adventure-item.is-visible,
+        .motion-ready .expl-section.is-visible .timeline-entry.is-visible {
             animation: card-settle 0.64s cubic-bezier(0.2, 0.7, 0.2, 1) both;
         }
 
@@ -990,14 +991,14 @@
                 <div class="timeline-year">
                     <h3 class="timeline-year-heading">${year}</h3>
                     <div class="timeline-items">
-                        ${trips.map((trip, index) => {
+                        ${trips.map(trip => {
                             const panelId = trip.panelId;
                             const route = Array.isArray(trip.route) ? trip.route.map((stop, index) =>
                                 `${index ? '<span class="trip-route-arrow" aria-hidden="true">→</span>' : ""}<span class="trip-stop">${escapeHtml(stop)}</span>`
                             ).join("") : "";
                             const story = String(trip.story || "").trim()
                                 ? `<p class="trip-story">${escapeHtml(trip.story)}</p>` : "";
-                            return `<div class="timeline-entry" style="--item-delay:${Math.min(index * 55, 330)}ms">
+                            return `<div class="timeline-entry">
                                 <button class="timeline-item" type="button" aria-expanded="false" aria-controls="${escapeHtml(panelId)}">
                                     <span class="timeline-month">${formatMonth(trip.dateInfo)}</span>
                                     <span><span class="timeline-title">${escapeHtml(trip.title)}</span><span class="timeline-label">${escapeHtml(trip.label || "")}</span></span>
@@ -1084,6 +1085,16 @@
             }, { threshold: 0.35 });
 
             document.querySelectorAll(".adventure-item").forEach(item => adventureObserver.observe(item));
+
+            const timelineObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add("is-visible");
+                    timelineObserver.unobserve(entry.target);
+                });
+            }, { threshold: 0.35 });
+
+            document.querySelectorAll(".timeline-entry").forEach(item => timelineObserver.observe(item));
         }
 
         function renderWorldFlags() {
