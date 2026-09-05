@@ -100,7 +100,6 @@ const TRIPS = [
         label: "Rajasthan",
         date: "2026-08",
         route: ["Delhi", "Chittorgarh", "Kumbhalgarh", "Udaipur", "Delhi"],
-        story: "This was an unexpected trip."
     },
     {
         title: "Janakpur",
@@ -144,6 +143,97 @@ const TRIPS = [
         date: "2025-07",
         route: ["Delhi", "Tijara", "Alwar", "Bhangarh", "Delhi"],
         story: "This was an unexpected trip."
+    },
+    {
+        title: "Goa",
+        label: "Goa",
+        date: "2023-11",
+        route: ["Goa"],
+        story: ""
+    },
+    {
+        title: "Varanasi",
+        label: "Uttar Pradesh",
+        date: "2023-12",
+        route: ["Varanasi"],
+        story: ""
+    },
+    {
+        title: "Shimla",
+        label: "Himachal Pradesh",
+        date: "2023-06",
+        route: ["Shimla"],
+        story: ""
+    },
+    {
+        title: "Puri & Konark",
+        label: "Odisha",
+        date: "2018-04",
+        route: ["Puri", "Konark"],
+        story: ""
+    },
+    {
+        title: "Rajgir",
+        label: "Bihar",
+        date: "2018-09",
+        route: ["Rajgir"],
+        story: ""
+    },
+    {
+        title: "Bhimavaram",
+        label: "Andhra Pradesh",
+        date: "2019-03",
+        route: ["Bhimavaram"],
+        story: ""
+    },
+    {
+        title: "Bangalore",
+        label: "Karnataka",
+        date: "2020-01",
+        route: ["Bangalore"],
+        story: ""
+    },
+    {
+        title: "Jodhpur",
+        label: "Rajasthan",
+        date: "2024-01",
+        route: ["Jodhpur"],
+        story: ""
+    },
+    {
+        title: "Mathura, Vrindavan & Agra",
+        label: "Uttar Pradesh",
+        date: "2024-03",
+        route: ["Mathura", "Vrindavan", "Agra"],
+        story: ""
+    },
+    {
+        title: "Jammu Region",
+        label: "Jammu & Kashmir",
+        date: "2024-09",
+        route: ["Udhampur", "Vaishno Devi", "Patnitop", "Jammu"],
+        story: ""
+    },
+    {
+        title: "Phuket & Phi Phi Islands",
+        label: "Thailand",
+        date: "2024-10",
+        route: ["Phuket", "Phi Phi Islands"],
+        story: ""
+    },
+    {
+        title: "Darjeeling",
+        label: "West Bengal",
+        date: "2024-11",
+        route: ["Darjeeling"],
+        story: ""
+    },
+    {
+        title: "Mumbai",
+        label: "Maharashtra",
+        date: "2025-01",
+        route: ["Mumbai"],
+        story: ""
     },
 ];
 
