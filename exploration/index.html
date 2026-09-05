@@ -648,6 +648,9 @@
 
         const svg     = d3.select("#india-svg");
         const tooltip = d3.select("#expl-tooltip");
+        let mapRevealPlayed = false;
+        let mapRevealObserver = null;
+        let mapRenderVersion = 0;
 
         // ── Build sidebar list ────────────────────────────────────────────
         const listBody = document.getElementById("places-list-body");
@@ -672,8 +675,63 @@
             }
         }
 
+        function prepareMapReveal(container, scratchReveals, boundaryPaths, renderVersion) {
+            const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (reducedMotion || !("IntersectionObserver" in window) || mapRevealPlayed) return;
+
+            const scratchTransform = (reveal, scale) => {
+                const [centerX, centerY] = reveal.polygon
+                    ? d3.polygonCentroid(reveal.polygon)
+                    : [reveal.x + reveal.width / 2, reveal.y + reveal.height / 2];
+                return `translate(${centerX} ${centerY}) scale(${scale}) translate(${-centerX} ${-centerY})`;
+            };
+
+            scratchReveals.attr("transform", reveal => scratchTransform(reveal, 0));
+            boundaryPaths.each(function () {
+                const length = this.getTotalLength();
+                d3.select(this)
+                    .attr("stroke-dasharray", `${length} ${length}`)
+                    .attr("stroke-dashoffset", length);
+            });
+
+            const mapTargets = svg.selectAll(".visited-place-targets *, .visited-area-targets *")
+                .style("pointer-events", "none");
+            const startReveal = () => {
+                if (renderVersion !== mapRenderVersion || mapRevealPlayed) return;
+                mapRevealPlayed = true;
+
+                boundaryPaths.transition("map-boundary-trace")
+                    .duration(720)
+                    .ease(d3.easeCubicInOut)
+                    .attr("stroke-dashoffset", 0);
+
+                window.setTimeout(() => {
+                    if (renderVersion !== mapRenderVersion) return;
+                    scratchReveals.transition("map-scratch-reveal")
+                        .delay((_, index) => Math.min(index * 55, 550))
+                        .duration(280)
+                        .ease(d3.easeCubicOut)
+                        .attr("transform", reveal => scratchTransform(reveal, 1));
+
+                    window.setTimeout(() => {
+                        if (renderVersion === mapRenderVersion) mapTargets.style("pointer-events", null);
+                    }, 850);
+                }, 740);
+            };
+
+            if (mapRevealObserver) mapRevealObserver.disconnect();
+            mapRevealObserver = new IntersectionObserver(entries => {
+                if (!entries.some(entry => entry.isIntersecting)) return;
+                mapRevealObserver.disconnect();
+                mapRevealObserver = null;
+                startReveal();
+            }, { threshold: 1 });
+            mapRevealObserver.observe(container);
+        }
+
         // ── Map render ────────────────────────────────────────────────────
         function renderIndiaMap(indiaData, nepalData) {
+            const renderVersion = ++mapRenderVersion;
             const container = document.getElementById("map-svg-container");
             const W = container.clientWidth;
             const H = container.clientHeight || Math.max(420, W * 0.85);
@@ -859,6 +917,13 @@
                 .on("mouseout", event => {
                     tooltip.style("display", "none");
                 });
+
+            prepareMapReveal(
+                container,
+                mask.selectAll(".scratch-reveal, .area-scratch-reveal"),
+                svg.selectAll(".map-gradient-boundaries path, .map-boundaries path"),
+                renderVersion
+            );
         }
 
         // ── Trip stories ─────────────────────────────────────────────────
