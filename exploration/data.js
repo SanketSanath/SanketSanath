@@ -100,7 +100,6 @@ const TRIPS = [
         label: "Rajasthan",
         date: "2026-08",
         route: ["Delhi", "Chittorgarh", "Kumbhalgarh", "Udaipur", "Delhi"],
-        story: "This was an unexpected trip."
     },
     {
         title: "Janakpur",

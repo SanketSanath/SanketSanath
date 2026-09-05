@@ -69,6 +69,45 @@
             margin: 0 0 40px 0;
         }
 
+        /* ── Motion ── */
+        @keyframes section-rise {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes divider-grow {
+            from { opacity: 0; transform: scaleX(0); }
+            to { opacity: 1; transform: scaleX(1); }
+        }
+
+        @keyframes card-settle {
+            from { opacity: 0; transform: translateY(10px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes detail-unfold {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .motion-ready .expl-section { opacity: 0; transform: translateY(24px); }
+        .motion-ready .expl-section.is-visible {
+            animation: section-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation-delay: var(--section-delay, 0ms);
+        }
+
+        .motion-ready .expl-section.is-visible .section-divider {
+            animation: divider-grow 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            transform-origin: left center;
+        }
+
+        .motion-ready .expl-section.is-visible .flag-card,
+        .motion-ready .expl-section.is-visible .adventure-item,
+        .motion-ready .expl-section.is-visible .timeline-entry {
+            animation: card-settle 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation-delay: var(--item-delay, 0ms);
+        }
+
         /* ── 1. INDIA MAP ── */
         #map-wrapper {
             display: flex;
@@ -83,6 +122,14 @@
             border-radius: 12px;
             overflow: hidden;
             position: relative;
+            transition: box-shadow 0.35s ease, transform 0.35s ease;
+        }
+
+        @media (hover: hover) {
+            #map-svg-container:hover {
+                box-shadow: 0 16px 34px rgba(49, 131, 225, 0.13);
+                transform: translateY(-2px);
+            }
         }
 
         #map-svg-container svg {
@@ -330,7 +377,26 @@
         }
 
         /* ── TRAVEL TIMELINE ── */
-        .travel-timeline { max-width: 900px; }
+        .travel-timeline {
+            max-width: 900px;
+            position: relative;
+        }
+
+        .travel-timeline.is-collapsed {
+            max-height: 520px;
+            overflow: hidden;
+        }
+
+        .travel-timeline.is-collapsed::after {
+            background: linear-gradient(to bottom, rgba(255,255,255,0), #fff 88%);
+            bottom: 0;
+            content: "";
+            height: 96px;
+            left: 0;
+            pointer-events: none;
+            position: absolute;
+            right: 0;
+        }
 
         .timeline-year + .timeline-year { margin-top: 28px; }
 
@@ -419,11 +485,35 @@
         }
 
         .timeline-panel[hidden] { display: none; }
+        .timeline-panel.is-opening { animation: detail-unfold 0.32s ease-out both; }
         .timeline-panel .trip-route { margin-bottom: 14px; }
+
+        .timeline-section-toggle {
+            background: transparent;
+            border: 0;
+            color: #236aa9;
+            cursor: pointer;
+            font: 600 13px 'Work Sans', sans-serif;
+            margin-top: 16px;
+            padding: 8px 0;
+        }
+
+        .timeline-section-toggle:hover { color: #174b78; }
+        .timeline-section-toggle:focus { outline: none; }
+        .timeline-section-toggle:focus-visible { outline: 3px solid #3183e1; outline-offset: 3px; }
 
         @media (max-width: 767px) {
             .timeline-items { padding-left: 18px; }
             .timeline-panel { margin-left: 58px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
         }
 
         /* map tooltip */
@@ -520,6 +610,7 @@
             <h2 class="section-heading">Travel Timeline</h2>
             <hr class="section-divider">
             <div id="travel-timeline" class="travel-timeline"></div>
+            <button id="timeline-section-toggle" class="timeline-section-toggle" type="button" aria-controls="travel-timeline" hidden></button>
         </section>
 
         <!-- ══════════════════════════════════════════════
@@ -794,6 +885,7 @@
         function renderTravelTimeline() {
             const section = document.getElementById("travel-timeline-section");
             const container = document.getElementById("travel-timeline");
+            const sectionToggle = document.getElementById("timeline-section-toggle");
             const datedTrips = TRIPS.map((trip, index) => ({
                 ...trip,
                 dateInfo: parseMonth(trip.date),
@@ -805,6 +897,7 @@
             section.hidden = datedTrips.length === 0;
             if (!datedTrips.length) {
                 container.innerHTML = "";
+                sectionToggle.hidden = true;
                 return;
             }
 
@@ -813,18 +906,21 @@
                 return groups;
             }, {});
 
-            container.innerHTML = Object.keys(tripsByYear).sort((a, b) => b - a).map(year => `
+            const years = Object.keys(tripsByYear).sort((a, b) => b - a);
+            container.innerHTML = years.map(year => {
+                const trips = tripsByYear[year];
+                return `
                 <div class="timeline-year">
                     <h3 class="timeline-year-heading">${year}</h3>
                     <div class="timeline-items">
-                        ${tripsByYear[year].map(trip => {
+                        ${trips.map((trip, index) => {
                             const panelId = trip.panelId;
                             const route = Array.isArray(trip.route) ? trip.route.map((stop, index) =>
                                 `${index ? '<span class="trip-route-arrow" aria-hidden="true">→</span>' : ""}<span class="trip-stop">${escapeHtml(stop)}</span>`
                             ).join("") : "";
                             const story = String(trip.story || "").trim()
                                 ? `<p class="trip-story">${escapeHtml(trip.story)}</p>` : "";
-                            return `<div class="timeline-entry">
+                            return `<div class="timeline-entry" style="--item-delay:${Math.min(index * 55, 330)}ms">
                                 <button class="timeline-item" type="button" aria-expanded="false" aria-controls="${escapeHtml(panelId)}">
                                     <span class="timeline-month">${formatMonth(trip.dateInfo)}</span>
                                     <span><span class="timeline-title">${escapeHtml(trip.title)}</span><span class="timeline-label">${escapeHtml(trip.label || "")}</span></span>
@@ -836,21 +932,71 @@
                             </div>`;
                         }).join("")}
                     </div>
-                </div>`).join("");
+                </div>`;
+            }).join("");
+
+            const collapsedHeight = 520;
+            const needsToggle = container.scrollHeight > collapsedHeight;
+            sectionToggle.hidden = !needsToggle;
+            if (needsToggle) {
+                let isCollapsed = true;
+                const updateSectionToggle = () => {
+                    container.classList.toggle("is-collapsed", isCollapsed);
+                    sectionToggle.setAttribute("aria-expanded", String(!isCollapsed));
+                    sectionToggle.textContent = isCollapsed
+                        ? `Show all ${datedTrips.length} trips`
+                        : "Collapse timeline";
+                };
+                updateSectionToggle();
+                sectionToggle.onclick = () => {
+                    isCollapsed = !isCollapsed;
+                    updateSectionToggle();
+                };
+            } else {
+                container.classList.remove("is-collapsed");
+                sectionToggle.onclick = null;
+            }
 
             container.querySelectorAll(".timeline-item").forEach(item => {
                 item.addEventListener("click", () => {
                     const willExpand = item.getAttribute("aria-expanded") !== "true";
                     container.querySelectorAll(".timeline-item").forEach(otherItem => {
                         otherItem.setAttribute("aria-expanded", "false");
-                        document.getElementById(otherItem.getAttribute("aria-controls")).hidden = true;
+                        const otherPanel = document.getElementById(otherItem.getAttribute("aria-controls"));
+                        otherPanel.hidden = true;
+                        otherPanel.classList.remove("is-opening");
                     });
                     if (willExpand) {
                         item.setAttribute("aria-expanded", "true");
-                        document.getElementById(item.getAttribute("aria-controls")).hidden = false;
+                        const panel = document.getElementById(item.getAttribute("aria-controls"));
+                        panel.hidden = false;
+                        panel.classList.remove("is-opening");
+                        requestAnimationFrame(() => panel.classList.add("is-opening"));
                     }
                 });
             });
+        }
+
+        function initializeExplorationMotion() {
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+
+            document.body.classList.add("motion-ready");
+            document.querySelectorAll(".expl-section").forEach((section, index) => {
+                section.style.setProperty("--section-delay", `${Math.min(index * 70, 210)}ms`);
+            });
+            document.querySelectorAll(".flag-card, .adventure-item").forEach((item, index) => {
+                item.style.setProperty("--item-delay", `${Math.min(index * 45, 315)}ms`);
+            });
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add("is-visible");
+                    observer.unobserve(entry.target);
+                });
+            }, { threshold: 0.12 });
+
+            document.querySelectorAll(".expl-section").forEach(section => observer.observe(section));
         }
 
         function renderWorldFlags() {
@@ -885,6 +1031,7 @@
         renderWorldFlags();
         renderTravelTimeline();
         renderBucketList();
+        initializeExplorationMotion();
 
         // ── Load & resize ─────────────────────────────────────────────────
         Promise.all([
