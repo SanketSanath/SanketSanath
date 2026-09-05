@@ -742,18 +742,18 @@
 
             resetReveal();
             if (mapRevealObserver) mapRevealObserver.disconnect();
-            let wasFullyVisible = false;
+            let wasReadyToReveal = false;
             mapRevealObserver = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
-                    if (entry.intersectionRatio >= 1 && !wasFullyVisible) {
-                        wasFullyVisible = true;
+                    if (entry.intersectionRatio >= 0.8 && !wasReadyToReveal) {
+                        wasReadyToReveal = true;
                         startReveal();
                     } else if (!entry.isIntersecting) {
-                        wasFullyVisible = false;
+                        wasReadyToReveal = false;
                         resetReveal();
                     }
                 });
-            }, { threshold: [0, 1] });
+            }, { threshold: [0, 0.8] });
             mapRevealObserver.observe(container);
         }
 
