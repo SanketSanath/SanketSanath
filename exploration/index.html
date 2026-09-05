@@ -71,7 +71,7 @@
 
         /* ── Motion ── */
         @keyframes section-rise {
-            from { opacity: 0; transform: translateY(24px); }
+            from { opacity: 0; transform: translateY(48px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -81,30 +81,30 @@
         }
 
         @keyframes card-settle {
-            from { opacity: 0; transform: translateY(10px) scale(0.98); }
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         @keyframes detail-unfold {
-            from { opacity: 0; transform: translateY(-6px); }
+            from { opacity: 0; transform: translateY(-12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .motion-ready .expl-section { opacity: 0; transform: translateY(24px); }
+        .motion-ready .expl-section { opacity: 0; transform: translateY(48px); }
         .motion-ready .expl-section.is-visible {
-            animation: section-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: section-rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
             animation-delay: var(--section-delay, 0ms);
         }
 
         .motion-ready .expl-section.is-visible .section-divider {
-            animation: divider-grow 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: divider-grow 0.79s cubic-bezier(0.2, 0.7, 0.2, 1) both;
             transform-origin: left center;
         }
 
         .motion-ready .expl-section.is-visible .flag-card,
         .motion-ready .expl-section.is-visible .adventure-item,
         .motion-ready .expl-section.is-visible .timeline-entry {
-            animation: card-settle 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: card-settle 0.64s cubic-bezier(0.2, 0.7, 0.2, 1) both;
             animation-delay: var(--item-delay, 0ms);
         }
 
@@ -485,7 +485,7 @@
         }
 
         .timeline-panel[hidden] { display: none; }
-        .timeline-panel.is-opening { animation: detail-unfold 0.32s ease-out both; }
+        .timeline-panel.is-opening { animation: detail-unfold 0.46s ease-out both; }
         .timeline-panel .trip-route { margin-bottom: 14px; }
 
         .timeline-section-toggle {
