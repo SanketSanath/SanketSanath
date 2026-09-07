@@ -23,8 +23,39 @@
             --font-sans:  'Inter', system-ui, sans-serif;
         }
 
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; overflow-anchor: none; }
         body { font-family: var(--font-sans); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        /* ─── MOTION ─── */
+        @keyframes reading-rise {
+            from { opacity: 0; transform: translateY(28px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes reading-settle {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reading-motion-ready .reading-shell,
+        .reading-motion-ready .section-header,
+        .reading-motion-ready .book-card {
+            opacity: 0;
+            transform: translateY(28px);
+        }
+
+        .reading-motion-ready .reading-shell.is-visible,
+        .reading-motion-ready .section-header.is-visible {
+            animation: reading-rise 0.64s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+        }
+
+        .reading-motion-ready .book-card {
+            transform: translateY(14px);
+        }
+
+        .reading-motion-ready .book-card.is-visible {
+            animation: reading-settle 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+        }
 
         /* ─── STATS BAR ─── */
         .stats-bar { background: #1c1917; color: #fff; display: flex; justify-content: center; flex-wrap: wrap; }
@@ -195,7 +226,7 @@
 <body>
 
     <!-- STATS BAR -->
-    <div class="stats-bar">
+    <div class="stats-bar reading-shell">
         <div class="stat-pill"><span class="stat-value" id="stat-total">—</span><span class="stat-label">Books Read</span></div>
         <div class="stat-pill"><span class="stat-value" id="stat-year">—</span><span class="stat-label" id="stat-year-label">This Year</span></div>
         <div class="stat-pill"><span class="stat-value" id="stat-avg">—</span><span class="stat-label">Avg Rating</span></div>
@@ -203,7 +234,7 @@
     </div>
 
     <!-- PAGE HEADER -->
-    <div class="page-header">
+    <div class="page-header reading-shell">
         <div class="header-headline"><h1>My<br><em>Reading</em></h1></div>
         <div class="header-side">
             <p>Books I've read over the years</p>
@@ -212,7 +243,7 @@
     </div>
 
     <!-- CONTROLS BAR -->
-    <div class="controls-bar">
+    <div class="controls-bar reading-shell">
 
         <!-- Row 1: search + group-by + count -->
         <div class="controls-top">
@@ -256,6 +287,36 @@
     let searchQ   = '';
     let groupMode = 'flat';
     let filters   = { year: '', author: '', genre: '', language: '' };
+    let readingMotionEnabled = false;
+    let contentMotionObserver = null;
+
+    function observeContentMotion() {
+        if (!readingMotionEnabled) return;
+        if (contentMotionObserver) contentMotionObserver.disconnect();
+
+        contentMotionObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                entry.target.classList.toggle('is-visible', entry.isIntersecting);
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.section-header, .book-card').forEach(item => contentMotionObserver.observe(item));
+    }
+
+    function initializeReadingMotion() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+
+        readingMotionEnabled = true;
+        document.body.classList.add('reading-motion-ready');
+
+        const shellObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                entry.target.classList.toggle('is-visible', entry.isIntersecting);
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.reading-shell').forEach(shell => shellObserver.observe(shell));
+    }
 
     /* Sort once: date-read descending, unknowns last */
     const allBooks = [...BOOKS].sort((a, b) => {
@@ -411,6 +472,7 @@
 
         if (!books.length) {
             container.innerHTML = `<div class="state-center"><p>No books match your search or filters.</p></div>`;
+            observeContentMotion();
             return;
         }
 
@@ -452,6 +514,7 @@
         }
 
         container.innerHTML = `<div class="main-content">${inner}</div>`;
+        observeContentMotion();
     }
 
     /* ── Events ── */
@@ -485,9 +548,14 @@
     });
 
     /* ── Init ── */
+    initializeReadingMotion();
     updateStats();
     populateFilters();
     render();
+
+    window.addEventListener('load', () => {
+        if (!window.location.hash) window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }, { once: true });
     </script>
 </body>
 </html>

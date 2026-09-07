@@ -18,6 +18,8 @@
 
     <style>
         /* ── Layout ── */
+        html { overflow-anchor: none; }
+
         body {
             font-family: 'Raleway', sans-serif;
             background: #f9f9f9;
@@ -1161,6 +1163,10 @@
                 }, 150);
             });
         });
+
+        window.addEventListener("load", () => {
+            if (!window.location.hash) window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+        }, { once: true });
     </script>
 
 </body>
