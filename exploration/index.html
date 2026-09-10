@@ -149,6 +149,15 @@
             height: 100%;
         }
 
+        #india-svg:focus {
+            outline: none;
+        }
+
+        #india-svg:focus-visible {
+            outline: 3px solid rgba(49, 131, 225, 0.65);
+            outline-offset: -3px;
+        }
+
         #map-places-list {
             width: 240px;
             flex-shrink: 0;
@@ -774,7 +783,10 @@
 
             const path = d3.geoPath().projection(projection);
 
-            svg.attr("width", W).attr("height", H);
+            svg.attr("width", W)
+                .attr("height", H)
+                .attr("tabindex", 0)
+                .attr("aria-label", "Interactive map of India and Nepal. Select a state to zoom in; press Escape to reset the map.");
             svg.selectAll("*").remove();
 
             // The map is built in three layers: a gradient base, the muted
@@ -873,28 +885,99 @@
                 ...indiaData.features.map(feature => ({ ...feature, mapCountry: "india" })),
                 { ...nepalShape, mapCountry: "nepal" }
             ];
+            const mapViewport = svg.append("g").attr("class", "map-viewport");
+            let activeMapShape = null;
+            const selectedStateOutline = mapViewport.append("path")
+                .attr("class", "selected-state-outline")
+                .attr("fill", "none")
+                .attr("stroke", "url(#visited-gradient-border)")
+                .attr("stroke-width", 0.95)
+                .attr("vector-effect", "non-scaling-stroke")
+                .style("pointer-events", "none")
+                .attr("display", "none");
+
+            const showAllMapShapes = () => {
+                mapViewport.selectAll(".map-shape").attr("display", null);
+            };
+
+            const showOnlyMapShape = shape => {
+                mapViewport.selectAll(".map-shape")
+                    .attr("display", d => d === shape ? null : "none");
+            };
+
+            const resetMapZoom = () => {
+                if (!activeMapShape) return;
+                activeMapShape = null;
+                showAllMapShapes();
+                selectedStateOutline.attr("display", "none");
+                mapViewport.interrupt("state-zoom")
+                    .transition("state-zoom")
+                    .duration(720)
+                    .ease(d3.easeCubicInOut)
+                    .attr("transform", null);
+            };
+
+            const zoomToShape = (event, shape) => {
+                if (event) event.stopPropagation();
+                if (activeMapShape === shape) {
+                    resetMapZoom();
+                    return;
+                }
+
+                const [[x0, y0], [x1, y1]] = path.bounds(shape);
+                const shapeWidth = x1 - x0;
+                const shapeHeight = y1 - y0;
+                if (!Number.isFinite(shapeWidth) || !Number.isFinite(shapeHeight) || !shapeWidth || !shapeHeight) return;
+
+                const zoom = Math.min(7, 0.86 / Math.max(shapeWidth / W, shapeHeight / H));
+                const translateX = W / 2 - zoom * (x0 + x1) / 2;
+                const translateY = H / 2 - zoom * (y0 + y1) / 2;
+                activeMapShape = shape;
+                selectedStateOutline
+                    .attr("d", path(shape))
+                    .attr("display", null)
+                    .raise();
+
+                mapViewport.interrupt("state-zoom")
+                    .transition("state-zoom")
+                    .duration(760)
+                    .ease(d3.easeCubicInOut)
+                    .attr("transform", `translate(${translateX}, ${translateY}) scale(${zoom})`)
+                    .on("end", () => {
+                        if (activeMapShape === shape) showOnlyMapShape(shape);
+                    });
+            };
+
+            const shapeForCoordinates = (lng, lat) => {
+                const coordinates = [lng, lat];
+                return mapShapes.find(shape => d3.geoContains(shape, coordinates))
+                    || (d3.geoContains(nepalData, coordinates)
+                        ? mapShapes.find(shape => shape.mapCountry === "nepal")
+                        : null);
+            };
             const statePaths = selection => selection
                 .data(mapShapes)
                 .enter().append("path")
                 .attr("d", path)
-                .attr("fill-rule", "evenodd");
+                .attr("fill-rule", "evenodd")
+                .classed("map-shape", true);
 
-            statePaths(svg.append("g").attr("class", "map-gradient-layer").selectAll("path"))
+            statePaths(mapViewport.append("g").attr("class", "map-gradient-layer").selectAll("path"))
                 .attr("fill", "url(#visited-gradient)");
 
-            statePaths(svg.append("g").attr("class", "map-gradient-boundaries").selectAll("path"))
+            statePaths(mapViewport.append("g").attr("class", "map-gradient-boundaries").selectAll("path"))
                 .attr("fill", "none")
                 .attr("stroke", "url(#visited-gradient-border)")
                 .attr("stroke-width", 0.65)
                 .attr("vector-effect", "non-scaling-stroke");
 
-            statePaths(svg.append("g")
+            statePaths(mapViewport.append("g")
                 .attr("class", "map-coating-layer")
                 .attr("mask", "url(#visited-reveal-mask)")
                 .selectAll("path"))
                 .attr("fill", d => d.mapCountry === "nepal" ? "#EBF8FF" : "#d8ecfa");
 
-            statePaths(svg.append("g")
+            statePaths(mapViewport.append("g")
                 .attr("class", "map-boundaries")
                 .attr("mask", "url(#visited-reveal-mask)")
                 .selectAll("path"))
@@ -903,10 +986,15 @@
                 .attr("stroke-width", 0.65)
                 .attr("vector-effect", "non-scaling-stroke");
 
+            statePaths(mapViewport.append("g").attr("class", "map-state-targets").selectAll("path"))
+                .attr("fill", "transparent")
+                .style("cursor", "zoom-in")
+                .on("click", zoomToShape);
+
             // Invisible hit areas retain useful tooltips without adding visible
             // markers above the scratch reveals. Area reveals use one target,
             // so nearby places do not create a stack of competing hover labels.
-            svg.append("g").attr("class", "visited-place-targets").selectAll("rect")
+            mapViewport.append("g").attr("class", "visited-place-targets").selectAll("rect")
                 .data(pointReveals)
                 .enter().append("rect")
                 .attr("x", d => d.x)
@@ -927,10 +1015,12 @@
                     tooltip.style("display", "none");
                 })
                 .on("click", (event, d) => {
+                    event.stopPropagation();
                     highlightRow(d.placeIndex);
+                    zoomToShape(null, shapeForCoordinates(d.lng, d.lat));
                 });
 
-            svg.append("g").attr("class", "visited-area-targets").selectAll("polygon")
+            mapViewport.append("g").attr("class", "visited-area-targets").selectAll("polygon")
                 .data(areaReveals)
                 .enter().append("polygon")
                 .attr("points", d => d.polygon.map(point => point.join(",")).join(" "))
@@ -946,6 +1036,16 @@
                 })
                 .on("mouseout", event => {
                     tooltip.style("display", "none");
+                })
+                .on("click", (event, d) => {
+                    event.stopPropagation();
+                    const firstPoint = d.points[0];
+                    zoomToShape(null, shapeForCoordinates(firstPoint.lng, firstPoint.lat));
+                });
+
+            svg.on("click", resetMapZoom)
+                .on("keydown", event => {
+                    if (event.key === "Escape") resetMapZoom();
                 });
 
             prepareMapReveal(
