@@ -94,17 +94,17 @@
 
         .motion-ready .expl-section { opacity: 0; transform: translateY(48px); }
         .motion-ready .expl-section.is-visible {
-            animation: section-rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: section-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
             animation-delay: var(--section-delay, 0ms);
         }
 
         .motion-ready .expl-section.is-visible .section-divider {
-            animation: divider-grow 0.79s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: divider-grow 0.711s cubic-bezier(0.2, 0.7, 0.2, 1) both;
             transform-origin: left center;
         }
 
         .motion-ready .expl-section.is-visible .flag-card {
-            animation: card-settle 0.64s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: card-settle 0.576s cubic-bezier(0.2, 0.7, 0.2, 1) both;
             animation-delay: var(--item-delay, 0ms);
         }
 
@@ -116,7 +116,7 @@
 
         .motion-ready .expl-section.is-visible .adventure-item.is-visible,
         .motion-ready .expl-section.is-visible .timeline-entry.is-visible {
-            animation: card-settle 0.64s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: card-settle 0.576s cubic-bezier(0.2, 0.7, 0.2, 1) both;
         }
 
         /* ── 1. INDIA MAP ── */
@@ -133,7 +133,7 @@
             border-radius: 12px;
             overflow: hidden;
             position: relative;
-            transition: box-shadow 0.35s ease, transform 0.35s ease;
+            transition: box-shadow 0.315s ease, transform 0.315s ease;
         }
 
         @media (hover: hover) {
@@ -188,7 +188,7 @@
             border-bottom: 1px solid #f5f5f5;
             font-size: 13px;
             cursor: default;
-            transition: background 0.15s;
+            transition: background 0.135s;
         }
 
         .place-row:hover {
@@ -269,7 +269,7 @@
             font-size: 2.8rem;
             line-height: 1;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-            transition: transform 0.2s;
+            transition: transform 0.18s;
         }
 
         .flag-emoji:hover {
@@ -332,7 +332,7 @@
             padding: 14px 16px;
             border-radius: 10px;
             margin-bottom: 10px;
-            transition: transform 0.15s, box-shadow 0.15s;
+            transition: transform 0.135s, box-shadow 0.135s;
         }
 
         .adventure-item:hover {
@@ -488,7 +488,7 @@
             font-family: 'Work Sans', sans-serif;
             font-size: 1rem;
             font-weight: 600;
-            transition: color 0.15s;
+            transition: color 0.135s;
         }
 
         .timeline-label {
@@ -505,7 +505,7 @@
         }
 
         .timeline-panel[hidden] { display: none; }
-        .timeline-panel.is-opening { animation: detail-unfold 0.46s ease-out both; }
+        .timeline-panel.is-opening { animation: detail-unfold 0.414s ease-out both; }
         .timeline-panel .trip-route { margin-bottom: 14px; }
 
         .timeline-section-toggle {
@@ -727,19 +727,19 @@
                 const revealRun = ++mapRevealRun;
 
                 boundaryPaths.transition("map-boundary-trace")
-                    .duration(720)
+                    .duration(648)
                     .ease(d3.easeCubicInOut)
                     .attr("stroke-dashoffset", 0);
 
                 window.setTimeout(() => {
                     if (renderVersion !== mapRenderVersion || revealRun !== mapRevealRun) return;
-                    const scratchRevealWindow = 550;
+                    const scratchRevealWindow = 495;
                     const scratchRevealCount = scratchReveals.size();
                     scratchReveals.transition("map-scratch-reveal")
                         .delay((_, index) => scratchRevealCount > 1
                             ? index * scratchRevealWindow / (scratchRevealCount - 1)
                             : 0)
-                        .duration(280)
+                        .duration(252)
                         .ease(d3.easeCubicOut)
                         .attr("transform", reveal => scratchTransform(reveal, 1));
 
@@ -747,8 +747,8 @@
                         if (renderVersion === mapRenderVersion && revealRun === mapRevealRun) {
                             mapTargets.style("pointer-events", null);
                         }
-                    }, 850);
-                }, 740);
+                    }, 765);
+                }, 666);
             };
 
             resetReveal();
@@ -923,7 +923,7 @@
                     .attr("display", null)
                     .attr("opacity", 1)
                     .transition("state-fade")
-                    .duration(760)
+                    .duration(684)
                     .ease(d3.easeCubicInOut)
                     .attr("opacity", 0)
                     .on("end", function () {
@@ -932,7 +932,7 @@
                 selectedStateOutline
                     .interrupt("state-fade")
                     .transition("state-fade")
-                    .duration(760)
+                    .duration(684)
                     .ease(d3.easeCubicInOut)
                     .attr("opacity", 0)
                     .on("end", function () {
@@ -940,7 +940,7 @@
                     });
                 mapViewport.interrupt("state-zoom")
                     .transition("state-zoom")
-                    .duration(760)
+                    .duration(684)
                     .ease(d3.easeCubicInOut)
                     .attr("transform", "translate(0, 0) scale(1)")
                     .on("end", function () {
@@ -970,7 +970,7 @@
                     .attr("opacity", 0)
                     .raise()
                     .transition("state-fade")
-                    .duration(760)
+                    .duration(684)
                     .ease(d3.easeCubicInOut)
                     .attr("opacity", 1);
                 selectedStateOutline
@@ -981,7 +981,7 @@
 
                 mapViewport.interrupt("state-zoom")
                     .transition("state-zoom")
-                    .duration(760)
+                    .duration(684)
                     .ease(d3.easeCubicInOut)
                     .attr("transform", `translate(${translateX}, ${translateY}) scale(${zoom})`)
                     .on("end", () => {
@@ -1223,10 +1223,10 @@
 
             document.body.classList.add("motion-ready");
             document.querySelectorAll(".expl-section").forEach((section, index) => {
-                section.style.setProperty("--section-delay", `${Math.min(index * 70, 210)}ms`);
+                section.style.setProperty("--section-delay", `${Math.min(index * 63, 189)}ms`);
             });
             document.querySelectorAll(".flag-card").forEach((item, index) => {
-                item.style.setProperty("--item-delay", `${Math.min(index * 45, 315)}ms`);
+                item.style.setProperty("--item-delay", `${Math.min(index * 40.5, 283.5)}ms`);
             });
 
             const observer = new IntersectionObserver(entries => {
