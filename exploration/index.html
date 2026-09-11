@@ -94,17 +94,17 @@
 
         .motion-ready .expl-section { opacity: 0; transform: translateY(48px); }
         .motion-ready .expl-section.is-visible {
-            animation: section-rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: section-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
             animation-delay: var(--section-delay, 0ms);
         }
 
         .motion-ready .expl-section.is-visible .section-divider {
-            animation: divider-grow 0.79s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: divider-grow 0.711s cubic-bezier(0.2, 0.7, 0.2, 1) both;
             transform-origin: left center;
         }
 
         .motion-ready .expl-section.is-visible .flag-card {
-            animation: card-settle 0.64s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: card-settle 0.576s cubic-bezier(0.2, 0.7, 0.2, 1) both;
             animation-delay: var(--item-delay, 0ms);
         }
 
@@ -116,24 +116,23 @@
 
         .motion-ready .expl-section.is-visible .adventure-item.is-visible,
         .motion-ready .expl-section.is-visible .timeline-entry.is-visible {
-            animation: card-settle 0.64s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: card-settle 0.576s cubic-bezier(0.2, 0.7, 0.2, 1) both;
         }
 
         /* ── 1. INDIA MAP ── */
         #map-wrapper {
-            display: flex;
-            gap: 24px;
-            align-items: flex-start;
+            width: 100%;
         }
 
         #map-svg-container {
-            flex: 1;
-            min-height: 480px;
+            width: 100%;
+            min-height: min(340px, calc(100vh - 32px));
+            max-height: calc(100vh - 32px);
             background: #f1f6fa;
             border-radius: 12px;
             overflow: hidden;
             position: relative;
-            transition: box-shadow 0.35s ease, transform 0.35s ease;
+            transition: box-shadow 0.315s ease, transform 0.315s ease;
         }
 
         @media (hover: hover) {
@@ -158,74 +157,11 @@
             outline-offset: -3px;
         }
 
-        #map-places-list {
-            width: 240px;
-            flex-shrink: 0;
-            max-height: 520px;
-            overflow-y: auto;
-            background: #fff;
-            border-radius: 10px;
-            border: 1px solid #e0e0e0;
-        }
-
-        #map-places-list .list-head {
-            padding: 12px 16px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: #666;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            background: #fff;
-        }
-
-        .place-row {
-            display: flex;
-            align-items: center;
-            padding: 8px 14px;
-            border-bottom: 1px solid #f5f5f5;
-            font-size: 13px;
-            cursor: default;
-            transition: background 0.15s;
-        }
-
-        .place-row:hover {
-            background: #f9f9f9;
-        }
-
-        .place-row .pr-icon {
-            font-size: 14px;
-            margin-right: 8px;
-            flex-shrink: 0;
-        }
-
-        .place-row .pr-name {
-            font-weight: 600;
-            color: #222;
-            line-height: 1.2;
-        }
-
-        .place-row .pr-state {
-            font-size: 11px;
-            color: #999;
-        }
-
         @media (max-width: 767px) {
-            #map-wrapper {
-                flex-direction: column;
-            }
-
-            #map-places-list {
-                width: 100%;
-                max-height: 260px;
-            }
-
             #map-svg-container {
                 width: 100%;
-                min-height: 340px;
-                flex: none;
+                min-height: min(300px, calc(100vh - 24px));
+                max-height: calc(100vh - 24px);
             }
 
             .expl-section {
@@ -269,7 +205,7 @@
             font-size: 2.8rem;
             line-height: 1;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-            transition: transform 0.2s;
+            transition: transform 0.18s;
         }
 
         .flag-emoji:hover {
@@ -332,7 +268,7 @@
             padding: 14px 16px;
             border-radius: 10px;
             margin-bottom: 10px;
-            transition: transform 0.15s, box-shadow 0.15s;
+            transition: transform 0.135s, box-shadow 0.135s;
         }
 
         .adventure-item:hover {
@@ -488,7 +424,7 @@
             font-family: 'Work Sans', sans-serif;
             font-size: 1rem;
             font-weight: 600;
-            transition: color 0.15s;
+            transition: color 0.135s;
         }
 
         .timeline-label {
@@ -505,7 +441,7 @@
         }
 
         .timeline-panel[hidden] { display: none; }
-        .timeline-panel.is-opening { animation: detail-unfold 0.46s ease-out both; }
+        .timeline-panel.is-opening { animation: detail-unfold 0.414s ease-out both; }
         .timeline-panel .trip-route { margin-bottom: 14px; }
 
         .timeline-section-toggle {
@@ -613,11 +549,6 @@
                 <div id="map-svg-container">
                     <svg id="india-svg"></svg>
                 </div>
-                <div id="map-places-list">
-                    <div class="list-head">Places visited <span id="places-count"
-                                                                style="font-weight:400;color:#bbb;"></span></div>
-                    <div id="places-list-body"></div>
-                </div>
             </div>
         </section>
 
@@ -672,29 +603,6 @@
         let mapRenderVersion = 0;
         let mapRevealRun = 0;
 
-        // ── Build sidebar list ────────────────────────────────────────────
-        const listBody = document.getElementById("places-list-body");
-        document.getElementById("places-count").textContent = `(${VISITED_PLACES.length})`;
-
-        VISITED_PLACES.forEach((p, i) => {
-            const row = document.createElement("div");
-            row.className = "place-row";
-            row.dataset.index = i;
-            row.innerHTML = `<span class="pr-icon">📍</span>
-                             <div><div class="pr-name">${p.name}</div>
-                             <div class="pr-state">${p.state}</div></div>`;
-            listBody.appendChild(row);
-        });
-
-        function highlightRow(idx) {
-            document.querySelectorAll(".place-row").forEach(r => r.style.background = "");
-            const el = listBody.querySelector(`[data-index="${idx}"]`);
-            if (el) {
-                el.style.background = "#fff8e1";
-                el.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            }
-        }
-
         function prepareMapReveal(container, scratchReveals, boundaryPaths, renderVersion) {
             const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
             if (reducedMotion || !("IntersectionObserver" in window)) return;
@@ -727,19 +635,19 @@
                 const revealRun = ++mapRevealRun;
 
                 boundaryPaths.transition("map-boundary-trace")
-                    .duration(720)
+                    .duration(648)
                     .ease(d3.easeCubicInOut)
                     .attr("stroke-dashoffset", 0);
 
                 window.setTimeout(() => {
                     if (renderVersion !== mapRenderVersion || revealRun !== mapRevealRun) return;
-                    const scratchRevealWindow = 550;
+                    const scratchRevealWindow = 495;
                     const scratchRevealCount = scratchReveals.size();
                     scratchReveals.transition("map-scratch-reveal")
                         .delay((_, index) => scratchRevealCount > 1
                             ? index * scratchRevealWindow / (scratchRevealCount - 1)
                             : 0)
-                        .duration(280)
+                        .duration(252)
                         .ease(d3.easeCubicOut)
                         .attr("transform", reveal => scratchTransform(reveal, 1));
 
@@ -747,8 +655,8 @@
                         if (renderVersion === mapRenderVersion && revealRun === mapRevealRun) {
                             mapTargets.style("pointer-events", null);
                         }
-                    }, 850);
-                }, 740);
+                    }, 765);
+                }, 666);
             };
 
             resetReveal();
@@ -779,7 +687,7 @@
             const projection = d3.geoMercator()
                 .center([82, 22])
                 .scale(scale)
-                .translate([W * 0.44, H * 0.52]);
+                .translate([W * 0.5, H * 0.52]);
 
             const path = d3.geoPath().projection(projection);
 
@@ -829,12 +737,11 @@
                 .attr("width", W).attr("height", H)
                 .attr("fill", "white");
 
-            const pointReveals = VISITED_PLACES.map((place, index) => {
+            const pointReveals = VISITED_PLACES.map(place => {
                 const [x, y] = projection([place.lng, place.lat]);
                 return {
                     ...place,
                     kind: "place",
-                    placeIndex: index,
                     x: x - scratchSize / 2,
                     y: y - scratchSize / 2,
                     width: scratchSize,
@@ -887,6 +794,15 @@
             ];
             const mapViewport = svg.append("g").attr("class", "map-viewport");
             let activeMapShape = null;
+            const coverPadding = Math.max(W, H) * 10;
+            const coverPath = `M${-coverPadding},${-coverPadding}H${W + coverPadding}V${H + coverPadding}H${-coverPadding}Z`;
+            const outsideStateFade = mapViewport.append("path")
+                .attr("class", "outside-state-fade")
+                .attr("fill", "#f1f6fa")
+                .attr("fill-rule", "evenodd")
+                .style("pointer-events", "none")
+                .attr("display", "none")
+                .attr("opacity", 0);
             const selectedStateOutline = mapViewport.append("path")
                 .attr("class", "selected-state-outline")
                 .attr("fill", "none")
@@ -909,12 +825,34 @@
                 if (!activeMapShape) return;
                 activeMapShape = null;
                 showAllMapShapes();
-                selectedStateOutline.attr("display", "none");
+                outsideStateFade
+                    .interrupt("state-fade")
+                    .attr("display", null)
+                    .attr("opacity", 1)
+                    .transition("state-fade")
+                    .duration(684)
+                    .ease(d3.easeCubicInOut)
+                    .attr("opacity", 0)
+                    .on("end", function () {
+                        d3.select(this).attr("display", "none");
+                    });
+                selectedStateOutline
+                    .interrupt("state-fade")
+                    .transition("state-fade")
+                    .duration(684)
+                    .ease(d3.easeCubicInOut)
+                    .attr("opacity", 0)
+                    .on("end", function () {
+                        d3.select(this).attr("display", "none").attr("opacity", 1);
+                    });
                 mapViewport.interrupt("state-zoom")
                     .transition("state-zoom")
-                    .duration(720)
+                    .duration(684)
                     .ease(d3.easeCubicInOut)
-                    .attr("transform", null);
+                    .attr("transform", "translate(0, 0) scale(1)")
+                    .on("end", function () {
+                        d3.select(this).attr("transform", null);
+                    });
             };
 
             const zoomToShape = (event, shape) => {
@@ -933,18 +871,33 @@
                 const translateX = W / 2 - zoom * (x0 + x1) / 2;
                 const translateY = H / 2 - zoom * (y0 + y1) / 2;
                 activeMapShape = shape;
+                outsideStateFade
+                    .attr("d", `${coverPath}${path(shape)}`)
+                    .attr("display", null)
+                    .attr("opacity", 0)
+                    .raise()
+                    .transition("state-fade")
+                    .duration(684)
+                    .ease(d3.easeCubicInOut)
+                    .attr("opacity", 1);
                 selectedStateOutline
                     .attr("d", path(shape))
                     .attr("display", null)
+                    .attr("opacity", 1)
                     .raise();
 
                 mapViewport.interrupt("state-zoom")
                     .transition("state-zoom")
-                    .duration(760)
+                    .duration(684)
                     .ease(d3.easeCubicInOut)
                     .attr("transform", `translate(${translateX}, ${translateY}) scale(${zoom})`)
                     .on("end", () => {
-                        if (activeMapShape === shape) showOnlyMapShape(shape);
+                        if (activeMapShape === shape) {
+                            showOnlyMapShape(shape);
+                            outsideStateFade.interrupt("state-fade")
+                                .attr("display", "none")
+                                .attr("opacity", 0);
+                        }
                     });
             };
 
@@ -1016,7 +969,6 @@
                 })
                 .on("click", (event, d) => {
                     event.stopPropagation();
-                    highlightRow(d.placeIndex);
                     zoomToShape(null, shapeForCoordinates(d.lng, d.lat));
                 });
 
@@ -1177,10 +1129,10 @@
 
             document.body.classList.add("motion-ready");
             document.querySelectorAll(".expl-section").forEach((section, index) => {
-                section.style.setProperty("--section-delay", `${Math.min(index * 70, 210)}ms`);
+                section.style.setProperty("--section-delay", `${Math.min(index * 63, 189)}ms`);
             });
             document.querySelectorAll(".flag-card").forEach((item, index) => {
-                item.style.setProperty("--item-delay", `${Math.min(index * 45, 315)}ms`);
+                item.style.setProperty("--item-delay", `${Math.min(index * 40.5, 283.5)}ms`);
             });
 
             const observer = new IntersectionObserver(entries => {
@@ -1244,9 +1196,13 @@
             d3.json(INDIA_STATES_GEOJSON_URL),
             d3.json(NEPAL_GEOJSON_URL)
         ]).then(([indiaData, nepalData]) => {
-            // set container height = 85% of its width for nice aspect ratio
             const container = document.getElementById("map-svg-container");
-            container.style.height = Math.max(420, container.clientWidth * 0.85) + "px";
+            const setMapHeight = () => {
+                const availableHeight = Math.max(260, window.innerHeight - 32);
+                const preferredHeight = Math.max(340, container.clientWidth * 0.62);
+                container.style.height = Math.min(preferredHeight, availableHeight) + "px";
+            };
+            setMapHeight();
             let renderedMapWidth = container.clientWidth;
 
             renderIndiaMap(indiaData, nepalData);
@@ -1258,7 +1214,7 @@
                     const nextMapWidth = container.clientWidth;
                     if (nextMapWidth === renderedMapWidth) return;
                     renderedMapWidth = nextMapWidth;
-                    container.style.height = Math.max(420, container.clientWidth * 0.85) + "px";
+                    setMapHeight();
                     renderIndiaMap(indiaData, nepalData);
                 }, 150);
             });
