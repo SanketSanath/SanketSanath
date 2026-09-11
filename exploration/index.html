@@ -121,14 +121,13 @@
 
         /* ── 1. INDIA MAP ── */
         #map-wrapper {
-            display: flex;
-            gap: 24px;
-            align-items: flex-start;
+            width: 100%;
         }
 
         #map-svg-container {
-            flex: 1;
-            min-height: 480px;
+            width: 100%;
+            min-height: min(340px, calc(100vh - 32px));
+            max-height: calc(100vh - 32px);
             background: #f1f6fa;
             border-radius: 12px;
             overflow: hidden;
@@ -158,74 +157,11 @@
             outline-offset: -3px;
         }
 
-        #map-places-list {
-            width: 240px;
-            flex-shrink: 0;
-            max-height: 520px;
-            overflow-y: auto;
-            background: #fff;
-            border-radius: 10px;
-            border: 1px solid #e0e0e0;
-        }
-
-        #map-places-list .list-head {
-            padding: 12px 16px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: #666;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            background: #fff;
-        }
-
-        .place-row {
-            display: flex;
-            align-items: center;
-            padding: 8px 14px;
-            border-bottom: 1px solid #f5f5f5;
-            font-size: 13px;
-            cursor: default;
-            transition: background 0.135s;
-        }
-
-        .place-row:hover {
-            background: #f9f9f9;
-        }
-
-        .place-row .pr-icon {
-            font-size: 14px;
-            margin-right: 8px;
-            flex-shrink: 0;
-        }
-
-        .place-row .pr-name {
-            font-weight: 600;
-            color: #222;
-            line-height: 1.2;
-        }
-
-        .place-row .pr-state {
-            font-size: 11px;
-            color: #999;
-        }
-
         @media (max-width: 767px) {
-            #map-wrapper {
-                flex-direction: column;
-            }
-
-            #map-places-list {
-                width: 100%;
-                max-height: 260px;
-            }
-
             #map-svg-container {
                 width: 100%;
-                min-height: 340px;
-                flex: none;
+                min-height: min(300px, calc(100vh - 24px));
+                max-height: calc(100vh - 24px);
             }
 
             .expl-section {
@@ -613,11 +549,6 @@
                 <div id="map-svg-container">
                     <svg id="india-svg"></svg>
                 </div>
-                <div id="map-places-list">
-                    <div class="list-head">Places visited <span id="places-count"
-                                                                style="font-weight:400;color:#bbb;"></span></div>
-                    <div id="places-list-body"></div>
-                </div>
             </div>
         </section>
 
@@ -671,29 +602,6 @@
         let mapRevealObserver = null;
         let mapRenderVersion = 0;
         let mapRevealRun = 0;
-
-        // ── Build sidebar list ────────────────────────────────────────────
-        const listBody = document.getElementById("places-list-body");
-        document.getElementById("places-count").textContent = `(${VISITED_PLACES.length})`;
-
-        VISITED_PLACES.forEach((p, i) => {
-            const row = document.createElement("div");
-            row.className = "place-row";
-            row.dataset.index = i;
-            row.innerHTML = `<span class="pr-icon">📍</span>
-                             <div><div class="pr-name">${p.name}</div>
-                             <div class="pr-state">${p.state}</div></div>`;
-            listBody.appendChild(row);
-        });
-
-        function highlightRow(idx) {
-            document.querySelectorAll(".place-row").forEach(r => r.style.background = "");
-            const el = listBody.querySelector(`[data-index="${idx}"]`);
-            if (el) {
-                el.style.background = "#fff8e1";
-                el.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            }
-        }
 
         function prepareMapReveal(container, scratchReveals, boundaryPaths, renderVersion) {
             const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -779,7 +687,7 @@
             const projection = d3.geoMercator()
                 .center([82, 22])
                 .scale(scale)
-                .translate([W * 0.44, H * 0.52]);
+                .translate([W * 0.5, H * 0.52]);
 
             const path = d3.geoPath().projection(projection);
 
@@ -829,12 +737,11 @@
                 .attr("width", W).attr("height", H)
                 .attr("fill", "white");
 
-            const pointReveals = VISITED_PLACES.map((place, index) => {
+            const pointReveals = VISITED_PLACES.map(place => {
                 const [x, y] = projection([place.lng, place.lat]);
                 return {
                     ...place,
                     kind: "place",
-                    placeIndex: index,
                     x: x - scratchSize / 2,
                     y: y - scratchSize / 2,
                     width: scratchSize,
@@ -1062,7 +969,6 @@
                 })
                 .on("click", (event, d) => {
                     event.stopPropagation();
-                    highlightRow(d.placeIndex);
                     zoomToShape(null, shapeForCoordinates(d.lng, d.lat));
                 });
 
@@ -1290,9 +1196,13 @@
             d3.json(INDIA_STATES_GEOJSON_URL),
             d3.json(NEPAL_GEOJSON_URL)
         ]).then(([indiaData, nepalData]) => {
-            // set container height = 85% of its width for nice aspect ratio
             const container = document.getElementById("map-svg-container");
-            container.style.height = Math.max(420, container.clientWidth * 0.85) + "px";
+            const setMapHeight = () => {
+                const availableHeight = Math.max(260, window.innerHeight - 32);
+                const preferredHeight = Math.max(340, container.clientWidth * 0.62);
+                container.style.height = Math.min(preferredHeight, availableHeight) + "px";
+            };
+            setMapHeight();
             let renderedMapWidth = container.clientWidth;
 
             renderIndiaMap(indiaData, nepalData);
@@ -1304,7 +1214,7 @@
                     const nextMapWidth = container.clientWidth;
                     if (nextMapWidth === renderedMapWidth) return;
                     renderedMapWidth = nextMapWidth;
-                    container.style.height = Math.max(420, container.clientWidth * 0.85) + "px";
+                    setMapHeight();
                     renderIndiaMap(indiaData, nepalData);
                 }, 150);
             });
