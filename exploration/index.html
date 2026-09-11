@@ -887,6 +887,15 @@
             ];
             const mapViewport = svg.append("g").attr("class", "map-viewport");
             let activeMapShape = null;
+            const coverPadding = Math.max(W, H) * 10;
+            const coverPath = `M${-coverPadding},${-coverPadding}H${W + coverPadding}V${H + coverPadding}H${-coverPadding}Z`;
+            const outsideStateFade = mapViewport.append("path")
+                .attr("class", "outside-state-fade")
+                .attr("fill", "#f1f6fa")
+                .attr("fill-rule", "evenodd")
+                .style("pointer-events", "none")
+                .attr("display", "none")
+                .attr("opacity", 0);
             const selectedStateOutline = mapViewport.append("path")
                 .attr("class", "selected-state-outline")
                 .attr("fill", "none")
@@ -909,12 +918,34 @@
                 if (!activeMapShape) return;
                 activeMapShape = null;
                 showAllMapShapes();
-                selectedStateOutline.attr("display", "none");
+                outsideStateFade
+                    .interrupt("state-fade")
+                    .attr("display", null)
+                    .attr("opacity", 1)
+                    .transition("state-fade")
+                    .duration(760)
+                    .ease(d3.easeCubicInOut)
+                    .attr("opacity", 0)
+                    .on("end", function () {
+                        d3.select(this).attr("display", "none");
+                    });
+                selectedStateOutline
+                    .interrupt("state-fade")
+                    .transition("state-fade")
+                    .duration(760)
+                    .ease(d3.easeCubicInOut)
+                    .attr("opacity", 0)
+                    .on("end", function () {
+                        d3.select(this).attr("display", "none").attr("opacity", 1);
+                    });
                 mapViewport.interrupt("state-zoom")
                     .transition("state-zoom")
-                    .duration(720)
+                    .duration(760)
                     .ease(d3.easeCubicInOut)
-                    .attr("transform", null);
+                    .attr("transform", "translate(0, 0) scale(1)")
+                    .on("end", function () {
+                        d3.select(this).attr("transform", null);
+                    });
             };
 
             const zoomToShape = (event, shape) => {
@@ -933,9 +964,19 @@
                 const translateX = W / 2 - zoom * (x0 + x1) / 2;
                 const translateY = H / 2 - zoom * (y0 + y1) / 2;
                 activeMapShape = shape;
+                outsideStateFade
+                    .attr("d", `${coverPath}${path(shape)}`)
+                    .attr("display", null)
+                    .attr("opacity", 0)
+                    .raise()
+                    .transition("state-fade")
+                    .duration(760)
+                    .ease(d3.easeCubicInOut)
+                    .attr("opacity", 1);
                 selectedStateOutline
                     .attr("d", path(shape))
                     .attr("display", null)
+                    .attr("opacity", 1)
                     .raise();
 
                 mapViewport.interrupt("state-zoom")
@@ -944,7 +985,12 @@
                     .ease(d3.easeCubicInOut)
                     .attr("transform", `translate(${translateX}, ${translateY}) scale(${zoom})`)
                     .on("end", () => {
-                        if (activeMapShape === shape) showOnlyMapShape(shape);
+                        if (activeMapShape === shape) {
+                            showOnlyMapShape(shape);
+                            outsideStateFade.interrupt("state-fade")
+                                .attr("display", "none")
+                                .attr("opacity", 0);
+                        }
                     });
             };
 
