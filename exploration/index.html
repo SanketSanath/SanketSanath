@@ -603,9 +603,13 @@
         let mapRenderVersion = 0;
         let mapRevealRun = 0;
 
-        function prepareMapReveal(container, scratchReveals, boundaryPaths, renderVersion) {
+        function prepareMapReveal(container, scratchReveals, boundaryPaths, renderVersion, setRevealReady) {
+            if (mapRevealObserver) mapRevealObserver.disconnect();
             const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-            if (reducedMotion || !("IntersectionObserver" in window)) return;
+            if (reducedMotion || !("IntersectionObserver" in window)) {
+                setRevealReady(true);
+                return;
+            }
 
             const scratchTransform = (reveal, scale) => {
                 const [centerX, centerY] = reveal.polygon
@@ -614,8 +618,6 @@
                 return `translate(${centerX} ${centerY}) scale(${scale}) translate(${-centerX} ${-centerY})`;
             };
 
-            const mapTargets = svg.selectAll(".visited-place-targets *, .visited-area-targets *")
-                .style("pointer-events", null);
             const resetReveal = () => {
                 mapRevealRun += 1;
                 boundaryPaths.interrupt("map-boundary-trace").each(function () {
@@ -626,8 +628,7 @@
                 });
                 scratchReveals.interrupt("map-scratch-reveal")
                     .attr("transform", reveal => scratchTransform(reveal, 0));
-                mapTargets.style("pointer-events", "none");
-                tooltip.style("display", "none");
+                setRevealReady(false);
             };
 
             const startReveal = () => {
@@ -653,14 +654,13 @@
 
                     window.setTimeout(() => {
                         if (renderVersion === mapRenderVersion && revealRun === mapRevealRun) {
-                            mapTargets.style("pointer-events", null);
+                            setRevealReady(true);
                         }
                     }, 765);
                 }, 666);
             };
 
             resetReveal();
-            if (mapRevealObserver) mapRevealObserver.disconnect();
             let wasReadyToReveal = false;
             mapRevealObserver = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
@@ -765,7 +765,7 @@
                 .attr("points", d => d.polygon.map(point => point.join(",")).join(" "))
                 .attr("fill", "black");
 
-            mask.selectAll("rect.scratch-reveal")
+            const pointMaskRects = mask.selectAll("rect.scratch-reveal")
                 .data(pointReveals)
                 .enter().append("rect")
                 .attr("class", "scratch-reveal")
@@ -794,6 +794,51 @@
             ];
             const mapViewport = svg.append("g").attr("class", "map-viewport");
             let activeMapShape = null;
+            let stateViewReady = false;
+            let mapRevealReady = false;
+            let pinnedLocation = null;
+            let pointTargets;
+            let areaTargets;
+            const hideLocationTooltip = () => {
+                pinnedLocation = null;
+                tooltip.style("display", "none");
+            };
+            const locationShape = d => d.kind === "area"
+                ? shapeForCoordinates(d.points[0].lng, d.points[0].lat)
+                : shapeForCoordinates(d.lng, d.lat);
+            const syncLocationTargets = () => {
+                const canInspect = stateViewReady && mapRevealReady;
+                const pointerEvents = d => canInspect && locationShape(d) === activeMapShape ? "all" : "none";
+                pointTargets?.style("pointer-events", pointerEvents);
+                areaTargets?.style("pointer-events", pointerEvents);
+            };
+            const setRevealReady = ready => {
+                mapRevealReady = ready;
+                if (!ready) hideLocationTooltip();
+                syncLocationTargets();
+            };
+            const resizePointReveals = zoom => {
+                // Counter the viewport scale so a visited city stays a compact square.
+                const visibleSize = Math.min(scratchSize, 14 / zoom);
+                const hitSize = Math.min(scratchSize, 24 / zoom);
+                for (const [selection, size] of [[pointMaskRects, visibleSize], [pointTargets, hitSize]]) {
+                    selection.interrupt("state-marker-size")
+                        .transition("state-marker-size")
+                        .duration(684)
+                        .ease(d3.easeCubicInOut)
+                        .attr("x", d => d.x + (d.width - size) / 2)
+                        .attr("y", d => d.y + (d.height - size) / 2)
+                        .attr("width", size)
+                        .attr("height", size);
+                }
+            };
+            const showLocationTooltip = (event, location) => {
+                if (!stateViewReady || !mapRevealReady || locationShape(location) !== activeMapShape) return;
+                tooltip.style("display", "block")
+                    .html(`<strong>${escapeHtml(location.name)}</strong><br>${escapeHtml(location.state)}`)
+                    .style("left", `${event.clientX + 14}px`)
+                    .style("top", `${event.clientY - 34}px`);
+            };
             const coverPadding = Math.max(W, H) * 10;
             const coverPath = `M${-coverPadding},${-coverPadding}H${W + coverPadding}V${H + coverPadding}H${-coverPadding}Z`;
             const outsideStateFade = mapViewport.append("path")
@@ -824,6 +869,10 @@
             const resetMapZoom = () => {
                 if (!activeMapShape) return;
                 activeMapShape = null;
+                stateViewReady = false;
+                syncLocationTargets();
+                hideLocationTooltip();
+                resizePointReveals(1);
                 showAllMapShapes();
                 outsideStateFade
                     .interrupt("state-fade")
@@ -871,6 +920,10 @@
                 const translateX = W / 2 - zoom * (x0 + x1) / 2;
                 const translateY = H / 2 - zoom * (y0 + y1) / 2;
                 activeMapShape = shape;
+                stateViewReady = false;
+                syncLocationTargets();
+                hideLocationTooltip();
+                resizePointReveals(zoom);
                 outsideStateFade
                     .attr("d", `${coverPath}${path(shape)}`)
                     .attr("display", null)
@@ -897,6 +950,8 @@
                             outsideStateFade.interrupt("state-fade")
                                 .attr("display", "none")
                                 .attr("opacity", 0);
+                            stateViewReady = true;
+                            syncLocationTargets();
                         }
                     });
             };
@@ -947,7 +1002,7 @@
             // Invisible hit areas retain useful tooltips without adding visible
             // markers above the scratch reveals. Area reveals use one target,
             // so nearby places do not create a stack of competing hover labels.
-            mapViewport.append("g").attr("class", "visited-place-targets").selectAll("rect")
+            pointTargets = mapViewport.append("g").attr("class", "visited-place-targets").selectAll("rect")
                 .data(pointReveals)
                 .enter().append("rect")
                 .attr("x", d => d.x)
@@ -956,44 +1011,40 @@
                 .attr("height", d => d.height)
                 .attr("fill", "transparent")
                 .style("cursor", "pointer")
-                .on("mouseover", (event, d) => {
-                    tooltip.style("display", "block")
-                        .html(`<strong>${d.name}</strong><br>${d.state}`);
+                .style("pointer-events", "none")
+                .on("mouseover", showLocationTooltip)
+                .on("mousemove", (event, d) => {
+                    if (pinnedLocation !== d) showLocationTooltip(event, d);
                 })
-                .on("mousemove", event => {
-                    tooltip.style("left", (event.clientX + 14) + "px")
-                           .style("top",  (event.clientY - 34) + "px");
-                })
-                .on("mouseout", event => {
-                    tooltip.style("display", "none");
+                .on("mouseout", (event, d) => {
+                    if (pinnedLocation !== d) tooltip.style("display", "none");
                 })
                 .on("click", (event, d) => {
                     event.stopPropagation();
-                    zoomToShape(null, shapeForCoordinates(d.lng, d.lat));
+                    pinnedLocation = d;
+                    showLocationTooltip(event, d);
                 });
 
-            mapViewport.append("g").attr("class", "visited-area-targets").selectAll("polygon")
+            areaTargets = mapViewport.append("g").attr("class", "visited-area-targets").selectAll("polygon")
                 .data(areaReveals)
                 .enter().append("polygon")
                 .attr("points", d => d.polygon.map(point => point.join(",")).join(" "))
                 .attr("fill", "transparent")
                 .style("cursor", "pointer")
-                .on("mouseover", (event, d) => {
-                    tooltip.style("display", "block")
-                        .html(`<strong>${d.name}</strong><br>${d.state}`);
+                .style("pointer-events", "none")
+                .on("mouseover", showLocationTooltip)
+                .on("mousemove", (event, d) => {
+                    if (pinnedLocation !== d) showLocationTooltip(event, d);
                 })
-                .on("mousemove", event => {
-                    tooltip.style("left", (event.clientX + 14) + "px")
-                           .style("top",  (event.clientY - 34) + "px");
-                })
-                .on("mouseout", event => {
-                    tooltip.style("display", "none");
+                .on("mouseout", (event, d) => {
+                    if (pinnedLocation !== d) tooltip.style("display", "none");
                 })
                 .on("click", (event, d) => {
                     event.stopPropagation();
-                    const firstPoint = d.points[0];
-                    zoomToShape(null, shapeForCoordinates(firstPoint.lng, firstPoint.lat));
+                    pinnedLocation = d;
+                    showLocationTooltip(event, d);
                 });
+            mapViewport.select(".visited-place-targets").raise();
 
             svg.on("click", resetMapZoom)
                 .on("keydown", event => {
@@ -1004,7 +1055,8 @@
                 container,
                 mask.selectAll(".scratch-reveal, .area-scratch-reveal"),
                 svg.selectAll(".map-gradient-boundaries path, .map-boundaries path"),
-                renderVersion
+                renderVersion,
+                setRevealReady
             );
         }
 
