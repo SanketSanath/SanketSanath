@@ -92,7 +92,7 @@
   const sortedTrips = [...trips].sort(latestFirst);
   const searchIndex = [...allRecords, ...travelThemes.flatMap(theme => theme.entries)].sort(latestFirst).map(record => ({
     record,
-    text: [record.title, record.author, record.genres, record.language, record.label, record.state, record.route,
+    text: [record.title, record.author, record.genres, record.language, record.label, record.state, record.route, record.trailhead,
       record.type, record.components?.map(component => component.name)]
       .flat().filter(Boolean).join(" ").toLocaleLowerCase(),
   }));
@@ -366,7 +366,7 @@
     return `<nav class="theme-picker" aria-label="Travel themes">${themeNav}</nav>
       ${panel(theme.name, `<div class="theme-toolbar">
         <nav class="theme-statuses" aria-label="Visit status">${statusNav}</nav>
-        ${theme.hasRouteMetrics ? '<span class="panel-head-meta">Approximate route figures</span>' : ""}
+        ${theme.hasRouteMetrics ? `<span class="panel-head-meta">${TRAVEL_ROUTE_NOTE}</span>` : ""}
       </div>${table}`, {
         meta: theme.source ? `<a class="text-link" href="${theme.source.url}" target="_blank" rel="noopener">${theme.source.label} <span aria-hidden="true">↗</span></a>` : "",
       })}`;

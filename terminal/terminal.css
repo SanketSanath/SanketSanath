@@ -315,6 +315,9 @@ dialog::backdrop { background: #080b08c9; }
   .theme-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
   .theme-table th, .theme-table td { padding-inline: 8px; }
   .theme-table td:last-child { width: auto; }
+  .trek-metrics th, .trek-metrics td { padding-inline: 4px; }
+  .trek-metrics th, .trek-metrics .route-metric { white-space: normal; }
+  .trek-metrics .route-metric { font-size: 11px; }
   .chart { --plot-height: 148px; min-width: calc(25px + var(--years) * 22px); }
   .year-short { display: inline; }
   .year-full { display: none; }

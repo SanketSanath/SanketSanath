@@ -192,6 +192,8 @@
             #thematic-lists .theme-table { font-size: 12px; }
             #thematic-lists .theme-table th, #thematic-lists .theme-table td { padding: 8px; }
             #thematic-lists .theme-table td:last-child { width: auto; }
+            #thematic-lists .trek-metrics th, #thematic-lists .trek-metrics td { padding-inline: 4px; }
+            #thematic-lists .trek-metrics .theme-note { font-size: 11px; }
         }
 
         /* ── Motion ── */
@@ -1452,7 +1454,7 @@
                 ).join("");
                 reference.innerHTML = theme.source
                     ? `<a href="${escapeHtml(theme.source.url)}" target="_blank" rel="noopener">${escapeHtml(theme.source.label)} <span aria-hidden="true">↗</span></a>`
-                    : theme.hasRouteMetrics ? "Approximate route figures" : "";
+                    : theme.hasRouteMetrics ? TRAVEL_ROUTE_NOTE : "";
                 reference.hidden = !reference.textContent;
                 checklist.innerHTML = renderTravelChecklist(theme, groups[activeKey][status], status);
             }

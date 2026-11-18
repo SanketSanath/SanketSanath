@@ -1,5 +1,5 @@
 // Visit statuses come from the Exploration lists and the public adventure log.
-// Distances and altitudes describe the linked routes.
+// Hiking distances are one way, from the named trailhead to the destination.
 const rajasthanHillForts = [
   { name: "Chittorgarh Fort", region: "Chittorgarh, Rajasthan", visited: true },
   { name: "Kumbhalgarh Fort", region: "Rajsamand, Rajasthan", visited: true },
@@ -110,22 +110,26 @@ const TRAVEL_THEMES = {
     entries: [
       {
         name: "Har Ki Dun", region: "Uttarakhand", visited: false,
-        distanceKm: 48, route: "Sankri route", altitudeM: 3566,
-        url: "https://uttarakhandtourism.gov.in/assets/pdf/Final_Master%20Plan_Report.pdf",
+        distanceKm: 25, trailhead: "Taluka", startAltitudeM: 2100, altitudeM: 3566,
+        // The itinerary lists 14 km to Seema and 11 km onward. The operator's route notes give Taluka's elevation.
+        url: "https://himalayatrekker.com/wp-content/uploads/2016/06/Har-Ki-Dun-Trek-Brochure.pdf",
       },
       {
         name: "Gaumukh–Tapovan", region: "Uttarakhand", visited: false,
-        distanceKm: 25, route: "from Gangotri", altitudeM: 4463,
+        distanceKm: 25, trailhead: "Gangotri", startAltitudeM: 3048, altitudeM: 4463,
+        // Gangotri elevation: https://www.moef.gov.in/uploads/2017/06/Chapter%20C%20-%20Tourism.pdf
         url: "https://www.uttarakhandtourism.gov.in/destination/gangotri",
       },
       {
         name: "Naina Peak", region: "Uttarakhand", visited: false,
-        distanceKm: 6, route: "from Nainital", altitudeM: 2611,
+        distanceKm: 6, trailhead: "Nainital", startAltitudeM: 1938, altitudeM: 2611,
+        // Town elevation: https://udd.uk.gov.in/files/CDP_NITL.PDF
         url: "https://nainital.nic.in/tourist-place/naina-peak-or-china-peak/",
       },
       {
         name: "Khaliya Top", region: "Uttarakhand", visited: false,
-        distanceKm: 6, route: "from Balati Farm", altitudeM: 3500,
+        distanceKm: 6, trailhead: "Balati Bend", startAltitudeM: 2633, altitudeM: 3500,
+        // Trailhead estimate from Copernicus GLO-90 at 30.059205° N, 80.220906° E.
         note: "Reached the bugyal. Zero Point is pending.",
         components: [
           { name: "Bugyal", visited: true },
@@ -135,8 +139,9 @@ const TRAVEL_THEMES = {
       },
       {
         name: "Triund", region: "Himachal Pradesh", visited: false,
-        distanceKm: 9, route: "round trip", altitudeM: 2828,
-        url: "https://apnakangra.hp.gov.in/adventure_trekking/triund-trek/",
+        distanceKm: 5.45, trailhead: "Dharamkot", startAltitudeM: 1934, altitudeM: 2828,
+        // Trailhead estimate from Copernicus GLO-90 at the route guide's Dharamkot coordinates.
+        url: "https://indiahikes.com/documented-trek/triund-trek",
       },
     ],
   },
