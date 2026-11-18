@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exploration – Sanket Sanath</title>
 
+    <script>
+        const mapEmbed = new URLSearchParams(window.location.search).get("embed") === "map";
+        if (mapEmbed) document.documentElement.classList.add("map-embed");
+    </script>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../css_n_js/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css_n_js/css/loader.css">
@@ -156,6 +160,39 @@
             outline: 3px solid rgba(49, 131, 225, 0.65);
             outline-offset: -3px;
         }
+
+        #map-status {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-content: center;
+            padding: 20px;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        #map-status[hidden],
+        .map-embed .navbar,
+        .map-embed .loader-wrapper,
+        .map-embed .expl-section:not(#scratch-map),
+        .map-embed #scratch-map > :not(#map-wrapper) {
+            display: none;
+        }
+
+        .map-embed body { margin: 0; padding: 0; color: #dbe7dc; background: #111612; }
+        .map-embed .page-wrapper, .map-embed #scratch-map { margin: 0; padding: 0; }
+        .map-embed #map-svg-container {
+            height: 100vh;
+            min-height: 0;
+            max-height: none;
+            border-radius: 0;
+            background: #111612;
+            transform: none;
+            box-shadow: none;
+        }
+        .map-embed .outside-state-fade { fill: #111612; }
+        .map-embed .map-coating-layer path { fill: #24332d; }
+        .map-embed .map-boundaries path { stroke: #526b60; }
 
         @media (max-width: 767px) {
             #map-svg-container {
@@ -540,7 +577,7 @@
         <!-- ══════════════════════════════════════════════
              SECTION 2 — INDIA PLACES
         ══════════════════════════════════════════════ -->
-        <section class="expl-section">
+        <section class="expl-section" id="scratch-map">
             <p class="section-sub">Where I've been</p>
             <h2 class="section-heading">India</h2>
             <hr class="section-divider">
@@ -548,6 +585,7 @@
             <div id="map-wrapper">
                 <div id="map-svg-container">
                     <svg id="india-svg"></svg>
+                    <p id="map-status" role="status">Loading map…</p>
                 </div>
             </div>
         </section>
@@ -597,8 +635,8 @@
         const INDIA_STATES_GEOJSON_URL = "https://gist.githubusercontent.com/jbrobst/56c13bbbf9d97d187fea01ca62ea5112/raw/e388c4cae20aa53cb5090210a42ebb9b765c0a36/india_states.geojson";
         const NEPAL_GEOJSON_URL = "https://raw.githubusercontent.com/Acesmndr/nepal-geojson/master/generated-geojson/nepal-acesmndr.geojson";
 
-        const svg     = d3.select("#india-svg");
-        const tooltip = d3.select("#expl-tooltip");
+        const svg     = window.d3?.select("#india-svg");
+        const tooltip = window.d3?.select("#expl-tooltip");
         let mapRevealObserver = null;
         let mapRenderVersion = 0;
         let mapRevealRun = 0;
@@ -1238,38 +1276,50 @@
                 </div>`).join("");
         }
 
-        renderWorldFlags();
-        renderTravelTimeline();
-        renderBucketList();
-        initializeExplorationMotion();
+        if (!mapEmbed) {
+            renderWorldFlags();
+            renderTravelTimeline();
+            renderBucketList();
+            initializeExplorationMotion();
+        }
 
         // ── Load & resize ─────────────────────────────────────────────────
-        Promise.all([
-            d3.json(INDIA_STATES_GEOJSON_URL),
-            d3.json(NEPAL_GEOJSON_URL)
-        ]).then(([indiaData, nepalData]) => {
+        async function loadScratchMap() {
+            const [indiaData, nepalData] = await Promise.all([
+                d3.json(INDIA_STATES_GEOJSON_URL),
+                d3.json(NEPAL_GEOJSON_URL)
+            ]);
             const container = document.getElementById("map-svg-container");
             const setMapHeight = () => {
+                if (mapEmbed) return;
                 const availableHeight = Math.max(260, window.innerHeight - 32);
                 const preferredHeight = Math.max(340, container.clientWidth * 0.62);
                 container.style.height = Math.min(preferredHeight, availableHeight) + "px";
             };
             setMapHeight();
             let renderedMapWidth = container.clientWidth;
+            let renderedMapHeight = container.clientHeight;
 
             renderIndiaMap(indiaData, nepalData);
+            document.getElementById("map-status").hidden = true;
 
             let t;
             window.addEventListener("resize", () => {
                 clearTimeout(t);
                 t = setTimeout(() => {
                     const nextMapWidth = container.clientWidth;
-                    if (nextMapWidth === renderedMapWidth) return;
+                    const nextMapHeight = container.clientHeight;
+                    if (nextMapWidth === renderedMapWidth && (!mapEmbed || nextMapHeight === renderedMapHeight)) return;
                     renderedMapWidth = nextMapWidth;
                     setMapHeight();
+                    renderedMapHeight = container.clientHeight;
                     renderIndiaMap(indiaData, nepalData);
                 }, 150);
             });
+        }
+
+        loadScratchMap().catch(() => {
+            document.getElementById("map-status").textContent = "Could not load the map. Reload the page to try again.";
         });
 
         window.addEventListener("load", () => {

@@ -68,6 +68,21 @@
   })).sort((a, b) => compareText(a.title, b.title));
   const placesCount = locations.filter(location => location.type === "Place").length;
   const allRecords = [...books, ...trips, ...locations];
+  const travelThemes = Object.entries(typeof TRAVEL_THEMES === "undefined" ? {} : TRAVEL_THEMES).map(
+    ([key, theme]) => ({
+      ...theme,
+      key,
+      entries: theme.entries.map((entry, index) => ({
+        ...entry,
+        id: `theme-${key}-${index}`,
+        title: entry.name,
+        label: entry.region ?? theme.name,
+        kind: "travel",
+        type: theme.itemType,
+        theme: key,
+      })),
+    }),
+  );
 
   function latestFirst(a, b) {
     return (b.date?.key ?? "").localeCompare(a.date?.key ?? "") || compareText(a.title, b.title);
@@ -75,9 +90,10 @@
 
   const activity = allRecords.filter(record => record.date).sort(latestFirst);
   const sortedTrips = [...trips].sort(latestFirst);
-  const searchIndex = [...allRecords].sort(latestFirst).map(record => ({
+  const searchIndex = [...allRecords, ...travelThemes.flatMap(theme => theme.entries)].sort(latestFirst).map(record => ({
     record,
-    text: [record.title, record.author, record.genres, record.language, record.label, record.state, record.route, record.type]
+    text: [record.title, record.author, record.genres, record.language, record.label, record.state, record.route,
+      record.type, record.components?.map(component => component.name)]
       .flat().filter(Boolean).join(" ").toLocaleLowerCase(),
   }));
 
@@ -112,6 +128,7 @@
   }
 
   function routeFor(record) {
+    if (record.theme) return hrefFor("travel", { view: "themes", theme: record.theme, record: record.id });
     return hrefFor(record.kind, { record: record.id });
   }
 
@@ -322,7 +339,77 @@
     `;
   }
 
+  function visitStatus(visited) {
+    return visited ? '<span class="visit-status visited">Visited</span>' : '<span class="visit-status">Pending</span>';
+  }
+
+  function travelThemeView(params) {
+    const theme = travelThemes.find(item => item.key === params.get("theme")) ?? travelThemes[0];
+    if (!theme) return panel("Theme lists", empty("Theme lists could not be loaded. Try refreshing."));
+    const status = params.get("status");
+    const activeStatus = ["visited", "pending"].includes(status) ? status : "";
+    const selected = params.get("record");
+    const visited = theme.entries.filter(entry => entry.visited);
+    const pending = theme.entries.filter(entry => !entry.visited);
+    const rows = activeStatus === "visited" ? visited : activeStatus === "pending" ? pending : [...visited, ...pending];
+    const themeNav = travelThemes.map(item => `<a href="${hrefFor("travel", { view: "themes", theme: item.key, status: activeStatus })}"${item === theme ? ' aria-current="page"' : ""}>
+      <strong>${item.name}</strong>
+      <span>${item.entries.filter(entry => entry.visited).length} / ${item.entries.length} visited</span>
+    </a>`).join("");
+    const statusNav = [["", "All", theme.entries.length], ["visited", "Visited", visited.length], ["pending", "Pending", pending.length]]
+      .map(([value, label, count]) => `<a href="${hrefFor("travel", { view: "themes", theme: theme.key, status: value })}"${activeStatus === value ? ' aria-current="page"' : ""}>${label} <span>${count}</span></a>`).join("");
+
+    const regionColumn = theme.key !== "unesco";
+    const records = rows.map(entry => {
+      const title = entry.url ? `<a class="theme-source" href="${escapeHtml(entry.url)}" target="_blank" rel="noopener">
+        ${escapeHtml(entry.name)}&nbsp;<span aria-hidden="true">↗</span></a>` : escapeHtml(entry.name);
+      const components = entry.components ? `<details class="theme-components"${selected === entry.id ? " open" : ""}>
+        <summary>${entry.components.filter(component => component.visited).length} / ${entry.components.length} visited</summary>
+        <ul>${entry.components.map(component => `<li><span>${escapeHtml(component.name)}</span>${visitStatus(component.visited)}</li>`).join("")}</ul>
+      </details>` : "";
+      const region = escapeHtml(entry.region);
+      return `<tr ${recordAttributes(entry, selected)}>
+        <td>${title}${theme.hasRouteMetrics ? `<span class="theme-note">${region}</span>` : ""}${components}</td>
+        ${theme.hasRouteMetrics ? `<td class="route-metric">≈ ${number.format(entry.distanceKm)} km<span class="theme-note">${escapeHtml(entry.route)}</span></td>
+          <td class="route-metric">≈ ${number.format(entry.altitudeM)} m</td>` : regionColumn ? `<td>${region}</td>` : ""}
+        <td>${visitStatus(entry.visited)}${entry.note ? `<span class="theme-note">${escapeHtml(entry.note)}</span>` : ""}</td>
+      </tr>`;
+    }).join("");
+    const table = rows.length ? `<div class="table-scroll" tabindex="0" role="region" aria-label="${theme.name} checklist">
+      <table class="theme-table" aria-label="${theme.name}"><thead><tr>
+        <th scope="col">${theme.itemType === "UNESCO" ? "Site" : theme.itemType}</th>
+        ${theme.hasRouteMetrics ? '<th scope="col">Distance</th><th scope="col">Altitude</th>' : regionColumn ? '<th scope="col">Location</th>' : ""}
+        <th scope="col">Status</th>
+      </tr></thead><tbody>${records}</tbody></table></div>` : empty(`No ${activeStatus} entries for this theme.`);
+
+    return `<nav class="theme-picker" aria-label="Travel themes">${themeNav}</nav>
+      ${panel(theme.name, `<div class="theme-toolbar">
+        <nav class="theme-statuses" aria-label="Visit status">${statusNav}</nav>
+        ${theme.hasRouteMetrics ? '<span class="panel-head-meta">Approximate route figures</span>' : ""}
+      </div>${table}`, {
+        meta: theme.source ? `<a class="text-link" href="${theme.source.url}" target="_blank" rel="noopener">${theme.source.label} <span aria-hidden="true">↗</span></a>` : "",
+      })}`;
+  }
+
   function travel(params) {
+    const views = [["", "Trips and places"], ["themes", "Theme lists"], ["map", "Scratch map"]];
+    const view = views.find(([key]) => key === params.get("view"))?.[0] ?? "";
+    const viewNav = views.map(([key, label]) => `<a href="${hrefFor("travel", { view: key })}"${key === view ? ' aria-current="page"' : ""}>${label}</a>`).join("");
+    const title = `${header("Travel", "Trips, routes, and places explored.",
+      '<a class="text-link" href="../exploration/index.html">Exploration map <span aria-hidden="true">↗</span></a>')}
+      <nav class="travel-views" aria-label="Travel views">${viewNav}</nav>`;
+
+    if (view === "themes") return title + travelThemeView(params);
+    if (view === "map") {
+      return title + panel("Scratch map", `<iframe class="scratch-map-frame" title="Interactive scratch map of India and Nepal"
+        src="../exploration/index.html?embed=map"></iframe>`, {
+        meta: '<span class="panel-head-meta">Select a region to zoom · Esc to reset</span>',
+      });
+    }
+    return title + travelRecords(params);
+  }
+
+  function travelRecords(params) {
     const selectedRecord = params.get("record");
     const region = params.get("region") ?? "";
     const filteredPlaces = locations.filter(place => !region || place.state === region);
@@ -341,9 +428,7 @@
       <td>${escapeHtml(place.title)}</td><td>${escapeHtml(place.state)}</td><td>${place.type}</td>
     </tr>`).join("");
 
-    return `${header("Travel", "Trips, routes, and places explored.",
-      '<a class="text-link" href="../exploration/index.html">Exploration map <span aria-hidden="true">↗</span></a>')}
-      <div class="panel-grid travel-grid">
+    return `<div class="panel-grid travel-grid">
         ${panel("Trips", tripRows ? `<div class="table-scroll" tabindex="0" role="region" aria-label="Trips table">
           <table class="trip-table" aria-label="Trips"><thead><tr><th scope="col">Trip</th><th scope="col">Region</th><th scope="col">Date</th></tr></thead><tbody>${tripRows}</tbody></table>
         </div>` : empty("No trips are available."), {
