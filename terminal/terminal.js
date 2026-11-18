@@ -339,48 +339,29 @@
     `;
   }
 
-  function visitStatus(visited) {
-    return visited ? '<span class="visit-status visited">Visited</span>' : '<span class="visit-status">Pending</span>';
-  }
-
   function travelThemeView(params) {
     const theme = travelThemes.find(item => item.key === params.get("theme")) ?? travelThemes[0];
-    if (!theme) return panel("Theme lists", empty("Theme lists could not be loaded. Try refreshing."));
-    const status = params.get("status");
-    const activeStatus = ["visited", "pending"].includes(status) ? status : "";
-    const selected = params.get("record");
-    const visited = theme.entries.filter(entry => entry.visited);
-    const pending = theme.entries.filter(entry => !entry.visited);
-    const rows = activeStatus === "visited" ? visited : activeStatus === "pending" ? pending : [...visited, ...pending];
-    const themeNav = travelThemes.map(item => `<a href="${hrefFor("travel", { view: "themes", theme: item.key, status: activeStatus })}"${item === theme ? ' aria-current="page"' : ""}>
-      <strong>${item.name}</strong>
-      <span>${item.entries.filter(entry => entry.visited).length} / ${item.entries.length} visited</span>
-    </a>`).join("");
-    const statusNav = [["", "All", theme.entries.length], ["visited", "Visited", visited.length], ["pending", "Pending", pending.length]]
-      .map(([value, label, count]) => `<a href="${hrefFor("travel", { view: "themes", theme: theme.key, status: value })}"${activeStatus === value ? ' aria-current="page"' : ""}>${label} <span>${count}</span></a>`).join("");
+    if (!theme || typeof renderTravelChecklist !== "function") {
+      return panel("Theme lists", empty("Theme lists could not be loaded. Try refreshing."));
+    }
 
-    const regionColumn = theme.key !== "unesco";
-    const records = rows.map(entry => {
-      const title = entry.url ? `<a class="theme-source" href="${escapeHtml(entry.url)}" target="_blank" rel="noopener">
-        ${escapeHtml(entry.name)}&nbsp;<span aria-hidden="true">↗</span></a>` : escapeHtml(entry.name);
-      const components = entry.components ? `<details class="theme-components"${selected === entry.id ? " open" : ""}>
-        <summary>${entry.components.filter(component => component.visited).length} / ${entry.components.length} visited</summary>
-        <ul>${entry.components.map(component => `<li><span>${escapeHtml(component.name)}</span>${visitStatus(component.visited)}</li>`).join("")}</ul>
-      </details>` : "";
-      const region = escapeHtml(entry.region);
-      return `<tr ${recordAttributes(entry, selected)}>
-        <td>${title}${theme.hasRouteMetrics ? `<span class="theme-note">${region}</span>` : ""}${components}</td>
-        ${theme.hasRouteMetrics ? `<td class="route-metric">≈ ${number.format(entry.distanceKm)} km<span class="theme-note">${escapeHtml(entry.route)}</span></td>
-          <td class="route-metric">≈ ${number.format(entry.altitudeM)} m</td>` : regionColumn ? `<td>${region}</td>` : ""}
-        <td>${visitStatus(entry.visited)}${entry.note ? `<span class="theme-note">${escapeHtml(entry.note)}</span>` : ""}</td>
-      </tr>`;
+    const status = params.get("status");
+    const activeStatus = Object.hasOwn(TRAVEL_VISIT_LABELS, status) ? status : "all";
+    const statusQuery = key => key === "all" ? "" : key;
+    const groups = travelVisitGroups(theme.entries);
+    const themeNav = travelThemes.map(item => {
+      const href = hrefFor("travel", { view: "themes", theme: item.key, status: statusQuery(activeStatus) });
+      const itemGroups = item === theme ? groups : travelVisitGroups(item.entries);
+      return `<a href="${href}"${item === theme ? ' aria-current="page"' : ""}>
+        <strong>${item.name}</strong>
+        <span>${itemGroups.visited.length} / ${item.entries.length} visited${itemGroups.partial.length ? ` · ${itemGroups.partial.length} partial` : ""}</span>
+      </a>`;
     }).join("");
-    const table = rows.length ? `<div class="table-scroll" tabindex="0" role="region" aria-label="${theme.name} checklist">
-      <table class="theme-table" aria-label="${theme.name}"><thead><tr>
-        <th scope="col">${theme.itemType === "UNESCO" ? "Site" : theme.itemType}</th>
-        ${theme.hasRouteMetrics ? '<th scope="col">Distance</th><th scope="col">Altitude</th>' : regionColumn ? '<th scope="col">Location</th>' : ""}
-        <th scope="col">Status</th>
-      </tr></thead><tbody>${records}</tbody></table></div>` : empty(`No ${activeStatus} entries for this theme.`);
+    const statusNav = Object.entries(TRAVEL_VISIT_LABELS).map(([value, label]) => {
+      const href = hrefFor("travel", { view: "themes", theme: theme.key, status: statusQuery(value) });
+      return `<a href="${href}"${activeStatus === value ? ' aria-current="page"' : ""}>${label} <span>${groups[value].length}</span></a>`;
+    }).join("");
+    const table = renderTravelChecklist(theme, groups[activeStatus], activeStatus, params.get("record"));
 
     return `<nav class="theme-picker" aria-label="Travel themes">${themeNav}</nav>
       ${panel(theme.name, `<div class="theme-toolbar">

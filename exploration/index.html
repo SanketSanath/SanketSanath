@@ -75,6 +75,125 @@
             margin: 0 0 40px 0;
         }
 
+        /* ── Thematic lists ── */
+        #thematic-lists { scroll-margin-top: 56px; }
+
+        .expl-theme-picker {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .expl-theme-picker button {
+            display: grid;
+            gap: 4px;
+            align-content: start;
+            padding: 12px 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: #fff;
+            color: #232323;
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .expl-theme-picker button:hover,
+        .expl-theme-picker button[aria-pressed="true"] {
+            border-color: #9cc7e8;
+            background: #f0f7fd;
+        }
+
+        .expl-theme-picker strong, .expl-theme-controls h3, #thematic-lists .theme-table th {
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 600;
+        }
+
+        .expl-theme-picker button[aria-pressed="true"] strong { color: #236aa9; }
+        .expl-theme-picker span, #thematic-lists .theme-note { color: #555d63; font-size: 12px; }
+
+        .expl-theme-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            min-width: 0;
+        }
+
+        .expl-theme-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px 18px;
+            padding: 14px 16px;
+        }
+
+        .expl-theme-controls h3 { font-size: 1.05rem; margin: 0; }
+        .expl-theme-controls label { display: inline-flex; align-items: center; gap: 7px; margin: 0; font-size: 13px; }
+        .expl-theme-controls select {
+            padding: 6px 8px;
+            border: 1px solid #d2d9de;
+            border-radius: 6px;
+            background: #fff;
+            color: #232323;
+        }
+
+        .expl-theme-reference { font-size: 12px; color: #555d63; margin: 0 16px 14px; }
+        .expl-theme-reference a, #thematic-lists .theme-source span { color: #236aa9; }
+        #thematic-lists .table-scroll { max-height: min(65vh, 540px); overflow: auto; border-radius: 0 0 10px 10px; }
+        #thematic-lists .theme-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
+        #thematic-lists .theme-table th, #thematic-lists .theme-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #eaf0f4;
+            vertical-align: top;
+        }
+
+        #thematic-lists .theme-table th {
+            position: sticky;
+            top: 0;
+            background: #f1f6fa;
+            color: #495969;
+            font-size: 12px;
+        }
+
+        #thematic-lists .theme-table td:last-child { width: 24%; }
+        #thematic-lists .theme-table td:first-child { font-weight: 600; }
+        #thematic-lists .theme-table tr:last-child td { border-bottom: 0; }
+        #thematic-lists .theme-source { color: inherit; }
+        #thematic-lists .theme-source:hover { color: #236aa9; }
+        #thematic-lists .theme-note { display: block; margin-top: 2px; font-weight: 400; }
+        #thematic-lists .route-metric { font-variant-numeric: tabular-nums; }
+        #thematic-lists .visit-status {
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 4px;
+            background: #f3f4f5;
+            color: #424e58;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        #thematic-lists .visit-status.visited, #thematic-lists .visit-status.partial { background: #e6f6ec; color: #206642; }
+        #thematic-lists .theme-components { margin-top: 4px; color: #555d63; font-size: 12px; font-weight: 400; }
+        #thematic-lists .theme-components summary { width: fit-content; cursor: pointer; }
+        #thematic-lists .theme-components summary:hover { color: #236aa9; }
+        #thematic-lists .theme-components ul { margin: 4px 0 0; padding: 0 0 0 10px; list-style: none; }
+        #thematic-lists .theme-components li { display: flex; justify-content: space-between; gap: 9px; max-width: 400px; margin-top: 4px; }
+        #thematic-lists .theme-empty { margin: 0; padding: 14px 16px; color: #555d63; border-top: 1px solid #eaf0f4; }
+        #thematic-lists :focus-visible { outline: 2px solid #236aa9; outline-offset: 2px; }
+        #thematic-lists .table-scroll:focus-visible { outline-offset: -2px; }
+
+        @media (max-width: 900px) {
+            .expl-theme-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 767px) {
+            #thematic-lists .theme-table { font-size: 12px; }
+            #thematic-lists .theme-table th, #thematic-lists .theme-table td { padding: 8px; }
+            #thematic-lists .theme-table td:last-child { width: auto; }
+        }
+
         /* ── Motion ── */
         @keyframes section-rise {
             from { opacity: 0; transform: translateY(48px); }
@@ -549,6 +668,7 @@
                 <li class="nav-item"><a class="nav-link" href="../books.html"><i class="fas fa-book-open"></i> Books</a>
                 </li>
                 <li class="nav-item active"><a class="nav-link" href="#"><i class="fas fa-compass"></i> Exploration</a></li>
+                <li class="nav-item"><a class="nav-link" href="#thematic-lists"><i class="fas fa-list-ul" aria-hidden="true"></i> Thematic lists</a></li>
                 <li class="nav-item">
                     <div id="smprofiles">
                         <a href="https://www.linkedin.com/in/sanketsanath" target="_blank"><i
@@ -613,6 +733,23 @@
             <div id="bucket-list" class="bucket-cols"></div>
         </section>
 
+        <section class="expl-section" id="thematic-lists" aria-labelledby="thematic-lists-title">
+            <h2 class="section-heading" id="thematic-lists-title">Thematic lists</h2>
+            <hr class="section-divider">
+            <p id="thematic-lists-status">Loading thematic lists…</p>
+            <div id="exploration-themes" hidden>
+                <div class="expl-theme-picker" role="group" aria-label="Travel themes"></div>
+                <div class="expl-theme-card">
+                    <div class="expl-theme-controls">
+                        <h3 id="expl-theme-title"></h3>
+                        <label for="expl-theme-filter">Status <select id="expl-theme-filter"></select></label>
+                    </div>
+                    <p class="expl-theme-reference" hidden></p>
+                    <div id="expl-theme-entries"></div>
+                </div>
+            </div>
+        </section>
+
     </div><!-- /page-wrapper -->
 
     <div id="expl-tooltip"></div>
@@ -626,6 +763,8 @@
             crossorigin="anonymous"></script>
     <script src="../css_n_js/js/bootstrap.min.js"></script>
     <script src="data.js"></script>
+    <script src="travel-themes.js"></script>
+    <script src="travel-checklist.js"></script>
 
     <script>
         $(window).on("load", function () { $(".loader-wrapper").hide(); });
@@ -1276,10 +1415,65 @@
                 </div>`).join("");
         }
 
+        function initializeThematicLists() {
+            const loadStatus = document.getElementById("thematic-lists-status");
+            if (typeof TRAVEL_THEMES === "undefined" || typeof renderTravelChecklist !== "function") {
+                loadStatus.textContent = "Could not load the thematic lists. Reload the page to try again.";
+                return;
+            }
+
+            const container = document.getElementById("exploration-themes");
+            const picker = container.querySelector(".expl-theme-picker");
+            const filter = container.querySelector("#expl-theme-filter");
+            const title = container.querySelector("#expl-theme-title");
+            const reference = container.querySelector(".expl-theme-reference");
+            const checklist = container.querySelector("#expl-theme-entries");
+            const groups = Object.fromEntries(Object.entries(TRAVEL_THEMES).map(([key, theme]) =>
+                [key, travelVisitGroups(theme.entries)]));
+            let activeKey = Object.keys(TRAVEL_THEMES)[0];
+
+            picker.innerHTML = Object.entries(TRAVEL_THEMES).map(([key, theme]) => {
+                const { visited, partial, all } = groups[key];
+                const progress = `${visited.length} of ${all.length} visited${partial.length ? ` · ${partial.length} partial` : ""}`;
+                return `<button type="button" data-theme="${escapeHtml(key)}" aria-pressed="false">
+                    <strong>${escapeHtml(theme.name)}</strong><span>${progress}</span>
+                </button>`;
+            }).join("");
+
+            function updateChecklist() {
+                const theme = TRAVEL_THEMES[activeKey];
+                const status = filter.value || "all";
+                title.textContent = theme.name;
+                for (const button of picker.querySelectorAll("button")) {
+                    button.setAttribute("aria-pressed", String(button.dataset.theme === activeKey));
+                }
+                filter.innerHTML = Object.entries(TRAVEL_VISIT_LABELS).map(([key, label]) =>
+                    `<option value="${key}"${key === status ? " selected" : ""}>${label} (${groups[activeKey][key].length})</option>`
+                ).join("");
+                reference.innerHTML = theme.source
+                    ? `<a href="${escapeHtml(theme.source.url)}" target="_blank" rel="noopener">${escapeHtml(theme.source.label)} <span aria-hidden="true">↗</span></a>`
+                    : theme.hasRouteMetrics ? "Approximate route figures" : "";
+                reference.hidden = !reference.textContent;
+                checklist.innerHTML = renderTravelChecklist(theme, groups[activeKey][status], status);
+            }
+
+            picker.addEventListener("click", event => {
+                const button = event.target.closest("button[data-theme]");
+                if (!button || button.dataset.theme === activeKey) return;
+                activeKey = button.dataset.theme;
+                updateChecklist();
+            });
+            filter.addEventListener("change", updateChecklist);
+            updateChecklist();
+            loadStatus.hidden = true;
+            container.hidden = false;
+        }
+
         if (!mapEmbed) {
             renderWorldFlags();
             renderTravelTimeline();
             renderBucketList();
+            initializeThematicLists();
             initializeExplorationMotion();
         }
 
