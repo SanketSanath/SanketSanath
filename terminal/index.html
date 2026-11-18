@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Explore Sanket Sanath’s reading log, travel records, and activity timeline.">
+  <title>Life Terminal | Sanket Sanath</title>
+  <link rel="stylesheet" href="terminal.css">
+  <script defer src="../reading/books-data.js"></script>
+  <script defer src="../exploration/data.js"></script>
+  <script defer src="terminal.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="masthead">
+    <div class="shell masthead-inner">
+      <a class="brand" href="#overview" aria-label="Life Terminal overview">
+        <span class="brand-mark" aria-hidden="true">&gt;<span>_</span></span>
+        <span class="brand-copy"><strong>Life Terminal</strong><span>Sanket Sanath</span></span>
+      </a>
+      <div class="masthead-actions">
+        <a class="portfolio-link" href="../index.html">Portfolio <span aria-hidden="true">↗</span></a>
+        <button class="search-trigger" id="open-search" type="button" aria-keyshortcuts="Control+k Meta+k" disabled>
+          <span>Search records</span>
+          <kbd class="search-shortcut" aria-hidden="true">Ctrl K</kbd>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="view-nav" aria-label="Terminal views">
+    <div class="shell nav-inner">
+      <a href="#overview" data-view="overview" aria-current="page" aria-keyshortcuts="Alt+1"><kbd aria-hidden="true">Alt 1</kbd> Overview</a>
+      <a href="#reading" data-view="reading" aria-keyshortcuts="Alt+2"><kbd aria-hidden="true">Alt 2</kbd> Reading</a>
+      <a href="#travel" data-view="travel" aria-keyshortcuts="Alt+3"><kbd aria-hidden="true">Alt 3</kbd> Travel</a>
+      <a href="#timeline" data-view="timeline" aria-keyshortcuts="Alt+4"><kbd aria-hidden="true">Alt 4</kbd> Timeline</a>
+    </div>
+  </nav>
+
+  <main class="shell dashboard" id="content" tabindex="-1">
+    <h1>Life Terminal</h1>
+    <p>Browse the <a href="../reading/index.html">reading log</a> and <a href="../exploration/index.html">exploration map</a>.</p>
+    <noscript><p>Enable JavaScript to use the terminal views.</p></noscript>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <span>Life Terminal <span class="footer-divider" aria-hidden="true">/</span> <a class="portfolio-footer-link" href="../index.html">Sanket Sanath</a></span>
+      <div class="source-links">
+        <a href="../reading/index.html">Reading log <span aria-hidden="true">↗</span></a>
+        <a href="../exploration/index.html">Exploration map <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </footer>
+
+  <dialog id="record-search" aria-labelledby="search-heading">
+    <div class="search-heading">
+      <h2 id="search-heading">Search records</h2>
+      <form method="dialog"><button type="submit" aria-label="Close search">Close <kbd aria-hidden="true">Esc</kbd></button></form>
+    </div>
+    <input id="search-input" type="search" placeholder="Titles, authors, places…" aria-label="Search titles, authors, and places" autocomplete="off" autofocus>
+    <p class="search-status" id="search-status" role="status"></p>
+    <ul class="search-results" id="search-results"></ul>
+  </dialog>
+</body>
+</html>
