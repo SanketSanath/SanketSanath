@@ -5,7 +5,8 @@
  *   title    {string}    Book title
  *   author   {string}    Author name
  *   rating   {number}    0-5  (0 = not rated; supports decimals e.g. 4.5)
- *   dateRead {string}    "YYYY/MM/DD" or "" if unknown
+ *   dateRead {string}    Date finished as "YYYY/MM/DD", or "" if unknown
+ *   dateStarted {string} Optional start date as "YYYY/MM/DD"
  *   genre    {string[]}  One or more genres, e.g. ["Mystery", "Thriller"]
  *   language {string}    e.g. "English", "Hindi", "Japanese"
  *
@@ -15,6 +16,18 @@
 const BOOKS = [
 
   // -- 2026 --
+  {
+    title: "Bina Darwaje Ka Makan", author: "Ramdarash Mishra", rating: 5,
+    dateStarted: "2026/11/13", dateRead: "2026/11/14", genre: ["Hindi Fiction"], language: "Hindi",
+  },
+  {
+    title: "Kohbar Ki Shart", author: "Keshav Prasad Mishra", rating: 3,
+    dateStarted: "2026/09/21", dateRead: "2026/11/04", genre: ["Hindi Fiction"], language: "Hindi",
+  },
+  {
+    title: "The Hobbit", author: "J. R. R. Tolkien", rating: 3,
+    dateStarted: "2026/08/16", dateRead: "2026/09/20", genre: ["Fantasy"], language: "English",
+  },
   { title: "Ret ki Machhli",                                              author: "Kanta Bharti",             rating: 4, dateRead: "2026/08/10", genre: ["Classic"],                          language: "Hindi"},
   { title: "The Silent Patient",                                           author: "Alex Michaelides",          rating: 3, dateRead: "2026/07/20", genre: ["Mystery", "Thriller"],                          language: "English"},
   { title: "The Housemaid",                                           author: "Freida McFadden",          rating: 3, dateRead: "2026/06/18", genre: ["Mystery", "Thriller"],                          language: "English"},
